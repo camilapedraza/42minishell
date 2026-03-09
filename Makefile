@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/03/09 20:31:55 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/03/09 21:06:53 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,11 +21,12 @@ LIBS		=	${LFT}
 SRC_DIR		=	src
 INC_DIR		=	include
 HEADERS		=	minishell.h
-FILES		=	minishell
+FILES		=	minishell \
+				tokenizer
 SRCS		=	${FILES:%=${SRC_DIR}/%.c}
 OBJS		=	${SRCS:%.c=%.o}
 
-LFT			:=	${libftdir}/libft.a
+LFT			=	${LFT_DIR}/libft.a
 LFT_DIR		=	libft
 
 

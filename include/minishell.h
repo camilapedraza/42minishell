@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/09 20:27:51 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/09 21:11:29 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@
 # include "libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+
+# define PIPE '|'
+# define GREATER_THAN '>'
+# define LESS_THAN '<'
 
 # define EXIT_MSG "exit\n"
 
@@ -36,7 +41,9 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
-	t_token			*next;
+	struct t_token	*next;
 }	t_token;
+
+t_token	*tokenize_input(const char *line);
 
 #endif
