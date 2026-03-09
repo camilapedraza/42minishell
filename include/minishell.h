@@ -6,13 +6,14 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/09 19:40:28 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/09 20:27:51 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>
