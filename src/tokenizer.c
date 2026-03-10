@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 20:13:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/10 19:57:48 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/10 20:11:35 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ static t_token_type	get_operator_type(const char *s)
 	if (*s == GREATER_THAN)
 	{
 		if (*(s + 1) == GREATER_THAN)
-		{
-			printf("token append!\n");
 			return (TOKEN_APPEND);
-		}
 		else
 			return (TOKEN_REDIR_OUT);
 	}
@@ -63,6 +60,7 @@ static t_token	*build_operator_token(const char *line)
 	return (token);
 }
 
+// TODO: Handle missing closing quotes
 static t_token	*build_word_token(const char *line)
 {
 	int		index;

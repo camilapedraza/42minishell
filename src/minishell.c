@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/10 19:56:28 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/10 20:16:38 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	print_tokens(t_token *head)
 	}
 }
 
+// TODO: Syntax validator
+// TODO: Parser
 int	main(void)
 {
 	char	*line;

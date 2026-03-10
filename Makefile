@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/03/10 18:01:40 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/03/10 20:01:42 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,8 @@ ${LIBS}:
 # FOR DEBUGGING
 %.o: %.c 
 	${CC} ${CFLAGS} ${CPPFLAGS} -O0 -c $< -o $@
+
+# REMOVE LIBFT AND ADD DOWNLOAD STEP LIKE SO LONG
 
 clean:
 	${RM} ${OBJS}
