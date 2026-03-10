@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 15:14:13 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/10 15:19:20 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/10 19:58:14 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	add_token(t_token **head, t_token *new_token)
 
 void	free_tokens(t_token *head)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	if (!head)
-		return;
+		return ;
 	while (head)
 	{
 		temp = head->next;

@@ -6,15 +6,28 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/09 21:04:28 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/10 19:56:28 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	print_tokens(t_token *head)
+{
+	t_token	*temp;
+
+	temp = head;
+	while (temp)
+	{
+		printf("[%d: %s]\n", temp->type, temp->value);
+		temp = temp->next;
+	}
+}
+
 int	main(void)
 {
 	char	*line;
+	t_token	*token_list;
 
 	while (1)
 	{
@@ -27,7 +40,12 @@ int	main(void)
 		if (line[0])
 			add_history(line);
 		printf("You typed: %s\n", line);
-		tokenize_input(line);
+		token_list = tokenize_input(line);
+		if (token_list)
+		{
+			print_tokens(token_list);
+			free_tokens(token_list);
+		}
 		free(line);
 	}
 	rl_clear_history();

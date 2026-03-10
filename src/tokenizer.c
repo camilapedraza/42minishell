@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 20:13:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/10 16:06:33 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/10 19:57:48 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,22 @@ static t_token_type	get_operator_type(const char *s)
 		return (TOKEN_PIPE);
 	if (*s == GREATER_THAN)
 	{
-		if (*s++ == GREATER_THAN)
+		if (*(s + 1) == GREATER_THAN)
+		{
+			printf("token append!\n");
 			return (TOKEN_APPEND);
+		}
 		else
 			return (TOKEN_REDIR_OUT);
 	}
 	if (*s == LESS_THAN)
 	{
-		if (*s++ == LESS_THAN)
+		if (*(s + 1) == LESS_THAN)
 			return (TOKEN_HEREDOC);
 		else
 			return (TOKEN_REDIR_IN);
 	}
+	return (TOKEN_NULL);
 }
 
 static char	*get_operator_value(t_token_type type)
@@ -44,27 +48,30 @@ static char	*get_operator_value(t_token_type type)
 		return (REDIR_IN_VALUE);
 	if (type == TOKEN_REDIR_OUT)
 		return (REDIR_OUT_VALUE);
+	return (NULL);
 }
 
-static t_token *build_operator_token(char *line)
+static t_token	*build_operator_token(const char *line)
 {
 	t_token_type	type;
 	char			*value;
 	t_token			*token;
-	
-	type = get_operator_type(*line);
-	value = get_operator_value(type);
+
+	type = get_operator_type(line);
+	value = ft_strdup(get_operator_value(type));
 	token = new_token(type, value);
-	// TODO protect token creation, free token list, exit
 	return (token);
 }
 
-static t_token *build_word_token(char *line)
+static t_token	*build_word_token(const char *line)
 {
 	int		index;
 	char	quote;
-	
-	while (line[index] && !is_space(line[index] && !is_operator(line[index])))
+	char	*value;
+	t_token	*token;
+
+	index = 0;
+	while (line[index] && !is_space(line[index]) && !is_operator(line[index]))
 	{
 		if (is_quote(line[index]))
 		{
@@ -73,16 +80,16 @@ static t_token *build_word_token(char *line)
 			while (line[index] && line[index] != quote)
 				index++;
 			if (!line[index])
-				printf("ERROR NO CLOSING QUOTE\n"); // TODO figure this out
-			else
-				index++;
+			{
+				printf("ERROR NO CLOSING QUOTE\n");
+				return (NULL);
+			}
 		}
-		else
-			index++;
+		index++;
 	}
-	// extract INDEX - START ft_substr?
-	// create token
-	// return token
+	value = ft_substr(line, 0, index);
+	token = new_token(TOKEN_WORD, value);
+	return (token);
 }
 
 t_token	*tokenize_input(const char *line)
@@ -91,6 +98,8 @@ t_token	*tokenize_input(const char *line)
 	t_token	*list;
 	t_token	*token;
 
+	list = NULL;
+	index = 0;
 	while (line[index])
 	{
 		while (is_space(line[index]))
@@ -99,7 +108,13 @@ t_token	*tokenize_input(const char *line)
 			token = build_operator_token(&line[index]);
 		else
 			token = build_word_token(&line[index]);
+		if (!token)
+		{
+			free(list);
+			return (NULL);
+		}
 		add_token(&list, token);
 		index += ft_strlen(token->value);
 	}
+	return (list);
 }

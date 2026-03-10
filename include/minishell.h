@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/10 15:47:23 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/10 19:56:07 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,9 @@
 
 # define EXIT_MSG "exit\n"
 
-typedef enum e_quote_type
-{
-	SINGLE,
-	DOUBLE
-} t_quote_type;
-
 typedef enum e_token_type
 {
+	TOKEN_NULL,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
 	TOKEN_PIPE,
@@ -55,7 +50,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
-	struct t_token	*next;
+	struct s_token	*next;
 }	t_token;
 
 //	** TOKENIZER **	
@@ -63,7 +58,7 @@ t_token		*tokenize_input(const char *line);
 
 // ** TOKENIZER HELPERS **
 bool		is_space(char c);
-bool		is_operator (char c);
+bool		is_operator(char c);
 bool		is_quote(char c);
 
 // ** TOKEN MANAGEMENT **
