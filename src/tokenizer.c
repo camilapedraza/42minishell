@@ -6,25 +6,13 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 20:13:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/09 21:28:38 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/10 16:06:33 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO which should be static?
-
-bool	is_space(char c)
-{
-	return (c == ' ' || (c >= 9 && c <= 13));
-}
-
-bool	is_operator (char c)
-{
-	return (c == PIPE || c == GREATER_THAN || c == LESS_THAN);
-}
-
-t_token_type	get_operator_type(const char *s)
+static t_token_type	get_operator_type(const char *s)
 {
 	if (*s == PIPE)
 		return (TOKEN_PIPE);
@@ -44,26 +32,74 @@ t_token_type	get_operator_type(const char *s)
 	}
 }
 
-t_token	*tokenize_input(const char *line)
+static char	*get_operator_value(t_token_type type)
 {
-	t_token_type	op_type;
-	while (*line)
+	if (type == TOKEN_APPEND)
+		return (APPEND_VALUE);
+	if (type == TOKEN_HEREDOC)
+		return (HEREDOC_VALUE);
+	if (type == TOKEN_PIPE)
+		return (PIPE_VALUE);
+	if (type == TOKEN_REDIR_IN)
+		return (REDIR_IN_VALUE);
+	if (type == TOKEN_REDIR_OUT)
+		return (REDIR_OUT_VALUE);
+}
+
+static t_token *build_operator_token(char *line)
+{
+	t_token_type	type;
+	char			*value;
+	t_token			*token;
+	
+	type = get_operator_type(*line);
+	value = get_operator_value(type);
+	token = new_token(type, value);
+	// TODO protect token creation, free token list, exit
+	return (token);
+}
+
+static t_token *build_word_token(char *line)
+{
+	int		index;
+	char	quote;
+	
+	while (line[index] && !is_space(line[index] && !is_operator(line[index])))
 	{
-		while (is_space(*line))
-			line++;
-		if (is_operator(*line))
+		if (is_quote(line[index]))
 		{
-			op_type = get_operator_type(*line);
-			// create appropriate operator token
-			// TODO if operator is len2 (APPEND/HEREDOC) make line ++;
-			line++;
+			quote = line[index];
+			index++;
+			while (line[index] && line[index] != quote)
+				index++;
+			if (!line[index])
+				printf("ERROR NO CLOSING QUOTE\n"); // TODO figure this out
+			else
+				index++;
 		}
 		else
-		{
-			// TODO if word found -> extract and create word token
-			// advance line by word len
-		}
+			index++;
 	}
-	
+	// extract INDEX - START ft_substr?
+	// create token
+	// return token
+}
 
+t_token	*tokenize_input(const char *line)
+{
+	int		index;
+	t_token	*list;
+	t_token	*token;
+
+	while (line[index])
+	{
+		while (is_space(line[index]))
+			index++;
+		if (is_operator(line[index]))
+			token = build_operator_token(&line[index]);
+		else
+			token = build_word_token(&line[index]);
+		add_token(&list, token);
+		index += ft_strlen(token->value);
+	}
 }
