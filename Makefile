@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/03/16 14:57:15 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/03/16 19:51:01 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ INC_DIR		=	include
 HEADERS		=	minishell.h
 FILES		=	minishell \
 				token tokenizer tokenizer_helpers \
+				command redirect parser parser_helpers \
 				validator
 SRCS		=	${FILES:%=${SRC_DIR}/%.c}
 OBJS		=	${SRCS:%.c=%.o}

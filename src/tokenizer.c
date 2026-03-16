@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 20:13:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 15:31:24 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:21:00 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static t_token	*build_word_token(const char *line)
 	t_token	*token;
 
 	index = 0;
-	while (line[index] != 0 && !is_space(line[index]) && !is_operator(line[index]))
+	while (line[index] && !is_space(line[index]) && !is_operator(line[index]))
 	{
 		if (is_quote(line[index]))
 		{

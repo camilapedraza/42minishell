@@ -1,59 +1,62 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
+/*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/10 15:14:13 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 20:21:17 by mpedraza         ###   ########.fr       */
+/*   Created: 2026/03/16 19:04:26 by mpedraza          #+#    #+#             */
+/*   Updated: 2026/03/16 20:24:34 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*new_token(t_token_type type, char *value)
+t_redir	*new_redirect(t_redir_type type, char *value)
 {
-	t_token	*token;
+	t_redir	*redir;
 
-	if (!type || !value)
+	redir = malloc(sizeof(redir));
+	if (!redir)
 		return (NULL);
-	token = malloc(sizeof(t_token));
-	if (!token)
+	redir->type = type;
+	redir->target = ft_strdup(value);
+	if (!redir->target)
+	{
+		free(redir);
 		return (NULL);
-	token->type = type;
-	token->value = value;
-	token->next = NULL;
-	return (token);
+	}
+	redir->next = NULL;
+	return (redir);
 }
 
-void	add_token(t_token **head, t_token *new_token)
+void	add_redirect(t_redir **head, t_redir *new_redirect)
 {
-	t_token	*temp;
+	t_redir	*temp;
 
-	if (!head || !new_token)
+	if (!head || !new_redirect)
 		return ;
 	if (*head == NULL)
-		*head = new_token;
+		*head = new_redirect;
 	else
 	{
 		temp = *head;
 		while (temp->next)
 			temp = temp->next;
-		temp->next = new_token;
+		temp->next = new_redirect;
 	}
 }
 
-void	free_tokens(t_token *head)
+void	free_redirects(t_redir *head)
 {
-	t_token	*temp;
+	t_redir	*temp;
 
 	if (!head)
 		return ;
 	while (head)
 	{
 		temp = head->next;
-		free(head->value);
+		free(head->target);
 		free(head);
 		head = temp;
 	}

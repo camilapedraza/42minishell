@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:12:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 15:35:03 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:21:58 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,18 @@ int	is_valid_input(t_token *head)
 		return (0);
 	temp = head;
 	if (temp->type == TOKEN_PIPE)
-		return (0); // first token cannot be pipe
+		return (0);
 	while (temp)
 	{
 		if (temp->type == TOKEN_PIPE)
 		{
-			if ( !temp->next || temp->next->type == TOKEN_PIPE)
-				return (0); // pipes cannot be followed by EOL or PIPE
+			if (!temp->next || temp->next->type == TOKEN_PIPE)
+				return (0);
 		}
 		else if (temp->type != TOKEN_WORD)
 		{
-			if ( !temp->next || temp->next->type != TOKEN_WORD)
-				return (0); // redirs must be followed by WORD
+			if (!temp->next || temp->next->type != TOKEN_WORD)
+				return (0);
 		}
 		temp = temp->next;
 	}

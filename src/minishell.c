@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 15:36:33 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:26:20 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int	main(void)
 		}
 		if (line[0])
 			add_history(line);
-		printf("You typed: %s\n", line);
 		token_list = tokenize_input(line);
 		if (token_list)
 		{
