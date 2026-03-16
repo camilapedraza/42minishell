@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 20:13:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/10 20:11:35 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:31:24 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static t_token	*build_operator_token(const char *line)
 	char			*value;
 	t_token			*token;
 
+	type = TOKEN_NULL;
+	value = NULL;
 	type = get_operator_type(line);
 	value = ft_strdup(get_operator_value(type));
 	token = new_token(type, value);
@@ -69,7 +71,7 @@ static t_token	*build_word_token(const char *line)
 	t_token	*token;
 
 	index = 0;
-	while (line[index] && !is_space(line[index]) && !is_operator(line[index]))
+	while (line[index] != 0 && !is_space(line[index]) && !is_operator(line[index]))
 	{
 		if (is_quote(line[index]))
 		{
@@ -79,7 +81,7 @@ static t_token	*build_word_token(const char *line)
 				index++;
 			if (!line[index])
 			{
-				printf("ERROR NO CLOSING QUOTE\n");
+				printf("%s", ERROR_NO_QUOTE);
 				return (NULL);
 			}
 		}
@@ -102,6 +104,8 @@ t_token	*tokenize_input(const char *line)
 	{
 		while (is_space(line[index]))
 			index++;
+		if (!line[index])
+			break ;
 		if (is_operator(line[index]))
 			token = build_operator_token(&line[index]);
 		else

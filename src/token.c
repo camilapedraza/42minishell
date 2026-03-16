@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 15:14:13 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/10 19:58:14 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:15:55 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_token	*new_token(t_token_type type, char *value)
 {
 	t_token	*token;
 
+	if (!type || !value)
+		return (NULL);
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
@@ -41,6 +43,7 @@ void	add_token(t_token **head, t_token *new_token)
 		temp->next = new_token;
 	}
 }
+
 
 void	free_tokens(t_token *head)
 {
