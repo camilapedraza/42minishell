@@ -6,13 +6,13 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 20:16:12 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 20:47:21 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*parse_var(char *envp)
+static t_env	*parse_var(char *envp)
 {
 	char	*div;
 	char	*key;

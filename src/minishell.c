@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 20:19:56 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 20:30:36 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	print_cmds(t_cmd *cmds)
 	}
 }
 
-int	get_input(char **line)
+static int	get_input(char **line)
 {
 	*line = readline("minishell$ ");
 	if (!line)
