@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 15:21:28 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 15:32:10 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 18:09:30 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,28 @@ bool	is_space(char c)
 
 bool	is_operator(char c)
 {
-	return (c == PIPE || c == GREATER_THAN || c == LESS_THAN);
+	return (c == CHAR_PIPE || c == CHAR_GREATER_THAN || c == CHAR_LESS_THAN);
 }
 
 bool	is_quote(char c)
 {
-	return (c == SINGLE_QUOTE || c == DOUBLE_QUOTE);
+	return (c == CHAR_SINGLE_QUOTE || c == CHAR_DOUBLE_QUOTE);
 }
 
 t_token_type	get_operator_type(const char *s)
 {
-	if (*s == PIPE)
+	if (*s == CHAR_PIPE)
 		return (TOKEN_PIPE);
-	if (*s == GREATER_THAN)
+	if (*s == CHAR_GREATER_THAN)
 	{
-		if (*(s + 1) == GREATER_THAN)
+		if (*(s + 1) == CHAR_GREATER_THAN)
 			return (TOKEN_APPEND);
 		else
 			return (TOKEN_REDIR_OUT);
 	}
-	if (*s == LESS_THAN)
+	if (*s == CHAR_LESS_THAN)
 	{
-		if (*(s + 1) == LESS_THAN)
+		if (*(s + 1) == CHAR_LESS_THAN)
 			return (TOKEN_HEREDOC);
 		else
 			return (TOKEN_REDIR_IN);

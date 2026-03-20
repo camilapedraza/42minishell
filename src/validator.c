@@ -6,13 +6,12 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:12:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 17:16:29 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:33:20 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO: syntax validator rules
 // first or last token in list cannot be a PIPE (so a single pipe is invalid)
 // a PIPE cannot be directly followed by another PIPE, ie. ||
 // a PIPE must be preceded and followed by a token (no space, no eol)

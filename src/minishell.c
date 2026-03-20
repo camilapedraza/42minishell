@@ -6,12 +6,22 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 17:24:48 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 20:19:56 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/* FOR DEBUGGING ONLY
+void	print_env(t_env *env)
+{
+	while (env)
+	{
+		printf("Key=%s, Value=%s\n", env->key, env->value);
+		env = env->next;
+	}
+}*/
+/* FOR DEBUGGING ONLY
 void	print_tokens(t_token *head)
 {
 	t_token	*temp;
@@ -22,7 +32,7 @@ void	print_tokens(t_token *head)
 		printf("[%d: %s]\n", temp->type, temp->value);
 		temp = temp->next;
 	}
-}
+}*/
 
 void	print_cmds(t_cmd *cmds)
 {
@@ -66,32 +76,41 @@ int	get_input(char **line)
 	return (1);
 }
 
-// TODO: Syntax validator
-// TODO: Parser
-int	main(void)
+void	clean_prompt(char *line, t_token *token_list, t_cmd *pipeline)
+{
+	if (line)
+		free(line);
+	if (token_list)
+		free_tokens(token_list);
+	if (pipeline)
+		free_commands(pipeline);
+}
+
+int	main(int ac, char **av, char **envp)
 {
 	char	*line;
+	t_env	*env;
 	t_token	*token_list;
 	t_cmd	*pipeline;
 
+	(void)ac;
+	(void)av;
+	env = init_env(envp);
 	while (1)
 	{
 		if (get_input(&line))
 			token_list = tokenize_input(line);
+		else
+			break ;
 		if (token_list)
 		{
-			print_tokens(token_list);
 			pipeline = parse_tokens(token_list);
 			if (pipeline)
-			{
 				print_cmds(pipeline);
-				free_commands(pipeline);
-			}
-			free_tokens(token_list);
 		}
-		if (line)
-			free(line);
+		clean_prompt(line, token_list, pipeline);
 	}
+	free_vars(env);
 	rl_clear_history();
 	return (0);
 }

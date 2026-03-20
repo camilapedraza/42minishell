@@ -6,13 +6,12 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 17:20:25 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:33:26 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO: Parser
 // parse token_list and group into:
 // - commands (WORDS stored as **argv, optionally followed by any redirects)
 // -- redirects are a REDIR operator followed by a WORD (file)
