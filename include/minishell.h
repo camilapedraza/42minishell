@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 20:19:51 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:24:56 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 // PREDEFINED STATUS MESSAGES
 # define EXIT_MSG "exit\n"
 # define ERROR_NO_QUOTE "Error: No closing quote!\n"
+# define ERROR_SYNTAX "Error! Invalid syntax!\n"
 
 // TOKEN DATA TYPES
 
@@ -63,6 +64,7 @@ typedef struct s_token
 
 typedef enum e_redir_type
 {
+	REDIR_NULL,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
 	REDIR_IN,
@@ -71,7 +73,7 @@ typedef enum e_redir_type
 
 typedef struct s_redir
 {
-	t_redir_type	type;
+	t_redir_type	type;	
 	char			*target;
 	struct s_redir	*next;
 }	t_redir;
@@ -80,44 +82,46 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	char			**args;
+	char			**argv;
 	t_redir			*redirs;
 	struct s_cmd	*next;
 }	t_cmd;
 
 //	** TOKENIZER **	
-t_token		*tokenize_input(const char *line);
+t_token			*tokenize_input(const char *line);
 
 //  ** TOKENIZER HELPERS **
-bool		is_space(char c);
-bool		is_operator(char c);
-bool		is_quote(char c);
+bool			is_space(char c);
+bool			is_operator(char c);
+bool			is_quote(char c);
+t_token_type	get_operator_type(const char *s);
+char			*get_operator_value(t_token_type type);
 
 //  ** TOKENS **
-t_token		*new_token(t_token_type type, char *value);
-void		add_token(t_token **head, t_token *new_node);
-void		free_tokens(t_token *head);
+t_token			*new_token(t_token_type type, char *value);
+void			add_token(t_token **head, t_token *new_node);
+void			free_tokens(t_token *head);
 
 //  ** PARSER **
-t_cmd		*parse_tokens(t_token *token);
-t_cmd		*parse_command(t_token **token);
+t_cmd			*parse_tokens(t_token *token);
 
 //  ** PARSER HELPERS **
-bool		is_redir(t_token_type type);
+bool			is_redir(t_token_type type);
+t_redir_type	get_redir_type(t_token_type token_type);
 
 //  ** VALIDATOR **
-int			is_valid_input(t_token *head);
+int				is_valid_syntax(t_token *head);
 
 //  ** COMMANDS **
-t_cmd		*new_command(t_token *token);
-void		add_command(t_cmd **pipeline, t_cmd *new_command);
-void		free_commands(t_cmd *pipeline);
-int			count_args(t_token *token);
-void		free_args(char **argv);
+t_cmd			*new_command(t_token *token);
+void			add_command(t_cmd **pipeline, t_cmd *new_command);
+void			free_commands(t_cmd *pipeline);
+int				count_args(t_token *token);
+void			free_args(char **argv);
 
 //  ** REDIRECTS **
-t_redir		*new_redirect(t_redir_type type, char *value);
-void		add_redirect(t_redir **head, t_redir *new_redirect);
-void		free_redirects(t_redir *head);
+t_redir			*new_redirect(t_redir_type type, char *value);
+void			add_redirect(t_redir **head, t_redir *new_redirect);
+void			free_redirects(t_redir *head);
 
 #endif

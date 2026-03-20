@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:12:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 20:21:58 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:16:29 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // -- a REDIR CAN appear before the command itself - valid syntax: < infile cat
 // print error message "syntax error near X"
 
-int	is_valid_input(t_token *head)
+int	is_valid_syntax(t_token *head)
 {
 	t_token	*temp;
 

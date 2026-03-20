@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:26 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 20:24:34 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:37:30 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_redir	*new_redirect(t_redir_type type, char *value)
 {
 	t_redir	*redir;
 
-	redir = malloc(sizeof(redir));
+	redir = malloc(sizeof(t_redir));
 	if (!redir)
 		return (NULL);
 	redir->type = type;

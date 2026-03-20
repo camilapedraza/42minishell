@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 20:48:53 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:20:25 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,45 +21,36 @@
 // - this means a pipeline is at least 1 command, with zero or more "| command"
 // - a command stops when it meets a pipe or EOL
 
-t_redir_type	get_redir_type(t_token_type token_type)
+static int	parse_args(t_cmd *cmd, int index, t_token **token)
 {
-	if (token_type == TOKEN_APPEND)
-		return (REDIR_APPEND);
-	if (token_type == TOKEN_HEREDOC)
-		return (REDIR_HEREDOC);
-	if (token_type == TOKEN_REDIR_IN)
-		return (REDIR_IN);
-	if (token_type == TOKEN_REDIR_OUT)
-		return (REDIR_OUT);
-	return (-1);
-}
-int	parse_args(t_cmd **cmd, int index, t_token *token)
-{
-	(*cmd)->args[index] = ft_strdup(token->value);
-	if (!(*cmd)->args[index])
-	{
-		free_commands(*cmd);
+	cmd->argv[index] = ft_strdup((*token)->value);
+	if (!cmd->argv[index])
 		return (0);
-	}
+	*token = (*token)->next;
 	return (1);
 }
 
-t_redir	*parse_redirect(t_token *token)
+static t_redir	*parse_redirect(t_cmd *cmd, t_token **token)
 {
 	t_redir			*redir;
 	t_redir_type	type;
 	char			*target;
 
-	type = get_redir_type(token->type);
-	target = token->next->value;
+	if (!*token || !(*token)->next)
+		return (NULL);
+	type = get_redir_type((*token)->type);
+	if (!type)
+		return (NULL);
+	target = (*token)->next->value;
 	redir = new_redirect(type, target);
+	add_redirect(&cmd->redirs, redir);
+	*token = (*token)->next->next;
 	return (redir);
 }
 
-t_cmd	*parse_command(t_token **token)
+static t_cmd	*build_command(t_token **token)
 {
 	t_cmd	*cmd;
-	t_redir	*redir;
 	int		index;
 
 	index = 0;
@@ -70,24 +61,17 @@ t_cmd	*parse_command(t_token **token)
 	{
 		if (is_redir((*token)->type))
 		{
-			redir = parse_redirect(*token);
-			if (!redir)
-			{
-				free_commands(cmd);
-				return (NULL);
-			}
-			add_redirect(&cmd->redirs, redir);
-			*token = (*token)->next;
+			if (!parse_redirect(cmd, token))
+				return (free_commands(cmd), NULL);
 		}
 		else
 		{
-			if (!parse_args(&cmd, index, *token))
-				return (NULL);
+			if (!parse_args(cmd, index, token))
+				return (free_commands(cmd), NULL);
 			index++;
 		}
-		*token = (*token)->next;
 	}
-	cmd->args[index] = NULL;
+	cmd->argv[index] = NULL;
 	return (cmd);
 }
 
@@ -97,9 +81,19 @@ t_cmd	*parse_tokens(t_token *token)
 	t_cmd	*cmd;
 
 	pipeline = NULL;
+	if (!is_valid_syntax(token))
+	{
+		printf("%s", ERROR_SYNTAX);
+		return (NULL);
+	}
 	while (token)
 	{
-		cmd = parse_command(&token);
+		cmd = build_command(&token);
+		if (!cmd)
+		{
+			free_commands(pipeline);
+			return (NULL);
+		}
 		add_command(&pipeline, cmd);
 		if (token && token->type == TOKEN_PIPE)
 			token = token->next;

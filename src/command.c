@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 20:42:17 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:13:52 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 int	count_args(t_token *token)
 {
 	t_token	*temp;
-	int		args;
+	int		argc;
 
 	temp = token;
-	args = 0;
+	argc = 0;
 	while (temp && temp->type != TOKEN_PIPE)
 	{
 		if (is_redir(temp->type))
 			temp = temp->next;
 		else
-			args++;
+			argc++;
 		temp = temp->next;
 	}
-	return (args);
+	return (argc);
 }
 
 t_cmd	*new_command(t_token *token)
@@ -39,15 +39,14 @@ t_cmd	*new_command(t_token *token)
 	if (!cmd)
 		return (NULL);
 	argc = count_args(token);
-	if (argc)
+	cmd->argv = malloc(sizeof(char *) * (argc + 1));
+	if (!cmd->argv)
 	{
-		cmd->args = malloc(sizeof(char *) * argc + 1);
-		if (!cmd->args)
-		{
-			free(cmd);
-			return (NULL);
-		}
+		free(cmd);
+		return (NULL);
 	}
+	cmd->redirs = NULL;
+	cmd->next = NULL;
 	return (cmd);
 }
 
@@ -90,8 +89,8 @@ void	free_commands(t_cmd *pipeline)
 	while (pipeline)
 	{
 		temp = pipeline->next;
-		if (pipeline->args)
-			free_args(pipeline->args);
+		if (pipeline->argv)
+			free_args(pipeline->argv);
 		if (pipeline->redirs)
 			free_redirects(pipeline->redirs);
 		free(pipeline);
