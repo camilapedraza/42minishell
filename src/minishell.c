@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 20:30:36 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/21 17:23:31 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,12 @@ int	main(int ac, char **av, char **envp)
 	t_env	*env;
 	t_token	*token_list;
 	t_cmd	*pipeline;
+	int		last_status;
 
 	(void)ac;
 	(void)av;
 	env = init_env(envp);
+	last_status = 0;
 	while (1)
 	{
 		if (get_input(&line))
@@ -106,7 +108,12 @@ int	main(int ac, char **av, char **envp)
 		{
 			pipeline = parse_tokens(token_list);
 			if (pipeline)
+			{
 				print_cmds(pipeline);
+				expand_parameters(pipeline, env, last_status);
+				printf("Expansion!\n");
+				print_cmds(pipeline);
+			}
 		}
 		clean_prompt(line, token_list, pipeline);
 	}

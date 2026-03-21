@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 20:24:29 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/21 18:37:12 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define CHAR_SINGLE_QUOTE '\''
 # define CHAR_DOUBLE_QUOTE '"'
 # define CHAR_EQUALS '='
+# define CHAR_DOLLAR '$'
+# define SPECIAL_CHARS "\"'$"
 
 //	** VALUES FOR OPERATOR TOKENS **
 # define APPEND_VALUE ">>"
@@ -41,6 +43,14 @@
 # define ERROR_ENV "Error! Failed to initialize environment\n"
 # define ERROR_NO_QUOTE "Error: No closing quote!\n"
 # define ERROR_SYNTAX "Error! Invalid syntax!\n"
+
+//	** ENVIRONMENT DATA TYPES **
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 //	** TOKEN DATA TYPES **
 typedef enum e_token_type
@@ -86,13 +96,21 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-//	** ENVIRONMENT DATA TYPES **
-typedef struct s_env
+typedef enum e_quote
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
+	NONE,
+	SINGLE,
+	DOUBLE
+}	t_quote;
+
+//	** ENVIRONMENT **
+t_env			*init_env(char **envp);
+
+//	** VARIABLES **
+t_env			*new_var(char *key, char *value);
+void			add_var(t_env **head, t_env *new_var);
+t_env			*find_var(t_env *env, char *key);
+void			free_vars(t_env *head);
 
 //	** TOKENIZER **	
 t_token			*tokenize_input(const char *line);
@@ -131,13 +149,7 @@ t_redir			*new_redirect(t_redir_type type, char *value);
 void			add_redirect(t_redir **head, t_redir *new_redirect);
 void			free_redirects(t_redir *head);
 
-//	** ENVIRONMENT **
-t_env			*init_env(char **envp);
-
-//	** VARIABLES **
-t_env			*new_var(char *key, char *value);
-void			add_var(t_env **head, t_env *new_var);
-t_env			*find_var(t_env *env, char *key);
-void			free_vars(t_env *head);
+//	** EXPANDER **
+void	expand_parameters(t_cmd *pipeline, t_env *env, int status);
 
 #endif
