@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/23 12:50:04 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/23 21:51:46 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define CHAR_EQUALS '='
 # define CHAR_DOLLAR '$'
 # define CHAR_QUESTION '?'
+# define CHAR_UNDERSCORE '_'
 # define SPECIAL_CHARS "\"'$"
 
 //	** VALUES FOR OPERATOR TOKENS **
@@ -111,6 +112,7 @@ t_env			*init_env(char **envp);
 t_env			*new_var(char *key, char *value);
 void			add_var(t_env **head, t_env *new_var);
 t_env			*find_var(t_env *env, char *key);
+char			*get_var_value(t_env *env, char *key);
 void			free_vars(t_env *head);
 
 //	** TOKENIZER **	
@@ -151,6 +153,15 @@ void			add_redirect(t_redir **head, t_redir *new_redirect);
 void			free_redirects(t_redir *head);
 
 //	** EXPANDER **
-void	expand_parameters(t_cmd *pipeline, t_env *env, int status);
+int				expand_parameters(t_cmd *pipeline, t_env *env, int status);
+
+//	** EXPANDER HELPERS **
+bool			is_metachar(char c, t_quote status);
+bool			is_valid_var_char(char c, int index);
+t_quote			set_quote_status(char c, t_quote status);
+char			*append_string(char *dest, char *src, size_t len);
+
+// ** DEBUG **
+void			print_env(t_env *env);
 
 #endif

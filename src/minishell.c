@@ -6,13 +6,13 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/21 17:23:31 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/23 21:54:34 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* FOR DEBUGGING ONLY
+/* FOR DEBUGGING ONLY*/
 void	print_env(t_env *env)
 {
 	while (env)
@@ -20,7 +20,7 @@ void	print_env(t_env *env)
 		printf("Key=%s, Value=%s\n", env->key, env->value);
 		env = env->next;
 	}
-}*/
+}
 /* FOR DEBUGGING ONLY
 void	print_tokens(t_token *head)
 {
@@ -86,18 +86,25 @@ void	clean_prompt(char *line, t_token *token_list, t_cmd *pipeline)
 		free_commands(pipeline);
 }
 
+void	init(t_env **env, t_token **token_list, t_cmd **pipeline, char **envp)
+{
+	*env = init_env(envp);
+	*token_list = NULL;
+	*pipeline = NULL;
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_env	*env;
 	t_token	*token_list;
 	t_cmd	*pipeline;
-	int		last_status;
+	int		exit_status;
 
 	(void)ac;
 	(void)av;
-	env = init_env(envp);
-	last_status = 0;
+	init(&env, &token_list, &pipeline, envp);
+	exit_status = 0;
 	while (1)
 	{
 		if (get_input(&line))
@@ -110,9 +117,8 @@ int	main(int ac, char **av, char **envp)
 			if (pipeline)
 			{
 				print_cmds(pipeline);
-				expand_parameters(pipeline, env, last_status);
-				printf("Expansion!\n");
-				print_cmds(pipeline);
+				if (expand_parameters(pipeline, env, exit_status))
+					print_cmds(pipeline);
 			}
 		}
 		clean_prompt(line, token_list, pipeline);

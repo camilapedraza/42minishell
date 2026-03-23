@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/23 12:56:45 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/23 22:00:03 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,70 +25,39 @@
 
 #include "minishell.h"
 
-static char *append_string(char *dest, char *src, size_t len)
+static int	parse_metachar(char **expanded, char *src, t_env *env, int code)
 {
-	char	*result;
-	size_t	dlen;
-	
-	if (!dest)
-		return (NULL);
-	if (!src || !len)
-		return (dest);
-	dlen = ft_strlen(dest);
-	result = ft_calloc(sizeof(char), dlen + len + 1);
-	if (!result)
-		return (NULL);
-	ft_strlcat(result, dest, dlen);
-	ft_strlcat(result + dlen, src, len);
-	free(dest);
-	return (result);
-}
-
-
-static int	parse_char(char *expanded, char *src, t_env *env, int code)
-{
-	char *exit_code;
+	char	*exit_code;
+	char	*var_key;
+	char	*var_value;
+	int		index;
 
 	if (*src == CHAR_DOLLAR)
 	{
 		if (*(src + 1) == CHAR_QUESTION)
 		{
 			exit_code = ft_itoa(code);
-			if (exit_code)
-				expanded = append_string(expanded, exit_code, ft_strlen(exit_code));
+			if (exit_code) // what if itoa fails?
+				*expanded = append_string(*expanded, exit_code, ft_strlen(exit_code));
 			return (2); // skip over '$?'
 		}
-		
-		// parse dollar updates expanded and return how many chars the index advanced in src
-		// return chars
+		index = 0;
+		while (src[index] && is_valid_var_char(src[index], index))
+			index++;
+		if (index > 1)
+		{
+			var_key = ft_substr(src, 1, index - 1);
+			var_value = get_var_value(env, var_key);
+			if (var_value)
+				*expanded = append_string(*expanded, var_value, ft_strlen(var_value));
+			else
+				*expanded = append_string(*expanded, var_key, ft_strlen(var_key));
+			return (index);
+		}
+		else
+			*expanded = append_string(*expanded, "$", 1);
 	}
-	else 
-		return (1); // because then the special char is a single or double quote and we need to skip it
-}
-
-static bool	is_metachar(char c, t_quote status)
-{
-	if (status == NONE && ft_strchr(SPECIAL_CHARS, c))
-		return (true);
-	if (status == SINGLE && c == CHAR_SINGLE_QUOTE)
-		return (true);
-	if (status == DOUBLE && (c == CHAR_DOUBLE_QUOTE || CHAR_DOLLAR))
-		return (true);
-}
-static t_quote	set_quote_status(char c, t_quote status)
-{
-	if (status == NONE)
-	{
-		if (c == CHAR_DOUBLE_QUOTE)
-			return (DOUBLE);
-		if (c == CHAR_SINGLE_QUOTE)
-			return (SINGLE);
-	}
-	if (status == SINGLE && c == CHAR_SINGLE_QUOTE)
-		return (NONE);
-	if (status == DOUBLE && c == CHAR_DOUBLE_QUOTE)
-		return (NONE);
-	return (status);
+	return (1); // because then the special char is a single or double quote and we need to skip it
 }
 
 static char	*expand_string(char *arg, t_env *env, int code)
@@ -100,26 +69,26 @@ static char	*expand_string(char *arg, t_env *env, int code)
 
 	start = 0;
 	quote_status = NONE;
-	expanded = ft_calloc(1, 1);
+	expanded = ft_calloc(sizeof(char), 1);
 	if (!expanded)
-		return (ft_strdup(arg)); // TODO: IS THIS OKAY?
+		return (NULL); // TODO: IS THIS OKAY?
 	while (arg && arg[start])
 	{
 		end = start;
 		while (arg[end] && !is_metachar(arg[end], quote_status))
 			end++;
-		expanded = append_string(expanded, arg + start, start - end);
+		expanded = append_string(expanded, arg + start, end - start);
 		start = end;
 		if (arg[start])
 		{
 			quote_status = set_quote_status(arg[start], quote_status);
-			start += parse_char(expanded, arg + start, env, code);
+			start += parse_metachar(&expanded, arg + start, env, code);
 		}
 	}
 	return (expanded);
 }
 
-static void	expand_args(t_cmd *cmd, t_env *env, int code)
+static int	expand_args(t_cmd *cmd, t_env *env, int code)
 {
 	int		index;
 	char	**args;
@@ -130,17 +99,16 @@ static void	expand_args(t_cmd *cmd, t_env *env, int code)
 	while (args && args[index])
 	{	
 		expanded_arg = expand_string(args[index], env, code);
-		if (expanded_arg)
-		{
-			free(args[index]);
-			args[index] = expanded_arg;
-		}
-		// TODO: what if no expanded args?
+		if (!expanded_arg)
+			return	(0);
+		free(args[index]);
+		args[index] = expanded_arg;
 		index++;
 	}
+	return (1);
 }
 
-static void	expand_targets(t_cmd *cmd, t_env *env, int code)
+static int	expand_targets(t_cmd *cmd, t_env *env, int code)
 {
 	t_redir	*redir;
 	char	*expanded_target;
@@ -149,23 +117,24 @@ static void	expand_targets(t_cmd *cmd, t_env *env, int code)
 	while (redir)
 	{
 		expanded_target = expand_string(redir->target, env, code);
-		if (expanded_target)
-		{
-			free(redir->target);
-			redir->target = expanded_target;
-		}
-		// TODO: what if no expanded target?
+		if (!expanded_target)
+			return (0);
+		free(redir->target);
+		redir->target = expanded_target;
 		redir = redir->next;
 	}
-	
+	return (1);
 }
 
-void	expand_parameters(t_cmd *pipeline, t_env *env, int code)
+int	expand_parameters(t_cmd *pipeline, t_env *env, int code)
 {
 	while (pipeline)
 	{
-		expand_args(pipeline, env, code);
-		expand_targets(pipeline, env, code);
+		if (!expand_args(pipeline, env, code))
+			return (0);
+		if (!expand_targets(pipeline, env, code))
+			return (0);
 		pipeline = pipeline->next;
 	}
+	return (1);
 }
