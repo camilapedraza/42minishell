@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/21 18:35:28 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/23 12:56:45 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,54 @@ static char *append_string(char *dest, char *src, size_t len)
 	return (result);
 }
 
-static int	parse_char(char *expanded, char *src, t_env *env, int status)
+
+static int	parse_char(char *expanded, char *src, t_env *env, int code)
 {
+	char *exit_code;
+
 	if (*src == CHAR_DOLLAR)
-		parse_dollar();
-	
+	{
+		if (*(src + 1) == CHAR_QUESTION)
+		{
+			exit_code = ft_itoa(code);
+			if (exit_code)
+				expanded = append_string(expanded, exit_code, ft_strlen(exit_code));
+			return (2); // skip over '$?'
+		}
+		
+		// parse dollar updates expanded and return how many chars the index advanced in src
+		// return chars
+	}
+	else 
+		return (1); // because then the special char is a single or double quote and we need to skip it
 }
 
-static char	*expand_string(char *arg, t_env *env, int status)
+static bool	is_metachar(char c, t_quote status)
+{
+	if (status == NONE && ft_strchr(SPECIAL_CHARS, c))
+		return (true);
+	if (status == SINGLE && c == CHAR_SINGLE_QUOTE)
+		return (true);
+	if (status == DOUBLE && (c == CHAR_DOUBLE_QUOTE || CHAR_DOLLAR))
+		return (true);
+}
+static t_quote	set_quote_status(char c, t_quote status)
+{
+	if (status == NONE)
+	{
+		if (c == CHAR_DOUBLE_QUOTE)
+			return (DOUBLE);
+		if (c == CHAR_SINGLE_QUOTE)
+			return (SINGLE);
+	}
+	if (status == SINGLE && c == CHAR_SINGLE_QUOTE)
+		return (NONE);
+	if (status == DOUBLE && c == CHAR_DOUBLE_QUOTE)
+		return (NONE);
+	return (status);
+}
+
+static char	*expand_string(char *arg, t_env *env, int code)
 {
 	int		start;
 	int		end;
@@ -66,17 +106,20 @@ static char	*expand_string(char *arg, t_env *env, int status)
 	while (arg && arg[start])
 	{
 		end = start;
-		while (arg[end] && !ft_strchr(SPECIAL_CHARS, arg[end]))
+		while (arg[end] && !is_metachar(arg[end], quote_status))
 			end++;
 		expanded = append_string(expanded, arg + start, start - end);
 		start = end;
 		if (arg[start])
-			start += parse_char(expanded, arg + start, env, status);
+		{
+			quote_status = set_quote_status(arg[start], quote_status);
+			start += parse_char(expanded, arg + start, env, code);
+		}
 	}
 	return (expanded);
 }
 
-static void	expand_args(t_cmd *cmd, t_env *env, int status)
+static void	expand_args(t_cmd *cmd, t_env *env, int code)
 {
 	int		index;
 	char	**args;
@@ -86,7 +129,7 @@ static void	expand_args(t_cmd *cmd, t_env *env, int status)
 	args = cmd->argv;
 	while (args && args[index])
 	{	
-		expanded_arg = expand_string(args[index], env, status);
+		expanded_arg = expand_string(args[index], env, code);
 		if (expanded_arg)
 		{
 			free(args[index]);
@@ -97,7 +140,7 @@ static void	expand_args(t_cmd *cmd, t_env *env, int status)
 	}
 }
 
-static void	expand_targets(t_cmd *cmd, t_env *env, int status)
+static void	expand_targets(t_cmd *cmd, t_env *env, int code)
 {
 	t_redir	*redir;
 	char	*expanded_target;
@@ -105,7 +148,7 @@ static void	expand_targets(t_cmd *cmd, t_env *env, int status)
 	redir = cmd->redirs;
 	while (redir)
 	{
-		expanded_target = expand_string(redir->target, env, status);
+		expanded_target = expand_string(redir->target, env, code);
 		if (expanded_target)
 		{
 			free(redir->target);
@@ -117,12 +160,12 @@ static void	expand_targets(t_cmd *cmd, t_env *env, int status)
 	
 }
 
-void	expand_parameters(t_cmd *pipeline, t_env *env, int status)
+void	expand_parameters(t_cmd *pipeline, t_env *env, int code)
 {
 	while (pipeline)
 	{
-		expand_args(pipeline, env, status);
-		expand_targets(pipeline, env, status);
+		expand_args(pipeline, env, code);
+		expand_targets(pipeline, env, code);
 		pipeline = pipeline->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/21 18:37:12 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/23 12:50:04 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define CHAR_DOUBLE_QUOTE '"'
 # define CHAR_EQUALS '='
 # define CHAR_DOLLAR '$'
+# define CHAR_QUESTION '?'
 # define SPECIAL_CHARS "\"'$"
 
 //	** VALUES FOR OPERATOR TOKENS **
