@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/21 16:55:43 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/25 22:22:18 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ static t_redir	*parse_redirect(t_cmd *cmd, t_token **token)
 	if (!type)
 		return (NULL);
 	target = (*token)->next->value;
-	redir = new_redirect(type, target);
-	add_redirect(&cmd->redirs, redir);
+	redir = new_redir(type, target);
+	add_redir(&cmd->redirs, redir);
 	*token = (*token)->next->next;
 	return (redir);
 }
@@ -84,7 +84,7 @@ t_cmd	*parse_tokens(t_token *token)
 	if (!is_valid_syntax(token))
 	{
 		printf("%s", ERROR_SYNTAX);
-		return (NULL);
+		return (pipeline);
 	}
 	while (token)
 	{

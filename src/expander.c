@@ -6,109 +6,42 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/23 22:00:03 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/25 22:39:11 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// TODO: Expander
-// - expand $VAR
-// - expand $?
-// do not expand inside single quotes - leave as is
-// do expand inside double quotes - replace as needed
-// always remove quote characters from the final result
-// process:
-// iterate over args in commands and expand
-// iterate over targets in redirs and expand
-// if a variable does not exist it is replaced with "" empty string
-// FIGURE OUT: $? - how do I get the exit code and how to I store it?
-// tip: Use state machine for tracking quotes (like so_long)
-
 #include "minishell.h"
 
-static int	parse_metachar(char **expanded, char *src, t_env *env, int code)
+static char	*process_redir(t_redir_type type, char *target, t_env *env, char *code)
 {
-	char	*exit_code;
-	char	*var_key;
-	char	*var_value;
 	int		index;
-
-	if (*src == CHAR_DOLLAR)
-	{
-		if (*(src + 1) == CHAR_QUESTION)
-		{
-			exit_code = ft_itoa(code);
-			if (exit_code) // what if itoa fails?
-				*expanded = append_string(*expanded, exit_code, ft_strlen(exit_code));
-			return (2); // skip over '$?'
-		}
-		index = 0;
-		while (src[index] && is_valid_var_char(src[index], index))
-			index++;
-		if (index > 1)
-		{
-			var_key = ft_substr(src, 1, index - 1);
-			var_value = get_var_value(env, var_key);
-			if (var_value)
-				*expanded = append_string(*expanded, var_value, ft_strlen(var_value));
-			else
-				*expanded = append_string(*expanded, var_key, ft_strlen(var_key));
-			return (index);
-		}
-		else
-			*expanded = append_string(*expanded, "$", 1);
-	}
-	return (1); // because then the special char is a single or double quote and we need to skip it
-}
-
-static char	*expand_string(char *arg, t_env *env, int code)
-{
-	int		start;
-	int		end;
 	t_quote	quote_status;
 	char	*expanded;
+	int		advance;
 
-	start = 0;
+	(void)type;
+	index = 0;
 	quote_status = NONE;
 	expanded = ft_calloc(sizeof(char), 1);
 	if (!expanded)
-		return (NULL); // TODO: IS THIS OKAY?
-	while (arg && arg[start])
+		return (NULL);
+	while (target && target[index])
 	{
-		end = start;
-		while (arg[end] && !is_metachar(arg[end], quote_status))
-			end++;
-		expanded = append_string(expanded, arg + start, end - start);
-		start = end;
-		if (arg[start])
+		if (!is_metachar(target[index], quote_status))
+			advance = parse_non_metachar(&expanded, target + index, quote_status);
+		else
 		{
-			quote_status = set_quote_status(arg[start], quote_status);
-			start += parse_metachar(&expanded, arg + start, env, code);
+			quote_status = set_quote_status(target[index], quote_status);
+			advance = parse_metachar(&expanded, target + index, env, code);
 		}
+		if (!advance)
+			return (NULL);
+		index += advance;
 	}
 	return (expanded);
 }
 
-static int	expand_args(t_cmd *cmd, t_env *env, int code)
-{
-	int		index;
-	char	**args;
-	char	*expanded_arg;
-
-	index = 0;
-	args = cmd->argv;
-	while (args && args[index])
-	{	
-		expanded_arg = expand_string(args[index], env, code);
-		if (!expanded_arg)
-			return	(0);
-		free(args[index]);
-		args[index] = expanded_arg;
-		index++;
-	}
-	return (1);
-}
-
-static int	expand_targets(t_cmd *cmd, t_env *env, int code)
+int	expand_redirections(t_cmd *cmd, t_env *env, char *code)
 {
 	t_redir	*redir;
 	char	*expanded_target;
@@ -116,7 +49,7 @@ static int	expand_targets(t_cmd *cmd, t_env *env, int code)
 	redir = cmd->redirs;
 	while (redir)
 	{
-		expanded_target = expand_string(redir->target, env, code);
+		expanded_target = process_redir(redir->type, redir->target, env, code);
 		if (!expanded_target)
 			return (0);
 		free(redir->target);
@@ -126,13 +59,66 @@ static int	expand_targets(t_cmd *cmd, t_env *env, int code)
 	return (1);
 }
 
-int	expand_parameters(t_cmd *pipeline, t_env *env, int code)
+static char	*process_arg(char *arg, t_env *env, char *code)
 {
+	int		index;
+	t_quote	quote_status;
+	char	*expanded;
+	int		advance;
+
+	index = 0;
+	quote_status = NONE;
+	expanded = ft_calloc(sizeof(char), 1);
+	if (!expanded)
+		return (NULL);
+	while (arg && arg[index])
+	{
+		if (!is_metachar(arg[index], quote_status))
+			advance = parse_non_metachar(&expanded, arg + index, quote_status);
+		else
+		{
+			quote_status = set_quote_status(arg[index], quote_status);
+			advance = parse_metachar(&expanded, arg + index, env, code);
+		}
+		if (!advance)
+			return (NULL);
+		index += advance;
+	}
+	return (expanded);
+}
+
+static int	expand_arguments(t_cmd *cmd, t_env *env, char *code)
+{
+	int		index;
+	char	**args;
+	char	*expanded_arg;
+	
+	index = 0;
+	args = cmd->argv;
+	while (args && args[index])
+	{	
+		expanded_arg = process_arg(args[index], env, code);
+		if (!expanded_arg)
+			return (FAILURE);
+		free(args[index]);
+		args[index] = expanded_arg;
+		index++;
+	}
+	return (SUCCESS);
+}
+
+int	expand_parameters(t_cmd *pipeline, t_env *env, int exit_code)
+{
+	char *code;
+
+	code = ft_itoa(exit_code);
+	if (!code)
+		return (FAILURE);
 	while (pipeline)
 	{
-		if (!expand_args(pipeline, env, code))
+		if (!expand_arguments(pipeline, env, code))
 			return (0);
-		if (!expand_targets(pipeline, env, code))
+		if (!expand_redirections(pipeline, env, code))
 			return (0);
 		pipeline = pipeline->next;
 	}

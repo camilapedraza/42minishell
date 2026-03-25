@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/23 21:54:34 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/25 21:51:53 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,23 @@ static int	get_input(char **line)
 	return (1);
 }
 
-void	clean_prompt(char *line, t_token *token_list, t_cmd *pipeline)
+void	clean_prompt(char **line, t_token **token_list, t_cmd **pipeline)
 {
-	if (line)
-		free(line);
-	if (token_list)
-		free_tokens(token_list);
+	if (line && *line)
+	{
+		free(*line);
+		*line = NULL;
+	}
+	if (token_list && *token_list)
+	{
+		free_tokens(*token_list);
+		*token_list = NULL;
+	}
 	if (pipeline)
-		free_commands(pipeline);
+	{
+		free_commands(*pipeline);
+		*pipeline = NULL;
+	}
 }
 
 void	init(t_env **env, t_token **token_list, t_cmd **pipeline, char **envp)
@@ -121,7 +130,7 @@ int	main(int ac, char **av, char **envp)
 					print_cmds(pipeline);
 			}
 		}
-		clean_prompt(line, token_list, pipeline);
+		clean_prompt(&line, &token_list, &pipeline);
 	}
 	free_vars(env);
 	rl_clear_history();

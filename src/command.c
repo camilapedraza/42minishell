@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/23 19:28:33 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/25 22:22:25 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	free_commands(t_cmd *pipeline)
 		if (pipeline->argv)
 			free_args(pipeline->argv);
 		if (pipeline->redirs)
-			free_redirects(pipeline->redirs);
+			free_redirs(pipeline->redirs);
 		free(pipeline);
 		pipeline = temp;
 	}

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect.c                                         :+:      :+:    :+:   */
+/*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:26 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 14:37:30 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/25 22:22:54 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_redir	*new_redirect(t_redir_type type, char *value)
+t_redir	*new_redir(t_redir_type type, char *value)
 {
 	t_redir	*redir;
 
@@ -30,24 +30,24 @@ t_redir	*new_redirect(t_redir_type type, char *value)
 	return (redir);
 }
 
-void	add_redirect(t_redir **head, t_redir *new_redirect)
+void	add_redir(t_redir **head, t_redir *new_redir)
 {
 	t_redir	*temp;
 
-	if (!head || !new_redirect)
+	if (!head || !new_redir)
 		return ;
 	if (*head == NULL)
-		*head = new_redirect;
+		*head = new_redir;
 	else
 	{
 		temp = *head;
 		while (temp->next)
 			temp = temp->next;
-		temp->next = new_redirect;
+		temp->next = new_redir;
 	}
 }
 
-void	free_redirects(t_redir *head)
+void	free_redirs(t_redir *head)
 {
 	t_redir	*temp;
 

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/23 21:51:46 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/25 22:26:00 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+
+//	** CUSTOM EXIT CODES **
+# define SUCCESS 1
+# define FAILURE 0
 
 //	** SPECIAL CHARS **
 # define CHAR_PIPE '|'
@@ -148,12 +152,14 @@ int				count_args(t_token *token);
 void			free_args(char **argv);
 
 //	** REDIRECTS **
-t_redir			*new_redirect(t_redir_type type, char *value);
-void			add_redirect(t_redir **head, t_redir *new_redirect);
-void			free_redirects(t_redir *head);
+t_redir			*new_redir(t_redir_type type, char *value);
+void			add_redir(t_redir **head, t_redir *new_redirect);
+void			free_redirs(t_redir *head);
 
 //	** EXPANDER **
-int				expand_parameters(t_cmd *pipeline, t_env *env, int status);
+int				expand_parameters(t_cmd *pipeline, t_env *env, int exit_code);
+int				expand_cmd_tokens(t_cmd *cmd, t_env *env, char *code);
+int				expand_redirections(t_cmd *cmd, t_env *env, char *code);
 
 //	** EXPANDER HELPERS **
 bool			is_metachar(char c, t_quote status);
