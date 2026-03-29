@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/03/25 22:21:07 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/03/29 19:01:36 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,13 @@ SRC_DIR		=	src
 INC_DIR		=	include
 HEADERS		=	minishell.h
 FILES		=	minishell \
-				variable environment \
-				token tokenizer tokenizer_helpers \
-				command redirection parser parser_helpers validator \
-				expander expander_args expander_redirs expander_helpers
+				variable token command redirection \
+				init \
+				tokenize tokenizer_helpers \
+				parse parser_helpers \
+				expand expansion_handlers expansion_helpers \
+				append \
+				debug_prints
 SRCS		=	${FILES:%=${SRC_DIR}/%.c}
 OBJS		=	${SRCS:%.c=%.o}
 

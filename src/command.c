@@ -6,29 +6,11 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/25 22:22:25 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 18:20:11 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	count_args(t_token *token)
-{
-	t_token	*temp;
-	int		argc;
-
-	temp = token;
-	argc = 0;
-	while (temp && temp->type != TOKEN_PIPE)
-	{
-		if (is_redir(temp->type))
-			temp = temp->next;
-		else
-			argc++;
-		temp = temp->next;
-	}
-	return (argc);
-}
 
 t_cmd	*new_command(t_token *token)
 {
@@ -65,6 +47,24 @@ void	add_command(t_cmd **pipeline, t_cmd *new_command)
 			temp = temp->next;
 		temp->next = new_command;
 	}
+}
+
+int	count_args(t_token *token)
+{
+	t_token	*temp;
+	int		argc;
+
+	temp = token;
+	argc = 0;
+	while (temp && temp->type != TOKEN_PIPE)
+	{
+		if (is_redirection(temp->type))
+			temp = temp->next;
+		else
+			argc++;
+		temp = temp->next;
+	}
+	return (argc);
 }
 
 void	free_args(char **argv)

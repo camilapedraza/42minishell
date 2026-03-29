@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/25 22:26:00 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 18:54:23 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,12 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+typedef struct s_context
+{
+	struct s_env	*env;
+	int				exit_code;
+}	t_cntxt;
 
 //	** TOKEN DATA TYPES **
 typedef enum e_token_type
@@ -109,15 +115,34 @@ typedef enum e_quote
 	DOUBLE
 }	t_quote;
 
-//	** ENVIRONMENT **
-t_env			*init_env(char **envp);
 
-//	** VARIABLES **
+//	** ENV VARIABLES **
 t_env			*new_var(char *key, char *value);
 void			add_var(t_env **head, t_env *new_var);
 t_env			*find_var(t_env *env, char *key);
 char			*get_var_value(t_env *env, char *key);
 void			free_vars(t_env *head);
+
+//	** TOKENS **
+t_token			*new_token(t_token_type type, char *value);
+void			add_token(t_token **head, t_token *new_node);
+void			free_tokens(t_token *head);
+
+//	** COMMANDS **
+t_cmd			*new_command(t_token *token);
+void			add_command(t_cmd **pipeline, t_cmd *new_command);
+int				count_args(t_token *token);
+void			free_args(char **argv);
+void			free_commands(t_cmd *pipeline);
+
+//	** REDIRECTS **
+t_redir			*new_redir(t_redir_type type, char *value);
+void			add_redir(t_redir **head, t_redir *new_redirect);
+t_redir_type	get_redir_type(t_token_type token_type);
+void			free_redirs(t_redir *head);
+
+//	** INITIALIZERS **
+t_env			*init_env(char **envp);
 
 //	** TOKENIZER **	
 t_token			*tokenize_input(const char *line);
@@ -129,45 +154,27 @@ bool			is_quote(char c);
 t_token_type	get_operator_type(const char *s);
 char			*get_operator_value(t_token_type type);
 
-//	** TOKENS **
-t_token			*new_token(t_token_type type, char *value);
-void			add_token(t_token **head, t_token *new_node);
-void			free_tokens(t_token *head);
-
 //	** PARSER **
 t_cmd			*parse_tokens(t_token *token);
 
 //	** PARSER HELPERS **
-bool			is_redir(t_token_type type);
-t_redir_type	get_redir_type(t_token_type token_type);
-
-//	** VALIDATOR **
+bool			is_redirection(t_token_type type);
 int				is_valid_syntax(t_token *head);
 
-//	** COMMANDS **
-t_cmd			*new_command(t_token *token);
-void			add_command(t_cmd **pipeline, t_cmd *new_command);
-void			free_commands(t_cmd *pipeline);
-int				count_args(t_token *token);
-void			free_args(char **argv);
-
-//	** REDIRECTS **
-t_redir			*new_redir(t_redir_type type, char *value);
-void			add_redir(t_redir **head, t_redir *new_redirect);
-void			free_redirs(t_redir *head);
-
-//	** EXPANDER **
+//	** EXPANDER, ESPANSION HANDLERS**
 int				expand_parameters(t_cmd *pipeline, t_env *env, int exit_code);
-int				expand_cmd_tokens(t_cmd *cmd, t_env *env, char *code);
-int				expand_redirections(t_cmd *cmd, t_env *env, char *code);
+int				scan_segment(char **exp, char *arg, t_quote *status, t_cntxt *context);
 
-//	** EXPANDER HELPERS **
+//	** EXPANDER HELPERS
 bool			is_metachar(char c, t_quote status);
 bool			is_valid_var_char(char c, int index);
-t_quote			set_quote_status(char c, t_quote status);
-char			*append_string(char *dest, char *src, size_t len);
+
+//	** APPENDER MODULE (FOR EXAPANSION)
+int				append_to_expanded(char **expanded, char *src, size_t len);
 
 // ** DEBUG **
 void			print_env(t_env *env);
+void			print_tokens(t_token *head);
+void			print_cmds(t_cmd *cmds);
 
 #endif

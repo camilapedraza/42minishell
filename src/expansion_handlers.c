@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_args.c                                    :+:      :+:    :+:   */
+/*   expansion_handlers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/25 22:30:35 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 19:49:35 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@
 
 #include "minishell.h"
 
-static int parse_env_var(char **expanded, char *src, t_env *env)
+static int	expand_variable(char **expanded, char *src, t_cntxt *context)
 {
-	char	*var_key;
-	char	*var_value;
+	char	*key;
+	char	*value;
 	int		index;
 
 	index = 0;
@@ -35,54 +35,62 @@ static int parse_env_var(char **expanded, char *src, t_env *env)
 		index++;
 	if (index > 1)
 	{
-		var_key = ft_substr(src, 1, index - 1);
-		if (var_key)
-		{
-			var_value = get_var_value(env, var_key);
-			if (var_value)
-				*expanded = append_string(*expanded, var_value, ft_strlen(var_value));
-			free(var_key);
-			if (!*expanded)
-				return (FAILURE);
-		}
+		key = ft_substr(src, 1, index - 1);
+		if (!key)
+			return (FAILURE);
+		value = get_var_value(context->env, key);
+		free(key);
+		if (value && !append_to_expanded(expanded, value, ft_strlen(value)))
+			return (FAILURE);
 	}
-	else
-		*expanded = append_string(*expanded, "$", 1);
+	else if (!append_to_expanded(expanded, "$", 1))
+		return (FAILURE);
 	return (index);
 }
 
-static int	parse_metachar(char **expanded, char *src, t_env *env, char *code)
+static int	handle_special(char **expanded, char *src, t_cntxt *context)
 {	
+	char	*code;
+
 	if (*src == CHAR_DOLLAR)
 	{
 		if (*(src + 1) && *(src + 1) == CHAR_QUESTION)
 		{
-			*expanded = append_string(*expanded, code, ft_strlen(code));	
-			if (!*expanded)
+			code = ft_itoa(context->exit_code);
+			if (!code)
 				return (FAILURE);
+			if (!append_to_expanded(expanded, code, ft_strlen(code)))
+			{
+				free(code);
+				return (FAILURE);
+			}
+			free(code);
 			return (2);
 		}
 		else
-			return (parse_env_var(expanded, src, env));
+			return (expand_variable(expanded, src, context));
 	}
 	else if (*src == CHAR_DOUBLE_QUOTE || *src == CHAR_SINGLE_QUOTE)
 		return (1);
 	return (FAILURE);
 }
 
-static int	parse_non_metachar(char **expanded, char *arg, t_quote quote_status)
+static int	handle_literal(char **expanded, char *arg, t_quote status)
 {
 	int		index;
 
 	index = 0;
-	while (arg[index] && !is_metachar(arg[index], quote_status))
+	while (arg[index] && !is_metachar(arg[index], status))
 			index++;
-	*expanded = append_string(*expanded, arg, index);
-	if (!expanded)
+	if (!append_to_expanded(expanded, arg, index))
 		return (FAILURE);
 	return (index);
 }
 
-
-
-
+int	scan_segment(char **exp, char *arg, t_quote *status, t_cntxt *context)
+{
+	if (!is_metachar(*arg, *status))
+		return (handle_literal(exp, arg, *status));
+	update_quote_status(*arg, status);
+	return (handle_special(exp, arg, context));
+}

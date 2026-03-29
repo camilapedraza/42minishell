@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:26 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/25 22:22:54 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 18:12:37 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,19 @@ t_redir	*new_redir(t_redir_type type, char *value)
 	}
 	redir->next = NULL;
 	return (redir);
+}
+
+t_redir_type	get_redir_type(t_token_type token_type)
+{
+	if (token_type == TOKEN_APPEND)
+		return (REDIR_APPEND);
+	if (token_type == TOKEN_HEREDOC)
+		return (REDIR_HEREDOC);
+	if (token_type == TOKEN_REDIR_IN)
+		return (REDIR_IN);
+	if (token_type == TOKEN_REDIR_OUT)
+		return (REDIR_OUT);
+	return (REDIR_NULL);
 }
 
 void	add_redir(t_redir **head, t_redir *new_redir)

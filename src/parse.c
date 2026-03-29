@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/25 22:22:18 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 19:55:01 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static t_cmd	*build_command(t_token **token)
 		return (NULL);
 	while (*token && (*token)->type != TOKEN_PIPE)
 	{
-		if (is_redir((*token)->type))
+		if (is_redirection((*token)->type))
 		{
 			if (!parse_redirect(cmd, token))
 				return (free_commands(cmd), NULL);
