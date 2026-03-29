@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 22:57:02 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 23:31:09 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 # define ERROR_NO_QUOTE "Error: No closing quote!\n"
 # define ERROR_SYNTAX "Error! Invalid syntax!\n"
 
-//	** ENVIRONMENT DATA TYPES **
+//	** SHELL DATA TYPES **
 typedef struct s_env
 {
 	char			*key;
@@ -61,11 +61,11 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_context
+typedef struct s_shell
 {
 	struct s_env	*env;
 	int				exit_code;
-}	t_cntxt;
+}	t_shell;
 
 //	** TOKEN DATA TYPES **
 typedef enum e_token_type
@@ -120,6 +120,14 @@ typedef enum e_quote
 	DOUBLE,
 }	t_quote;
 
+//	** SESSION DATA TYPES **
+typedef struct s_session
+{
+	char	*line;
+	t_token	*tokens;
+	t_cmd	*pipeline;
+}	t_session;
+
 //	** ENV VARIABLES **
 t_env			*new_var(char *key, char *value);
 void			add_var(t_env **head, t_env *new_var);
@@ -145,8 +153,13 @@ void			add_redir(t_redir **head, t_redir *new_redirect);
 t_redir_type	get_redir_type(t_token_type token_type);
 void			free_redirs(t_redir *head);
 
-//	** INITIALIZERS **
-t_env			*init_env(char **envp);
+//	** SHELL **
+int				init_shell(t_shell *shell, char **envp);
+void			free_shell(t_shell *shell);
+
+//	** PROMPt **
+int				run_prompt_cycle(t_shell *shell);
+int				get_input(char **line, char *prompt);
 
 //	** TOKENIZER **	
 t_token			*tokenize_input(const char *line);
@@ -166,8 +179,8 @@ bool			is_redirection(t_token_type type);
 int				is_valid_syntax(t_token *head);
 
 //	** EXPANDER, ESPANSION HANDLERS**
-int				expand_parameters(t_cmd *pipeline, t_env *env, int exit_code);
-int				scan_segment(char **exp, char *arg, t_quote *st, t_cntxt *ct);
+int				expand_parameters(t_cmd *pipeline, t_shell *shell);
+int				scan_segment(char **exp, char *arg, t_quote *st, t_shell *sh);
 
 //	** EXPANDER HELPERS
 bool			is_metachar(char c, t_quote status);

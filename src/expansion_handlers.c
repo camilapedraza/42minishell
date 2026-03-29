@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 22:21:38 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 23:00:31 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 #include "minishell.h"
 
-static int	expand_variable(char **expanded, char *src, t_cntxt *context)
+static int	expand_variable(char **expanded, char *src, t_shell *shell)
 {
 	char	*key;
 	char	*value;
@@ -38,7 +38,7 @@ static int	expand_variable(char **expanded, char *src, t_cntxt *context)
 		key = ft_substr(src, 1, index - 1);
 		if (!key)
 			return (FAILURE);
-		value = get_var_value(context->env, key);
+		value = get_var_value(shell->env, key);
 		free(key);
 		if (value && !append_to_expanded(expanded, value, ft_strlen(value)))
 			return (FAILURE);
@@ -48,7 +48,7 @@ static int	expand_variable(char **expanded, char *src, t_cntxt *context)
 	return (index);
 }
 
-static int	handle_special(char **expanded, char *src, t_cntxt *context)
+static int	handle_special(char **expanded, char *src, t_shell *shell)
 {	
 	char	*code;
 
@@ -56,7 +56,7 @@ static int	handle_special(char **expanded, char *src, t_cntxt *context)
 	{
 		if (*(src + 1) && *(src + 1) == CHAR_QUESTION)
 		{
-			code = ft_itoa(context->exit_code);
+			code = ft_itoa(shell->exit_code);
 			if (!code)
 				return (FAILURE);
 			if (!append_to_expanded(expanded, code, ft_strlen(code)))
@@ -68,7 +68,7 @@ static int	handle_special(char **expanded, char *src, t_cntxt *context)
 			return (2);
 		}
 		else
-			return (expand_variable(expanded, src, context));
+			return (expand_variable(expanded, src, shell));
 	}
 	else if (*src == CHAR_DOUBLE_QUOTE || *src == CHAR_SINGLE_QUOTE)
 		return (1);
@@ -87,10 +87,10 @@ static int	handle_literal(char **expanded, char *arg, t_quote status)
 	return (index);
 }
 
-int	scan_segment(char **exp, char *arg, t_quote *status, t_cntxt *context)
+int	scan_segment(char **exp, char *arg, t_quote *status, t_shell *shell)
 {
 	if (!is_metachar(*arg, *status))
 		return (handle_literal(exp, arg, *status));
 	update_segment_status(*arg, status);
-	return (handle_special(exp, arg, context));
+	return (handle_special(exp, arg, shell));
 }

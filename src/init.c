@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 18:33:16 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 23:30:17 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_env	*parse_var(char *envp)
 	return (var);
 }
 
-t_env	*init_env(char **envp)
+static t_env	*init_env(char **envp)
 {
 	int		index;
 	t_env	*env;
@@ -59,4 +59,19 @@ t_env	*init_env(char **envp)
 		index++;
 	}
 	return (env);
+}
+
+int	init_shell(t_shell *shell, char **envp)
+{
+	shell->env = init_env(envp);
+	if (!shell->env)
+		return (FAILURE);
+	shell->exit_code = 0;
+	return (SUCCESS);
+}
+
+void	free_shell(t_shell *shell)
+{
+	free_vars(shell->env);
+	rl_clear_history();
 }
