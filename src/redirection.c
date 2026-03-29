@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:26 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 18:12:37 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 21:40:58 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@ t_redir	*new_redir(t_redir_type type, char *value)
 	redir = malloc(sizeof(t_redir));
 	if (!redir)
 		return (NULL);
-	redir->type = type;
 	redir->target = ft_strdup(value);
 	if (!redir->target)
 	{
 		free(redir);
 		return (NULL);
 	}
+	redir->type = type;
+	redir->expand = false;
+	redir->fd = -1;
 	redir->next = NULL;
 	return (redir);
 }
@@ -70,6 +72,8 @@ void	free_redirs(t_redir *head)
 	{
 		temp = head->next;
 		free(head->target);
+		if (head->fd != -1)
+			close(head->fd);
 		free(head);
 		head = temp;
 	}

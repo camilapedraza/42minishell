@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 19:49:35 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 22:21:38 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,6 @@ int	scan_segment(char **exp, char *arg, t_quote *status, t_cntxt *context)
 {
 	if (!is_metachar(*arg, *status))
 		return (handle_literal(exp, arg, *status));
-	update_quote_status(*arg, status);
+	update_segment_status(*arg, status);
 	return (handle_special(exp, arg, context));
 }

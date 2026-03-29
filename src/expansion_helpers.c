@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 14:41:56 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 19:51:50 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 22:56:00 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,18 @@ bool	is_metachar(char c, t_quote status)
 	return (false);
 }
 
-static void	update_quote_status(char c, t_quote *status)
+bool	is_removable_quote(char c, t_quote status)
+{
+	if (status == NONE && is_quote(c))
+		return (true);
+	if (status == SINGLE && c == CHAR_SINGLE_QUOTE)
+		return (true);
+	if (status == DOUBLE && c == CHAR_DOUBLE_QUOTE)
+		return (true);
+	return (false);
+}
+
+void	update_segment_status(char c, t_quote *status)
 {
 	if (c == '\0')
 		return ;
@@ -51,4 +62,17 @@ static void	update_quote_status(char c, t_quote *status)
 	else if (*status == DOUBLE && c == CHAR_DOUBLE_QUOTE)
 		*status = NONE;
 	return ;
+}
+
+void	update_delimiter_status(char c, t_quote *status)
+{
+	if (*status == NONE)
+	{
+		if (c == CHAR_SINGLE_QUOTE)
+			*status = SINGLE;
+		else if (c == CHAR_DOUBLE_QUOTE)
+			*status = DOUBLE;
+	}
+	else
+		*status = NONE;
 }

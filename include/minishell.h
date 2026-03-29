@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 18:54:23 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 22:57:02 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@
 # define PIPE_VALUE "|"
 # define REDIR_IN_VALUE "<"
 # define REDIR_OUT_VALUE ">"
+
+//	** VALUES FOR PROMPTS **
+# define SHELL_PROMPT "minishell$ "
 
 //	** PREDEFINED STATUS MESSAGES **
 # define EXIT_MSG "exit\n"
@@ -97,6 +100,8 @@ typedef struct s_redir
 {
 	t_redir_type	type;	
 	char			*target;
+	bool			expand;
+	int				fd;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -112,9 +117,8 @@ typedef enum e_quote
 {
 	NONE,
 	SINGLE,
-	DOUBLE
+	DOUBLE,
 }	t_quote;
-
 
 //	** ENV VARIABLES **
 t_env			*new_var(char *key, char *value);
@@ -163,11 +167,14 @@ int				is_valid_syntax(t_token *head);
 
 //	** EXPANDER, ESPANSION HANDLERS**
 int				expand_parameters(t_cmd *pipeline, t_env *env, int exit_code);
-int				scan_segment(char **exp, char *arg, t_quote *status, t_cntxt *context);
+int				scan_segment(char **exp, char *arg, t_quote *st, t_cntxt *ct);
 
 //	** EXPANDER HELPERS
 bool			is_metachar(char c, t_quote status);
 bool			is_valid_var_char(char c, int index);
+bool			is_removable_quote(char c, t_quote status);
+void			update_segment_status(char c, t_quote *status);
+void			update_delimiter_status(char c, t_quote *status);
 
 //	** APPENDER MODULE (FOR EXAPANSION)
 int				append_to_expanded(char **expanded, char *src, size_t len);

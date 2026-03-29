@@ -6,17 +6,46 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 19:50:40 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/29 22:47:29 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*expand_redir(t_redir_type type, char *target, t_cntxt *context)
+static char	*extract_delimiter(t_redir *redir)
 {
+	char	*src;
+	char	*delimiter;
+	int		s;
+	int		d;
+	t_quote	status;
+
+	src = redir->target;
+	delimiter = ft_calloc(ft_strlen(src) + 1, sizeof(char));
+	if (!delimiter)
+		return (NULL);
+	s = 0;
+	d = 0;
+	status = NONE;
+	while (src[s])
+	{
+		if (is_removable_quote(src[s], status))
+		{
+			redir->expand = false;
+			update_delimiter_status(src[s], &status);
+		}
+		else
+			delimiter[d++] = src[s];
+		s++;
+	}
+	return (delimiter);
+}
+
+static char	*standard_expansion(char *arg, t_cntxt *context)
+{
+	char	*expanded;
 	int		index;
 	t_quote	status;
-	char	*expanded;
 	int		advance;
 
 	expanded = ft_calloc(sizeof(char), 1);
@@ -24,9 +53,9 @@ static char	*expand_redir(t_redir_type type, char *target, t_cntxt *context)
 		return (NULL);
 	index = 0;
 	status = NONE;
-	while (target && target[index])
+	while (arg && arg[index])
 	{
-		advance = scan_segment(&expanded, target + index, &status, context);
+		advance = scan_segment(&expanded, arg + index, &status, context);
 		if (!advance)
 		{
 			free(expanded);
@@ -48,39 +77,20 @@ static int	expand_redirections(t_cmd *cmd, t_env *env, int code)
 	context.exit_code = code;
 	while (redir)
 	{
-		expanded_target = expand_redir(redir->type, redir->target, &context);
+		if (redir->type == REDIR_HEREDOC)
+		{
+			redir->expand = true;
+			expanded_target = extract_delimiter(redir);
+		}
+		else
+			expanded_target = standard_expansion(redir->target, &context);
 		if (!expanded_target)
-			return (0);
+			return (FAILURE);
 		free(redir->target);
 		redir->target = expanded_target;
 		redir = redir->next;
 	}
-	return (1);
-}
-
-static char	*expand_arg(char *arg, t_cntxt *context)
-{
-	int		index;
-	t_quote	status;
-	char	*expanded;
-	int		advance;
-
-	expanded = ft_calloc(sizeof(char), 1);
-	if (!expanded)
-		return (NULL);
-	index = 0;
-	status = NONE;
-	while (arg && arg[index])
-	{
-		advance = scan_segment(&expanded, arg + index, &status, context);
-		if (!advance)
-		{
-			free(expanded);
-			return (NULL);
-		}
-		index += advance;
-	}
-	return (expanded);
+	return (SUCCESS);
 }
 
 static int	expand_arguments(t_cmd *cmd, t_env *env, int code)
@@ -96,7 +106,7 @@ static int	expand_arguments(t_cmd *cmd, t_env *env, int code)
 	context.exit_code = code;
 	while (args && args[index])
 	{	
-		expanded_arg = expand_arg(args[index], &context);
+		expanded_arg = standard_expansion(args[index], &context);
 		if (!expanded_arg)
 			return (FAILURE);
 		free(args[index]);
