@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/03/29 23:29:10 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/03/30 20:24:20 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ INC_DIR		=	include
 HEADERS		=	minishell.h
 FILES		=	minishell \
 				variable token command redirection \
-				init \
+				init_shell \
+				session \
 				prompt \
 				tokenize tokenizer_helpers \
 				parse parser_helpers \

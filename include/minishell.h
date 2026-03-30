@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 23:31:09 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 20:23:20 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 
 //	** VALUES FOR PROMPTS **
 # define SHELL_PROMPT "minishell$ "
+# define HEREDOC_PROMPT "heredoc >"
 
 //	** PREDEFINED STATUS MESSAGES **
 # define EXIT_MSG "exit\n"
@@ -157,9 +158,11 @@ void			free_redirs(t_redir *head);
 int				init_shell(t_shell *shell, char **envp);
 void			free_shell(t_shell *shell);
 
-//	** PROMPt **
-int				run_prompt_cycle(t_shell *shell);
-int				get_input(char **line, char *prompt);
+//	** COMMAND LINE SESSION **
+int				run_session(t_shell *shell);
+
+//	** PROMPT & INPUT **
+int				get_input(char **line, char *prompt, bool history_enabled);
 
 //	** TOKENIZER **	
 t_token			*tokenize_input(const char *line);

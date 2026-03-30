@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 23:09:13 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 18:33:33 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,17 @@ static int	expand_arguments(t_cmd *cmd, t_shell *shell)
 
 int	expand_parameters(t_cmd *pipeline, t_shell *shell)
 {
-	while (pipeline)
+	t_cmd	*cmd;
+
+	cmd = pipeline;
+	while (cmd)
 	{
-		if (!expand_arguments(pipeline, shell))
+		if (!expand_arguments(cmd, shell))
 			return (FAILURE);
-		if (!expand_redirections(pipeline, shell))
+		if (!expand_redirections(cmd, shell))
 			return (FAILURE);
-		pipeline = pipeline->next;
+		cmd = cmd->next;
 	}
+	// expand_heredocs(pipeline, shell);
 	return (SUCCESS);
 }

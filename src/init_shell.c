@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 23:30:17 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:38:41 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static t_env	*init_env(char **envp)
 		{
 			free_vars(env);
 			printf("%s", ERROR_ENV);
-			exit(EXIT_FAILURE);
+			return (NULL);
 		}	
 		add_var(&env, var);
 		index++;

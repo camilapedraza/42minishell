@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 23:27:25 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 20:21:57 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	if (!init_shell(&shell, envp))
 		exit(EXIT_FAILURE);
-	while (run_prompt_cycle(&shell))
+	while (run_session(&shell))
 		;
 	free_shell(&shell);
 	exit(EXIT_SUCCESS);
