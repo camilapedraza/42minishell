@@ -6,64 +6,39 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 22:56:01 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 23:33:00 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*extract_delimiter(t_redir *redir)
+static int	expand_heredocs(t_redir *heredoc, t_shell *shell)
 {
-	char	*src;
-	char	*delimiter;
-	int		s;
-	int		d;
-	t_quote	status;
+	int		pipefd[2];
+	char	*line;
 
-	src = redir->target;
-	delimiter = ft_calloc(ft_strlen(src) + 1, sizeof(char));
-	if (!delimiter)
-		return (NULL);
-	s = 0;
-	d = 0;
-	status = NONE;
-	while (src[s])
+	if (pipe(pipefd) == -1)
 	{
-		if (is_removable_quote(src[s], status))
-		{
-			redir->expand = false;
-			update_delimiter_status(src[s], &status);
-		}
-		else
-			delimiter[d++] = src[s];
-		s++;
+		perror("Pipe Error");
+		return (FAILURE);
 	}
-	return (delimiter);
-}
-
-static char	*expand(char *arg, t_shell *shell)
-{
-	char	*expanded;
-	int		index;
-	t_quote	status;
-	int		advance;
-
-	expanded = ft_calloc(sizeof(char), 1);
-	if (!expanded)
-		return (NULL);
-	index = 0;
-	status = NONE;
-	while (arg && arg[index])
+	line = NULL;
+	while (1)
 	{
-		advance = scan_segment(&expanded, arg + index, &status, shell);
-		if (!advance)
+		if (!get_heredoc_line(&line, heredoc, shell))
 		{
-			free(expanded);
-			return (NULL);
+			close_heredoc_pipe(pipefd);
+			return (FAILURE);
 		}
-		index += advance;
+		if (!line)
+			break ;
+		write(pipefd[1], line, ft_strlen(line));
+		write(pipefd[1], "\n", 1);
+		free(line);
 	}
-	return (expanded);
+	close(pipefd[1]);
+	heredoc->fd = pipefd[0];
+	return (SUCCESS);
 }
 
 static int	expand_redirections(t_cmd *cmd, t_shell *shell)
@@ -80,7 +55,7 @@ static int	expand_redirections(t_cmd *cmd, t_shell *shell)
 			expanded_target = extract_delimiter(redir);
 		}
 		else
-			expanded_target = expand(redir->target, shell);
+			expanded_target = handle_expansion(redir->target, shell);
 		if (!expanded_target)
 			return (FAILURE);
 		free(redir->target);
@@ -100,7 +75,7 @@ static int	expand_arguments(t_cmd *cmd, t_shell *shell)
 	args = cmd->argv;
 	while (args && args[index])
 	{	
-		expanded_arg = expand(args[index], shell);
+		expanded_arg = handle_expansion(args[index], shell);
 		if (!expanded_arg)
 			return (FAILURE);
 		free(args[index]);
@@ -113,6 +88,7 @@ static int	expand_arguments(t_cmd *cmd, t_shell *shell)
 int	expand_parameters(t_cmd *pipeline, t_shell *shell)
 {
 	t_cmd	*cmd;
+	t_redir	*redir;
 
 	cmd = pipeline;
 	while (cmd)
@@ -123,7 +99,17 @@ int	expand_parameters(t_cmd *pipeline, t_shell *shell)
 			return (FAILURE);
 		cmd = cmd->next;
 	}
-	if (!expand_heredocs(pipeline, shell))
-		return (FAILURE);
+	cmd = pipeline;
+	while (cmd)
+	{
+		redir = cmd->redirs;
+		while (redir)
+		{
+			if (redir->type == REDIR_HEREDOC && !expand_heredocs(redir, shell))
+				return (FAILURE);
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
 	return (SUCCESS);
 }

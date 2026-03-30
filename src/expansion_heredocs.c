@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 17:04:41 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 23:07:10 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 23:30:06 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 // or check for other heredocs first?
 // or expand during execution only? - shell documentation
 
-static void	close_heredoc_pipe(int *pipefd)
+void	close_heredoc_pipe(int *pipefd)
 {
 	if (pipefd[0] != -1)
 		close(pipefd[0]);
@@ -33,7 +33,7 @@ static void	close_heredoc_pipe(int *pipefd)
 		close(pipefd[1]);
 }
 
-static char	*heredoc_expansion(char *arg, t_shell *shell)
+char	*heredoc_expansion(char *arg, t_shell *shell)
 {
 	char	*expanded;
 	int		index;
@@ -58,7 +58,7 @@ static char	*heredoc_expansion(char *arg, t_shell *shell)
 	return (expanded);
 }
 
-static int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
+int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
 {	
 	char	*expanded_line;
 
@@ -81,52 +81,31 @@ static int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
 	return (SUCCESS);
 }
 
-static int	deal_with_heredoc(t_redir *heredoc, t_shell *shell)
+char	*extract_delimiter(t_redir *redir)
 {
-	int		pipefd[2];
-	char	*line;
+	char	*src;
+	char	*delimiter;
+	int		s;
+	int		d;
+	t_quote	status;
 
-	if (pipe(pipefd) == -1)
+	src = redir->target;
+	delimiter = ft_calloc(ft_strlen(src) + 1, sizeof(char));
+	if (!delimiter)
+		return (NULL);
+	s = 0;
+	d = 0;
+	status = NONE;
+	while (src[s])
 	{
-		perror("Pipe Error");
-		return (FAILURE);
-	}
-	line = NULL;
-	while (1)
-	{
-		if (!get_heredoc_line(&line, heredoc, shell))
+		if (is_removable_quote(src[s], status))
 		{
-			close_heredoc_pipe(pipefd);
-			return (FAILURE);
+			redir->expand = false;
+			update_delimiter_status(src[s], &status);
 		}
-		if (!line)
-			break ;
-		write(pipefd[1], line, ft_strlen(line));
-		write(pipefd[1], "\n", 1);
-		free(line);
+		else
+			delimiter[d++] = src[s];
+		s++;
 	}
-	close(pipefd[1]);
-	heredoc->fd = pipefd[0];
-	return (SUCCESS);
-}
-
-int	expand_heredocs(t_cmd *pipeline, t_shell *shell)
-{
-	t_cmd	*cmd;
-	t_redir	*redir;
-
-	cmd = pipeline;
-	while (cmd)
-	{
-		redir = cmd->redirs;
-		while (redir)
-		{
-			if (redir->type == REDIR_HEREDOC)
-				if (!deal_with_heredoc(redir, shell))
-					return (FAILURE);
-			redir = redir->next;
-		}
-		cmd = cmd->next;
-	}
-	return (SUCCESS);
+	return (delimiter);
 }

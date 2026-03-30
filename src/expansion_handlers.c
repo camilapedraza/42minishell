@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 23:00:31 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 23:23:58 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,29 @@ int	scan_segment(char **exp, char *arg, t_quote *status, t_shell *shell)
 		return (handle_literal(exp, arg, *status));
 	update_segment_status(*arg, status);
 	return (handle_special(exp, arg, shell));
+}
+
+char	*handle_expansion(char *arg, t_shell *shell)
+{
+	char	*expanded;
+	int		index;
+	t_quote	status;
+	int		advance;
+
+	expanded = ft_calloc(sizeof(char), 1);
+	if (!expanded)
+		return (NULL);
+	index = 0;
+	status = NONE;
+	while (arg && arg[index])
+	{
+		advance = scan_segment(&expanded, arg + index, &status, shell);
+		if (!advance)
+		{
+			free(expanded);
+			return (NULL);
+		}
+		index += advance;
+	}
+	return (expanded);
 }
