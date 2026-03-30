@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:53:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 22:43:05 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 23:06:58 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,25 @@ void	print_cmds(t_cmd *cmds)
 		printf("\n");
 		tmp_cmd = tmp_cmd->next;
 	}
+}
+
+void	print_heredoc_pipe(int fd)
+{
+	int		copy;
+	char	buffer[1024];
+	ssize_t	bytes;
+
+	if (fd < 0)
+		return ;
+	copy = dup(fd);
+	if (copy < 0)
+		return ;
+	bytes = read(copy, buffer, sizeof(buffer) - 1);
+	while (bytes > 0)
+	{
+		buffer[bytes] = '\0';
+		printf("%s", buffer);
+		bytes = read(copy, buffer, sizeof(buffer) - 1);
+	}
+	close(copy);
 }

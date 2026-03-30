@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 20:23:20 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 23:00:48 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef enum e_quote
 	NONE,
 	SINGLE,
 	DOUBLE,
+	HEREDOC_EXPAND,
 }	t_quote;
 
 //	** SESSION DATA TYPES **
@@ -181,9 +182,10 @@ t_cmd			*parse_tokens(t_token *token);
 bool			is_redirection(t_token_type type);
 int				is_valid_syntax(t_token *head);
 
-//	** EXPANDER, ESPANSION HANDLERS**
+//	** EXPANDER **
 int				expand_parameters(t_cmd *pipeline, t_shell *shell);
 int				scan_segment(char **exp, char *arg, t_quote *st, t_shell *sh);
+int				expand_heredocs(t_cmd *pipeline, t_shell *shell);
 
 //	** EXPANDER HELPERS
 bool			is_metachar(char c, t_quote status);
@@ -199,5 +201,6 @@ int				append_to_expanded(char **expanded, char *src, size_t len);
 void			print_env(t_env *env);
 void			print_tokens(t_token *head);
 void			print_cmds(t_cmd *cmds);
+void			print_heredoc_pipe(int fd);
 
 #endif

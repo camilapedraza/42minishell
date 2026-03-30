@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 18:33:33 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 22:56:01 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*extract_delimiter(t_redir *redir)
 	return (delimiter);
 }
 
-static char	*standard_expansion(char *arg, t_shell *shell)
+static char	*expand(char *arg, t_shell *shell)
 {
 	char	*expanded;
 	int		index;
@@ -80,7 +80,7 @@ static int	expand_redirections(t_cmd *cmd, t_shell *shell)
 			expanded_target = extract_delimiter(redir);
 		}
 		else
-			expanded_target = standard_expansion(redir->target, shell);
+			expanded_target = expand(redir->target, shell);
 		if (!expanded_target)
 			return (FAILURE);
 		free(redir->target);
@@ -100,7 +100,7 @@ static int	expand_arguments(t_cmd *cmd, t_shell *shell)
 	args = cmd->argv;
 	while (args && args[index])
 	{	
-		expanded_arg = standard_expansion(args[index], shell);
+		expanded_arg = expand(args[index], shell);
 		if (!expanded_arg)
 			return (FAILURE);
 		free(args[index]);
@@ -123,6 +123,7 @@ int	expand_parameters(t_cmd *pipeline, t_shell *shell)
 			return (FAILURE);
 		cmd = cmd->next;
 	}
-	// expand_heredocs(pipeline, shell);
+	if (!expand_heredocs(pipeline, shell))
+		return (FAILURE);
 	return (SUCCESS);
 }

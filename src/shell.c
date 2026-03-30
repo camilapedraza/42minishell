@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 20:21:57 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 22:08:41 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,6 @@ static void	clear_session(t_session *sesh)
 	if (sesh->pipeline)
 		free_commands(sesh->pipeline);
 	init_session(sesh);
-}
-
-int	get_input(char **line, char *prompt, bool history_enabled)
-{
-	*line = readline(SHELL_PROMPT);
-	if (!*line)
-	{
-		printf("%s", EXIT_MSG); // TODO should use perror?
-		return (FAILURE);
-	}
-	if ((*line)[0] && history_enabled)
-		add_history(*line);
-	return (SUCCESS);
 }
 
 int	run_session(t_shell *shell)

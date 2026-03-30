@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 14:41:56 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 22:56:00 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/03/30 21:43:18 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ bool	is_metachar(char c, t_quote status)
 	if (status == SINGLE && c == CHAR_SINGLE_QUOTE)
 		return (true);
 	if (status == DOUBLE && (c == CHAR_DOUBLE_QUOTE || c == CHAR_DOLLAR))
+		return (true);
+	if (status == HEREDOC_EXPAND && (c == CHAR_DOLLAR))
 		return (true);
 	return (false);
 }
