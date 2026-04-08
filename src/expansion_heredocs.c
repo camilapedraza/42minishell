@@ -6,24 +6,11 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 17:04:41 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 23:30:06 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 15:25:51 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// create a function that parses the pipeline for heredoc type redirs
-// if found, when found:
-// - create a pipe (how does one do this)?
-// - run a prompt with "heredoc >"
-// - store each line as is in the pipe
-// - check each line for the trailing delimiter (on it's own, in a real newline)
-// when delimiter found:
-// - do not store delimiter
-// - close the prompt for that heredoc when the delimiter is found	
-// should I expand immediately if it requires expansion? 
-// or check for other heredocs first?
-// or expand during execution only? - shell documentation
 
 void	close_heredoc_pipe(int *pipefd)
 {
@@ -31,6 +18,15 @@ void	close_heredoc_pipe(int *pipefd)
 		close(pipefd[0]);
 	if (pipefd[1] != -1)
 		close(pipefd[1]);
+}
+
+int	write_to_pipe(int fd, char *line, size_t size)
+{
+	if (write(fd, line, size) == -1)
+		return (FAILURE);
+	if (write(fd, "\n", 1) == -1)
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 char	*heredoc_expansion(char *arg, t_shell *shell)

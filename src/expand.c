@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 23:33:00 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 15:25:09 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ static int	expand_heredocs(t_redir *heredoc, t_shell *shell)
 	char	*line;
 
 	if (pipe(pipefd) == -1)
-	{
-		perror("Pipe Error");
-		return (FAILURE);
-	}
+		return (perror("Pipe Error"), FAILURE);
 	line = NULL;
 	while (1)
 	{
@@ -32,8 +29,11 @@ static int	expand_heredocs(t_redir *heredoc, t_shell *shell)
 		}
 		if (!line)
 			break ;
-		write(pipefd[1], line, ft_strlen(line));
-		write(pipefd[1], "\n", 1);
+		if (!write_to_pipe(pipefd[1], line, ft_strlen(line)))
+		{
+			close_heredoc_pipe(pipefd);
+			return (free(line), FAILURE);
+		}
 		free(line);
 	}
 	close(pipefd[1]);

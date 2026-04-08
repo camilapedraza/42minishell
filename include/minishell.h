@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 23:30:50 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 14:54:21 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,17 +182,19 @@ t_cmd			*parse_tokens(t_token *token);
 bool			is_redirection(t_token_type type);
 int				is_valid_syntax(t_token *head);
 
-//	** EXPANDER & EXPANDER HANDLERS**
+//	** EXPANDER & EXPANDER HANDLERS **
 int				expand_parameters(t_cmd *pipeline, t_shell *shell);
 char			*handle_expansion(char *arg, t_shell *shell);
 int				scan_segment(char **exp, char *arg, t_quote *st, t_shell *sh);
 
+//	** EXPANDER - HEREDOC HANDLERS **
 char			*extract_delimiter(t_redir *redir);
 int				get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell);
 char			*heredoc_expansion(char *arg, t_shell *shell);
+int				write_to_pipe(int fd, char *line, size_t size);
 void			close_heredoc_pipe(int *pipefd);
 
-//	** EXPANDER HELPERS
+//	** EXPANDER HELPERS **
 bool			is_metachar(char c, t_quote status);
 bool			is_valid_var_char(char c, int index);
 bool			is_removable_quote(char c, t_quote status);
