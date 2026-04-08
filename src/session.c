@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 20:23:33 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 20:18:03 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	clear_session(t_session *sesh)
 	init_session(sesh);
 }
 
+// TODO: Handle failures (since main doesn't read the return of run_session)
 int	run_session(t_shell *shell)
 {
 	t_session	sesh;
@@ -42,8 +43,11 @@ int	run_session(t_shell *shell)
 		sesh.pipeline = parse_tokens(sesh.tokens);
 	if (sesh.pipeline)
 	{
-		if (expand_parameters(sesh.pipeline, shell))
-			print_cmds(sesh.pipeline);
+		if (!expand_parameters(sesh.pipeline, shell))
+			return (FAILURE);
+		print_cmds(sesh.pipeline);
+		execute_pipeline(sesh.pipeline, shell);
+		printf("exit code: %d\n", shell->exit_code);
 	}
 	clear_session(&sesh);
 	return (SUCCESS);

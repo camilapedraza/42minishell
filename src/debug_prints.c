@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:53:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 23:06:58 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 17:58:09 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,13 @@ void	print_heredoc_pipe(int fd)
 		bytes = read(copy, buffer, sizeof(buffer) - 1);
 	}
 	close(copy);
+}
+
+void	print_char_array(char **array)
+{
+	while (*array)
+	{
+		printf("%s\n", *array);
+		array++;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 14:54:21 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 20:16:08 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 //	** CUSTOM EXIT CODES **
@@ -134,8 +136,12 @@ typedef struct s_session
 t_env			*new_var(char *key, char *value);
 void			add_var(t_env **head, t_env *new_var);
 t_env			*find_var(t_env *env, char *key);
-char			*get_var_value(t_env *env, char *key);
+int				count_vars(t_env *env);
 void			free_vars(t_env *head);
+
+// ** ENV VARIABLE HELPERS **
+char			*get_var_value(t_env *env, char *key);
+char			**build_envp_array(t_env *env);
 
 //	** TOKENS **
 t_token			*new_token(t_token_type type, char *value);
@@ -182,8 +188,10 @@ t_cmd			*parse_tokens(t_token *token);
 bool			is_redirection(t_token_type type);
 int				is_valid_syntax(t_token *head);
 
-//	** EXPANDER & EXPANDER HANDLERS **
+//	** EXPANDER **
 int				expand_parameters(t_cmd *pipeline, t_shell *shell);
+
+// ** EXPANDER HANDLERS **
 char			*handle_expansion(char *arg, t_shell *shell);
 int				scan_segment(char **exp, char *arg, t_quote *st, t_shell *sh);
 
@@ -201,8 +209,14 @@ bool			is_removable_quote(char c, t_quote status);
 void			update_segment_status(char c, t_quote *status);
 void			update_delimiter_status(char c, t_quote *status);
 
-//	** APPENDER MODULE (FOR EXAPANSION)
+//	** APPENDER MODULE (FOR EXAPANSION) **
 int				append_to_expanded(char **expanded, char *src, size_t len);
+
+//	** EXECUTOR **
+int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
+
+// ** GENERAL HELPERS **
+void			free_matrix(char **array);
 
 // ** DEBUG **
 void			print_env(t_env *env);
