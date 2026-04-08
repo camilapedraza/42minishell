@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 20:16:08 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 21:44:06 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # define CHAR_DOLLAR '$'
 # define CHAR_QUESTION '?'
 # define CHAR_UNDERSCORE '_'
+# define CHAR_SLASH '/'
+# define CHAR_COLON	':'
 # define SPECIAL_CHARS "\"'$"
 
 //	** VALUES FOR OPERATOR TOKENS **
@@ -136,12 +138,8 @@ typedef struct s_session
 t_env			*new_var(char *key, char *value);
 void			add_var(t_env **head, t_env *new_var);
 t_env			*find_var(t_env *env, char *key);
-int				count_vars(t_env *env);
-void			free_vars(t_env *head);
-
-// ** ENV VARIABLE HELPERS **
 char			*get_var_value(t_env *env, char *key);
-char			**build_envp_array(t_env *env);
+void			free_vars(t_env *head);
 
 //	** TOKENS **
 t_token			*new_token(t_token_type type, char *value);
@@ -164,6 +162,10 @@ void			free_redirs(t_redir *head);
 //	** SHELL **
 int				init_shell(t_shell *shell, char **envp);
 void			free_shell(t_shell *shell);
+
+// ** ENV **
+t_env			*init_env(char **envp);
+char			**build_envp_array(t_env *env);
 
 //	** COMMAND LINE SESSION **
 int				run_session(t_shell *shell);
@@ -215,8 +217,12 @@ int				append_to_expanded(char **expanded, char *src, size_t len);
 //	** EXECUTOR **
 int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
+// ** EXECUTOR HELPERS **
+char			*resolve_cmd_path(char *cmd, t_env *env);
+
 // ** GENERAL HELPERS **
 void			free_matrix(char **array);
+char			*join_with_delimiter(char *s1, char *s2, char delim);
 
 // ** DEBUG **
 void			print_env(t_env *env);

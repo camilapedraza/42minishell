@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:43:05 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 20:11:21 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 21:44:38 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,16 @@ t_env	*find_var(t_env *env, char *key)
 	return (NULL);
 }
 
-int	count_vars(t_env *env)
+char	*get_var_value(t_env *env, char *key)
 {
-	int	count;
+	t_env	*var;
 
-	count = 0;
-	while (env)
-	{
-		count++;
-		env = env->next;
-	}
-	return (count);
+	if (!key || !*key)
+		return (NULL);
+	var = find_var(env, key);
+	if (!var || !var->value)
+		return (NULL);
+	return (var->value);
 }
 
 void	free_vars(t_env *head)

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 20:17:21 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/08 21:46:48 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ static int	wait_for_child(pid_t pid)
 static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 {
 	char	**envp;
+	char	*cmd_path;
 
 	envp = build_envp_array(shell->env);
 	if (!*envp)
 		exit(1);
-	execve(cmd->argv[0], cmd->argv, envp);
+	cmd_path = resolve_cmd_path(cmd->argv[0], shell->env);
+	execve(cmd_path, cmd->argv, envp);
 	perror(cmd->argv[0]);
 	free_matrix(envp);
 	exit(126);

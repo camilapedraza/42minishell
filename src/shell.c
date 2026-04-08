@@ -5,46 +5,24 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 22:08:41 by mpedraza         ###   ########.fr       */
+/*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
+/*   Updated: 2026/04/08 21:40:08 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	init_session(t_session *sesh)
+int	init_shell(t_shell *shell, char **envp)
 {
-	sesh->line = NULL;
-	sesh->tokens = NULL;
-	sesh->pipeline = NULL;
-}
-
-static void	clear_session(t_session *sesh)
-{
-	if (sesh->line)
-		free(sesh->line);
-	if (sesh->tokens)
-		free_tokens(sesh->tokens);
-	if (sesh->pipeline)
-		free_commands(sesh->pipeline);
-	init_session(sesh);
-}
-
-int	run_session(t_shell *shell)
-{
-	t_session	sesh;
-
-	init_session(&sesh);
-	if (!get_input(&sesh.line, SHELL_PROMPT, true))
+	shell->env = init_env(envp);
+	if (!shell->env)
 		return (FAILURE);
-	sesh.tokens = tokenize_input(sesh.line);
-	if (sesh.tokens)
-		sesh.pipeline = parse_tokens(sesh.tokens);
-	if (sesh.pipeline)
-	{
-		if (expand_parameters(sesh.pipeline, shell))
-			print_cmds(sesh.pipeline);
-	}
-	clear_session(&sesh);
+	shell->exit_code = 0;
 	return (SUCCESS);
+}
+
+void	free_shell(t_shell *shell)
+{
+	free_vars(shell->env);
+	rl_clear_history();
 }

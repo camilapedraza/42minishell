@@ -1,16 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_shell.c                                       :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/30 16:38:41 by mpedraza         ###   ########.fr       */
+/*   Created: 2026/04/08 21:39:11 by mpedraza          #+#    #+#             */
+/*   Updated: 2026/04/08 21:46:32 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	count_env_vars(t_env *env)
+{
+	int	count;
+
+	count = 0;
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
+}
+
+char	**build_envp_array(t_env *env)
+{
+	char	**envp;
+	int		count;
+	int		index;
+
+	count = count_env_vars(env);
+	envp = ft_calloc(sizeof(char *), (count + 1));
+	if (!envp)
+		return (NULL);
+	index = 0;
+	while (env)
+	{
+		envp[index] = join_with_delimiter(env->key, env->value, CHAR_EQUALS);
+		if (!envp[index])
+		{
+			free_matrix(envp);
+			return (NULL);
+		}
+		index++;
+		env = env->next;
+	}
+	envp[index] = NULL;
+	return (envp);
+}
 
 static t_env	*parse_var(char *envp)
 {
@@ -38,7 +77,7 @@ static t_env	*parse_var(char *envp)
 	return (var);
 }
 
-static t_env	*init_env(char **envp)
+t_env	*init_env(char **envp)
 {
 	int		index;
 	t_env	*env;
@@ -59,19 +98,4 @@ static t_env	*init_env(char **envp)
 		index++;
 	}
 	return (env);
-}
-
-int	init_shell(t_shell *shell, char **envp)
-{
-	shell->env = init_env(envp);
-	if (!shell->env)
-		return (FAILURE);
-	shell->exit_code = 0;
-	return (SUCCESS);
-}
-
-void	free_shell(t_shell *shell)
-{
-	free_vars(shell->env);
-	rl_clear_history();
 }

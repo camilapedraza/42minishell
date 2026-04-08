@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/04/08 20:10:57 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/04/08 21:44:56 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,15 +24,15 @@ HEADERS		=	minishell.h
 FILES		=	minishell \
 				general \
 				variable token command redirection \
-				variable_helpers \
-				init_shell \
+				shell \
+				env \
 				session \
 				prompt \
 				tokenize tokenizer_helpers \
 				parse parser_helpers \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
 				append \
-				execute \
+				execute executor_helpers \
 				debug_prints
 SRCS		=	${FILES:%=${SRC_DIR}/%.c}
 OBJS		=	${SRCS:%.c=%.o}
