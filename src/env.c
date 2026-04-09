@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:39:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 21:46:32 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/09 14:52:19 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ char	**build_envp_array(t_env *env)
 		envp[index] = join_with_delimiter(env->key, env->value, CHAR_EQUALS);
 		if (!envp[index])
 		{
+			perror("Building env var array");
 			free_matrix(envp);
 			return (NULL);
 		}

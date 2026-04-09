@@ -6,11 +6,19 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:05:42 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 21:15:54 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/09 15:33:01 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_error(char *token, char *msg)
+{
+	ft_putstr_fd(SHELL_PREFIX, 2);
+	ft_putstr_fd(token, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(msg, 2);
+}
 
 void	free_matrix(char **array)
 {

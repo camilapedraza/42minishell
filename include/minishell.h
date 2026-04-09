@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 21:44:06 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/09 15:33:34 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <errno.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
@@ -48,15 +51,17 @@
 # define REDIR_IN_VALUE "<"
 # define REDIR_OUT_VALUE ">"
 
-//	** VALUES FOR PROMPTS **
+//	** VALUES FOR PROMPTS & PREFIXES **
 # define SHELL_PROMPT "minishell$ "
 # define HEREDOC_PROMPT "heredoc >"
+# define SHELL_PREFIX "minishell: "
 
 //	** PREDEFINED STATUS MESSAGES **
 # define EXIT_MSG "exit\n"
 # define ERROR_ENV "Error! Failed to initialize environment\n"
 # define ERROR_NO_QUOTE "Error: No closing quote!\n"
 # define ERROR_SYNTAX "Error! Invalid syntax!\n"
+# define ERROR_COMMAND "Command not found"
 
 //	** SHELL DATA TYPES **
 typedef struct s_env
@@ -218,9 +223,11 @@ int				append_to_expanded(char **expanded, char *src, size_t len);
 int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
 // ** EXECUTOR HELPERS **
+int				resolve_redirections(t_redir *redirs);
 char			*resolve_cmd_path(char *cmd, t_env *env);
 
 // ** GENERAL HELPERS **
+void			print_error(char *token, char *msg);
 void			free_matrix(char **array);
 char			*join_with_delimiter(char *s1, char *s2, char delim);
 

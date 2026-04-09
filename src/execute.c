@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 21:46:48 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/09 15:50:32 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,27 @@ static int	wait_for_child(pid_t pid)
 // TODO: improve error handling for return code with errno
 static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 {
-	char	**envp;
 	char	*cmd_path;
+	char	**envp;
+	int 	err;
 
-	envp = build_envp_array(shell->env);
-	if (!*envp)
+	if (!resolve_redirections(cmd->redirs))
 		exit(1);
 	cmd_path = resolve_cmd_path(cmd->argv[0], shell->env);
+	if (!cmd_path)
+		exit(127);
+	envp = build_envp_array(shell->env);
+	if (!envp)
+	{
+		free(cmd_path);
+		exit(1);
+	}
 	execve(cmd_path, cmd->argv, envp);
+	err = errno;
 	perror(cmd->argv[0]);
+	free(cmd_path);
 	free_matrix(envp);
-	exit(126);
+	exit(err);
 }
 
 static int	execute_single_command(t_cmd *cmd, t_shell *shell)
@@ -50,7 +60,7 @@ static int	execute_single_command(t_cmd *cmd, t_shell *shell)
 	pid = fork();
 	if (pid < 0)
 	{
-		perror("Command Execution Failed - Fork: ");
+		perror("Command Execution Failed - Fork:");
 		shell->exit_code = 1;
 		return (FAILURE);
 	}
