@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/09 15:33:34 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:16:18 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,23 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include <errno.h>
-# include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
+
+// ** STANDARD C LIBRARY HEADERS **
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <sys/wait.h>
+# include <errno.h>
+
+// ** POSIX / SYSTEM HEADERS **
 # include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+
+// ** THIRD-PARTY LIBARY HEADERS **
+# include <readline/history.h>
+# include <readline/readline.h>
 
 //	** CUSTOM EXIT CODES **
 # define SUCCESS 1
@@ -131,6 +137,13 @@ typedef enum e_quote
 	HEREDOC_EXPAND,
 }	t_quote;
 
+typedef enum e_access
+{
+	NOT_FOUND,
+	FOUND,
+	EXECUTABLE
+}	t_access;
+
 //	** SESSION DATA TYPES **
 typedef struct s_session
 {
@@ -222,9 +235,18 @@ int				append_to_expanded(char **expanded, char *src, size_t len);
 //	** EXECUTOR **
 int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
-// ** EXECUTOR HELPERS **
-int				resolve_redirections(t_redir *redirs);
+// ** RESOLVER **
 char			*resolve_cmd_path(char *cmd, t_env *env);
+int				resolve_redirections(t_redir *redirs);
+
+// ** PATH RESOLVER **
+char			*evaluate_paths(char **dirs, char *cmd);
+
+// ** REDIR RESOLVERS**
+int				handle_redir_append(t_redir *redir);
+int				handle_redir_heredoc(t_redir *redir);
+int				handle_redir_in(t_redir *redir);
+int				handle_redir_out(t_redir *redir);
 
 // ** GENERAL HELPERS **
 void			print_error(char *token, char *msg);

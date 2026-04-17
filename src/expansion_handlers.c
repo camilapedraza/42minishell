@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 14:39:35 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:14:25 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	expand_variable(char **expanded, char *src, t_shell *shell)
 }
 
 static int	handle_special(char **expanded, char *src, t_shell *shell)
-{	
+{
 	char	*code;
 
 	if (*src == CHAR_DOLLAR)
@@ -69,7 +69,7 @@ static int	handle_literal(char **expanded, char *arg, t_quote status)
 
 	index = 0;
 	while (arg[index] && !is_metachar(arg[index], status))
-			index++;
+		index++;
 	if (!append_to_expanded(expanded, arg, index))
 		return (FAILURE);
 	return (index);

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 15:25:09 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:15:56 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	expand_arguments(t_cmd *cmd, t_shell *shell)
 	index = 0;
 	args = cmd->argv;
 	while (args && args[index])
-	{	
+	{
 		expanded_arg = handle_expansion(args[index], shell);
 		if (!expanded_arg)
 			return (FAILURE);

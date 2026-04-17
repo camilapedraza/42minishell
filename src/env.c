@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:39:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/09 14:52:19 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:15:16 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_env	*init_env(char **envp)
 			free_vars(env);
 			printf("%s", ERROR_ENV);
 			return (NULL);
-		}	
+		}
 		add_var(&env, var);
 		index++;
 	}

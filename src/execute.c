@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/09 15:50:32 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:15:37 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 {
 	char	*cmd_path;
 	char	**envp;
-	int 	err;
+	int		err;
 
 	if (!resolve_redirections(cmd->redirs))
 		exit(1);
@@ -48,7 +48,10 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 	perror(cmd->argv[0]);
 	free(cmd_path);
 	free_matrix(envp);
-	exit(err);
+	if (err == ENOENT)
+		exit(127);
+	else
+		exit(126);
 }
 
 static int	execute_single_command(t_cmd *cmd, t_shell *shell)

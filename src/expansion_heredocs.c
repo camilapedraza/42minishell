@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 17:04:41 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 15:32:33 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:14:11 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*heredoc_expansion(char *arg, t_shell *shell)
 }
 
 int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
-{	
+{
 	char	*expanded_line;
 
 	if (!get_input(line, HEREDOC_PROMPT, false))
