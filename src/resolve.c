@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:50:36 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 20:33:21 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 21:27:48 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int	resolve_redirections(t_redir *redir, int read, int write)
 {
-	if (!redir && !read && !write)
+	if (!handle_redir_pipe(read, write))
+		return (FAILURE);
+	if (!redir)
 		return (SUCCESS);
 	while (redir)
 	{

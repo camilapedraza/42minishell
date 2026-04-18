@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/04/17 20:50:37 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/04/18 23:48:55 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ FILES		=	minishell \
 				parse parser_helpers \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
 				append \
-				execute \
+				execute executor_helpers \
 				resolve resolver_paths resolver_redirs \
 				debug_prints
 SRCS		=	${FILES:%=${SRC_DIR}/%.c}

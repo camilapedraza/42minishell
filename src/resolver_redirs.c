@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 20:27:07 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/17 21:14:49 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 21:30:56 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,30 @@ int	handle_redir_append(t_redir *redir)
 		return (FAILURE);
 	}
 	close(fd);
+	return (SUCCESS);
+}
+
+int	handle_redir_pipe(int read, int write)
+{
+	if (read != -1)
+	{
+		if (dup2(read, STDIN_FILENO) == -1)
+		{
+			perror("Pipe redirection");
+			close(read);
+			return (FAILURE);
+		}
+		close(read);
+	}
+	if (write != -1)
+	{
+		if (dup2(write, STDOUT_FILENO) == -1)
+		{
+			perror("Pipe redirection");
+			close(write);
+			return (FAILURE);
+		}
+		close(write);
+	}
 	return (SUCCESS);
 }

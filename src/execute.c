@@ -6,24 +6,11 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 20:33:01 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:47:45 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*static int	wait_for_child(pid_t pid)
-{
-	int	status;
-
-	status = 0;
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
-}*/
 
 static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 {
@@ -54,13 +41,13 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 static pid_t	execute_command(t_cmd *cmd, t_shell *shell, int read, int write)
 {
 	pid_t	pid;
-		
+
 	pid = fork();
 	if (pid < 0)
 	{
 		perror("Command Execution Failed - Fork:");
-		shell->exit_code = 1; // TODO: fix this based on parent wait behavior
-		return (ABORT);
+		shell->exit_code = 1;
+		return (FAILURE);
 	}
 	if (pid == 0)
 	{
@@ -73,29 +60,56 @@ static pid_t	execute_command(t_cmd *cmd, t_shell *shell, int read, int write)
 	return (pid);
 }
 
-int	execute_pipeline(t_cmd *pipeline, t_shell *shell)
+int	execute_piped_command(t_cmd *pipeline, t_shell *shell, int *prev_read_fd)
 {
 	int		pipefd[2];
-	int		prev_read_fd;
+	pid_t	pid;
 
-	if (!pipeline)
-		return (SUCCESS);
-	prev_read_fd = STDIN_FILENO;
+	if (pipe(pipefd) == -1)
+	{
+		perror("Pipeline execution error");
+		close_if_valid(*prev_read_fd);
+		*prev_read_fd = -1;
+		return (FAILURE);
+	}
+	pid = execute_command(pipeline, shell, *prev_read_fd, pipefd[1]);
+	close(pipefd[1]);
+	close_if_valid(*prev_read_fd);
+	if (!pid)
+	{
+		close(pipefd[0]);
+		*prev_read_fd = -1;
+		return (FAILURE);
+	}
+	*prev_read_fd = pipefd[0];
+	return (pid);
+}
+
+int	execute_pipeline(t_cmd *pipeline, t_shell *shell)
+{
+	int		prev_read_fd;
+	pid_t	forked;
+	pid_t	last_pid;
+
+	prev_read_fd = -1;
+	forked = 0;
+	last_pid = 0;
 	while (pipeline)
 	{
 		if (pipeline->next)
-		{
-			if (pipe(pipefd) == -1)
-				return (perror("Pipe Error"), FAILURE);
-			if (!execute_command(pipeline, shell, prev_read_fd, pipefd[1]))
-				return (close(pipefd[1]), close(prev_read_fd), FAILURE);
-			close(pipefd[1]);
-			close(prev_read_fd);
-			prev_read_fd = pipefd[0];
-		}
-		else if (!execute_command(pipeline, shell, prev_read_fd, STDOUT_FILENO))
-			return (close(prev_read_fd), FAILURE);
+			forked = execute_piped_command(pipeline, shell, &prev_read_fd);
+		else
+			forked = execute_command(pipeline, shell, prev_read_fd, -1);
+		if (!forked)
+			break ;
+		last_pid = forked;
 		pipeline = pipeline->next;
 	}
-	return (SUCCESS);
+	close_if_valid(prev_read_fd);
+	if (last_pid)
+		shell->exit_code = wait_for_children(last_pid);
+	if (forked)
+		return (SUCCESS);
+	shell->exit_code = 1;
+	return (FAILURE);
 }

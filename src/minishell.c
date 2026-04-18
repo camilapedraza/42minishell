@@ -6,12 +6,22 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/09 15:01:03 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 20:58:08 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+// TODO: reproduce bash behavior when command is empty string
+/*
+bash-5.2$ ""
+bash: : command not found
+bash-5.2$ ''
+bash: : command not found
+bash-5.2$ "''"
+bash: '': command not found
+bash-5.2$ '""'
+bash: "": command not found
+*/
 // TODO: review all PERRORs and switch to stderror if needed
 // TODO: review all write(2,) and switch to PERROR or stderror if needed
 // TODO: review all PRINTF and switch to writes, perrors or stderror if needed

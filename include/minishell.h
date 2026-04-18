@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 20:33:46 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:48:16 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@
 //	** CUSTOM EXIT CODES **
 # define SUCCESS 1
 # define FAILURE 0
-
-# define SKIP 0
-# define ABORT -1
 
 //	** SPECIAL CHARS **
 # define CHAR_PIPE '|'
@@ -171,7 +168,6 @@ void			free_tokens(t_token *head);
 //	** COMMANDS **
 t_cmd			*new_command(t_token *token);
 void			add_command(t_cmd **pipeline, t_cmd *new_command);
-int				count_commands(t_cmd *pipeline);
 void			free_args(char **argv);
 void			free_commands(t_cmd *pipeline);
 
@@ -239,6 +235,9 @@ int				append_to_expanded(char **expanded, char *src, size_t len);
 //	** EXECUTOR **
 int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
+// ** EXECUTOR HELPERS **
+int				wait_for_children(pid_t last_pid);
+
 // ** RESOLVER **
 char			*resolve_cmd_path(char *cmd, t_env *env);
 int				resolve_redirections(t_redir *redirs, int read, int write);
@@ -247,12 +246,14 @@ int				resolve_redirections(t_redir *redirs, int read, int write);
 char			*evaluate_paths(char **dirs, char *cmd);
 
 // ** REDIR RESOLVERS**
+int				handle_redir_pipe(int read, int write);
 int				handle_redir_append(t_redir *redir);
 int				handle_redir_heredoc(t_redir *redir);
 int				handle_redir_in(t_redir *redir);
 int				handle_redir_out(t_redir *redir);
 
 // ** GENERAL HELPERS **
+void			close_if_valid(int fd);
 void			print_error(char *token, char *msg);
 void			free_matrix(char **array);
 char			*join_with_delimiter(char *s1, char *s2, char delim);

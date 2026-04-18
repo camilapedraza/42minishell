@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 20:32:10 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 21:21:06 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	run_session(t_shell *shell)
 		if (!expand_parameters(sesh.pipeline, shell))
 			return (FAILURE);
 		print_cmds(sesh.pipeline);
-		//execute_pipeline(sesh.pipeline, shell);
-		//printf("exit code: %d\n", shell->exit_code);
+		execute_pipeline(sesh.pipeline, shell);
+		printf("exit code: %d\n", shell->exit_code);
 	}
 	clear_session(&sesh);
 	return (SUCCESS);

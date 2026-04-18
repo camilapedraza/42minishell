@@ -6,11 +6,17 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:05:42 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/09 15:33:01 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 23:46:47 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	close_if_valid(int fd)
+{
+	if (fd >= 0)
+		close(fd);
+}
 
 void	print_error(char *token, char *msg)
 {

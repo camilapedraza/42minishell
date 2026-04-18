@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 18:55:12 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 22:30:13 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,6 @@ void	add_command(t_cmd **pipeline, t_cmd *new_command)
 			temp = temp->next;
 		temp->next = new_command;
 	}
-}
-
-// TODO: might not need this function
-int		count_commands(t_cmd *pipeline)
-{
-	int	count;
-
-	count = 0;
-	while (pipeline)
-	{
-		count++;
-		pipeline = pipeline->next;
-	}
-	return (count);
 }
 
 void	free_args(char **argv)
