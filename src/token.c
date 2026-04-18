@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 15:14:13 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/16 20:21:17 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 18:49:55 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,24 @@ void	add_token(t_token **head, t_token *new_token)
 			temp = temp->next;
 		temp->next = new_token;
 	}
+}
+
+int	count_args(t_token *token)
+{
+	t_token	*temp;
+	int		argc;
+
+	temp = token;
+	argc = 0;
+	while (temp && temp->type != TOKEN_PIPE)
+	{
+		if (is_redirection(temp->type))
+			temp = temp->next;
+		else
+			argc++;
+		temp = temp->next;
+	}
+	return (argc);
 }
 
 void	free_tokens(t_token *head)

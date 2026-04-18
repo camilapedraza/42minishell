@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/17 21:16:18 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 20:33:46 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@
 //	** CUSTOM EXIT CODES **
 # define SUCCESS 1
 # define FAILURE 0
+
+# define SKIP 0
+# define ABORT -1
 
 //	** SPECIAL CHARS **
 # define CHAR_PIPE '|'
@@ -162,12 +165,13 @@ void			free_vars(t_env *head);
 //	** TOKENS **
 t_token			*new_token(t_token_type type, char *value);
 void			add_token(t_token **head, t_token *new_node);
+int				count_args(t_token *token);
 void			free_tokens(t_token *head);
 
 //	** COMMANDS **
 t_cmd			*new_command(t_token *token);
 void			add_command(t_cmd **pipeline, t_cmd *new_command);
-int				count_args(t_token *token);
+int				count_commands(t_cmd *pipeline);
 void			free_args(char **argv);
 void			free_commands(t_cmd *pipeline);
 
@@ -237,7 +241,7 @@ int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
 // ** RESOLVER **
 char			*resolve_cmd_path(char *cmd, t_env *env);
-int				resolve_redirections(t_redir *redirs);
+int				resolve_redirections(t_redir *redirs, int read, int write);
 
 // ** PATH RESOLVER **
 char			*evaluate_paths(char **dirs, char *cmd);

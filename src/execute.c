@@ -6,13 +6,13 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/17 21:15:37 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 20:33:01 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	wait_for_child(pid_t pid)
+/*static int	wait_for_child(pid_t pid)
 {
 	int	status;
 
@@ -23,17 +23,14 @@ static int	wait_for_child(pid_t pid)
 	if (WIFSIGNALED(status))
 		return (128 + WTERMSIG(status));
 	return (1);
-}
+}*/
 
-// TODO: improve error handling for return code with errno
 static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 {
 	char	*cmd_path;
 	char	**envp;
 	int		err;
 
-	if (!resolve_redirections(cmd->redirs))
-		exit(1);
 	cmd_path = resolve_cmd_path(cmd->argv[0], shell->env);
 	if (!cmd_path)
 		exit(127);
@@ -54,31 +51,51 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 		exit(126);
 }
 
-static int	execute_single_command(t_cmd *cmd, t_shell *shell)
+static pid_t	execute_command(t_cmd *cmd, t_shell *shell, int read, int write)
 {
 	pid_t	pid;
-
-	if (!cmd || !cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
-		return (SUCCESS);
+		
 	pid = fork();
 	if (pid < 0)
 	{
 		perror("Command Execution Failed - Fork:");
-		shell->exit_code = 1;
-		return (FAILURE);
+		shell->exit_code = 1; // TODO: fix this based on parent wait behavior
+		return (ABORT);
 	}
 	if (pid == 0)
+	{
+		if (!resolve_redirections(cmd->redirs, read, write))
+			exit(1);
+		if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
+			exit(0);
 		exec_in_child(cmd, shell);
-	shell->exit_code = wait_for_child(pid);
-	return (SUCCESS);
+	}
+	return (pid);
 }
 
 int	execute_pipeline(t_cmd *pipeline, t_shell *shell)
 {
-	t_cmd	*cmd;
+	int		pipefd[2];
+	int		prev_read_fd;
 
 	if (!pipeline)
 		return (SUCCESS);
-	cmd = pipeline;
-	return (execute_single_command(cmd, shell));
+	prev_read_fd = STDIN_FILENO;
+	while (pipeline)
+	{
+		if (pipeline->next)
+		{
+			if (pipe(pipefd) == -1)
+				return (perror("Pipe Error"), FAILURE);
+			if (!execute_command(pipeline, shell, prev_read_fd, pipefd[1]))
+				return (close(pipefd[1]), close(prev_read_fd), FAILURE);
+			close(pipefd[1]);
+			close(prev_read_fd);
+			prev_read_fd = pipefd[0];
+		}
+		else if (!execute_command(pipeline, shell, prev_read_fd, STDOUT_FILENO))
+			return (close(prev_read_fd), FAILURE);
+		pipeline = pipeline->next;
+	}
+	return (SUCCESS);
 }

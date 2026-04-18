@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 18:20:11 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 18:55:12 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,18 @@ void	add_command(t_cmd **pipeline, t_cmd *new_command)
 	}
 }
 
-int	count_args(t_token *token)
+// TODO: might not need this function
+int		count_commands(t_cmd *pipeline)
 {
-	t_token	*temp;
-	int		argc;
+	int	count;
 
-	temp = token;
-	argc = 0;
-	while (temp && temp->type != TOKEN_PIPE)
+	count = 0;
+	while (pipeline)
 	{
-		if (is_redirection(temp->type))
-			temp = temp->next;
-		else
-			argc++;
-		temp = temp->next;
+		count++;
+		pipeline = pipeline->next;
 	}
-	return (argc);
+	return (count);
 }
 
 void	free_args(char **argv)

@@ -6,15 +6,15 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:50:36 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/17 20:51:52 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/18 20:33:21 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	resolve_redirections(t_redir *redir)
+int	resolve_redirections(t_redir *redir, int read, int write)
 {
-	if (!redir)
+	if (!redir && !read && !write)
 		return (SUCCESS);
 	while (redir)
 	{
