@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 23:48:16 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 13:56:25 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,7 @@ int				handle_redir_in(t_redir *redir);
 int				handle_redir_out(t_redir *redir);
 
 // ** GENERAL HELPERS **
-void			close_if_valid(int fd);
+void			close_if_valid(int *fd);
 void			print_error(char *token, char *msg);
 void			free_matrix(char **array);
 char			*join_with_delimiter(char *s1, char *s2, char delim);

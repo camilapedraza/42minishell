@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 20:27:07 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 21:30:56 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 14:34:00 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	handle_redir_pipe(int read, int write)
 			close(read);
 			return (FAILURE);
 		}
+		printf("handle_redir_pipe: closing read fd %d after dup2", read);
 		close(read);
 	}
 	if (write != -1)
@@ -106,6 +107,7 @@ int	handle_redir_pipe(int read, int write)
 			close(write);
 			return (FAILURE);
 		}
+		printf("handle_redir_pipe: closing write fd %d after dup2", write);
 		close(write);
 	}
 	return (SUCCESS);

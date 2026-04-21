@@ -6,16 +6,20 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:05:42 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 23:46:47 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 14:26:11 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	close_if_valid(int fd)
+void	close_if_valid(int *fd)
 {
-	if (fd >= 0)
-		close(fd);
+	if (*fd != -1)
+	{
+		printf("closing valid fd: %d\n", *fd);
+		close(*fd);
+	}
+	*fd = -1;
 }
 
 void	print_error(char *token, char *msg)
