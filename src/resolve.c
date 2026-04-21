@@ -6,16 +6,15 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:50:36 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 14:42:08 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 16:18:50 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	resolve_redirections(t_redir *redir, int read, int write)
+int	resolve_redirections(t_redir *redir, t_pipex *pipex)
 {
-	printf("resolving redirs: read %d write %d\n", read, write);
-	if (!handle_redir_pipe(read, write))
+	if (!handle_redir_pipe(pipex))
 		return (FAILURE);
 	if (!redir)
 		return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 15:19:21 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 16:40:54 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 		exit(126);
 }
 
-static pid_t	execute_command(t_cmd *cmd, t_shell *shell, int read, int write)
+static pid_t	execute_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 {
 	pid_t	pid;
 
@@ -46,17 +46,18 @@ static pid_t	execute_command(t_cmd *cmd, t_shell *shell, int read, int write)
 	if (pid < 0)
 	{
 		perror("Command Execution Failed - Fork:");
-		close_if_valid(&read);
-		close_if_valid(&write);
+		close_if_valid(pipex->prev_read);
+		close_if_valid(pipex->pipe_write);
+		close_if_valid(pipex->pipe_read);
 		shell->exit_code = 1;
 		return (FAILURE);
 	}
 	if (pid == 0)
 	{
 		printf("executing in child: %s\n", cmd->argv[0]);
-		printf("---------- read fd: %d\n", read);
-		printf("--------- write fd: %d\n", write);
-		if (!resolve_redirections(cmd->redirs, read, write))
+		printf("---------- prev_read fd: %d\n", pipex->prev_read);
+		printf("--------- pipe_write fd: %d\n", pipex->pipe_write);
+		if (!resolve_redirections(cmd->redirs, pipex))
 			exit(1);
 		if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
 			exit(0);
@@ -65,60 +66,66 @@ static pid_t	execute_command(t_cmd *cmd, t_shell *shell, int read, int write)
 	return (pid);
 }
 
-int	execute_piped_command(t_cmd *cmd, t_shell *shell, int *prev_read_fd)
+int	execute_piped_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 {
 	int		pipefd[2];
 	pid_t	pid;
-	int		read_fd;
 
 	if (pipe(pipefd) == -1)
 	{
 		perror("Pipeline execution error");
-		close_if_valid(prev_read_fd);
+		close_if_valid(pipex->prev_read);
 		return (FAILURE);
 	}
-	read_fd = *prev_read_fd;
-	
+	pipex->pipe_read = pipefd[0];
+	pipex->pipe_write = pipefd[1];
 	printf("piped command: %s\n", cmd->argv[0]);
-	printf("----- prev fd: %d\n", *prev_read_fd);
-	printf("----- read fd: %d\n", pipefd[0]);
-	printf("---- write fd: %d\n", pipefd[1]);
-	pid = execute_command(cmd, shell, *prev_read_fd, pipefd[1]);
-	printf("closing fd after executing piped command: %d\n", pipefd[1]);
-	close(pipefd[1]);
-	close_if_valid(prev_read_fd);
+	printf("---------- prev fd: %d\n", pipex->prev_read);
+	printf("----- pipe_read fd: %d\n", pipex->pipe_read);
+	printf("---- pipe_write fd: %d\n", pipex->pipe_write);
+	pid = execute_command(cmd, shell, pipex);
+	printf("closing fd after executing piped command: %d\n", pipex->pipe_write);
+	close(pipex->pipe_write);
+	close_if_valid(pipex->prev_read);
 	if (!pid)
 	{
-		close(pipefd[0]);
+		close(pipex->pipe_read);
 		return (FAILURE);
 	}
-	*prev_read_fd = pipefd[0];
-	printf("new fd for prev: %d\n", *prev_read_fd);
+	pipex->prev_read = pipex->pipe_read;
+	printf("new fd for prev: %d\n", pipex->prev_read);
 	return (pid);
+}
+
+void	init_pipex(t_pipex *pipex)
+{
+	pipex->pipe_read = -1;
+	pipex->pipe_write = -1;
+	pipex->prev_read = -1;
 }
 
 int	execute_pipeline(t_cmd *pipeline, t_shell *shell)
 {
-	int		prev_read_fd;
+	t_pipex	pipex;
 	pid_t	forked;
 	pid_t	last_pid;
 
-	prev_read_fd = -1;
+	init_pipex(&pipex);
 	forked = 0;
 	last_pid = 0;
 	while (pipeline)
 	{
 		if (pipeline->next)
-			forked = execute_piped_command(pipeline, shell, &prev_read_fd);
+			forked = execute_piped_command(pipeline, shell, &pipex);
 		else
-			forked = execute_command(pipeline, shell, prev_read_fd, -1);
+			forked = execute_command(pipeline, shell, &pipex);
 		if (!forked)
 			break ;
 		last_pid = forked;
 		pipeline = pipeline->next;
 	}
-	printf("close trailing fd:\n");
-	close_if_valid(&prev_read_fd);
+	//printf("close trailing fd:\n");
+	//close_if_valid(pipex.prev_read);
 	if (last_pid)
 		shell->exit_code = wait_for_children(last_pid);
 	if (forked)

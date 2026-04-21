@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 13:56:25 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 16:37:45 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,13 @@ typedef struct s_shell
 	struct s_env	*env;
 	int				exit_code;
 }	t_shell;
+
+typedef struct s_pipex
+{
+	int		pipe_read;
+	int		pipe_write;
+	int		prev_read;
+}	t_pipex;
 
 //	** TOKEN DATA TYPES **
 typedef enum e_token_type
@@ -240,20 +247,20 @@ int				wait_for_children(pid_t last_pid);
 
 // ** RESOLVER **
 char			*resolve_cmd_path(char *cmd, t_env *env);
-int				resolve_redirections(t_redir *redirs, int read, int write);
+int				resolve_redirections(t_redir *redirs, t_pipex *pipex);
 
 // ** PATH RESOLVER **
 char			*evaluate_paths(char **dirs, char *cmd);
 
 // ** REDIR RESOLVERS**
-int				handle_redir_pipe(int read, int write);
+int				handle_redir_pipe(t_pipex *pipex);
 int				handle_redir_append(t_redir *redir);
 int				handle_redir_heredoc(t_redir *redir);
 int				handle_redir_in(t_redir *redir);
 int				handle_redir_out(t_redir *redir);
 
 // ** GENERAL HELPERS **
-void			close_if_valid(int *fd);
+void			close_if_valid(int fd);
 void			print_error(char *token, char *msg);
 void			free_matrix(char **array);
 char			*join_with_delimiter(char *s1, char *s2, char delim);
