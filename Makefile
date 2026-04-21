@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/04/18 23:48:55 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/04/21 21:13:34 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC_DIR		=	src
 INC_DIR		=	include
 HEADERS		=	minishell.h
 FILES		=	minishell \
+				signals \
 				general \
 				variable token command redirection \
 				shell \

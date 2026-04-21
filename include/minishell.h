@@ -6,16 +6,25 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 19:33:06 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 22:46:02 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# ifndef _XOPEN_SOURCE
+#  define _XOPEN_SOURCE 600
+# endif
+
+# ifndef _POSIX_C_SOURCE
+#  define _POSIX_C_SOURCE 200809L
+# endif
+
 # include "libft.h"
 
 // ** STANDARD C LIBRARY HEADERS **
+# include <signal.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -69,6 +78,8 @@
 # define ERROR_SYNTAX "Error! Invalid syntax!\n"
 # define ERROR_COMMAND "Command not found"
 
+extern volatile sig_atomic_t	g_signal;
+
 //	** SHELL DATA TYPES **
 typedef struct s_env
 {
@@ -83,12 +94,13 @@ typedef struct s_shell
 	int				exit_code;
 }	t_shell;
 
-typedef struct s_pipex
+// ** SIGNAL DATA TYPES **
+typedef enum e_sigmode
 {
-	int		tmp;
-	int		write;
-	int		read;
-}	t_pipex;
+	PROMPT,
+	CHILD,
+	WAIT
+}	t_sigmode;
 
 //	** TOKEN DATA TYPES **
 typedef enum e_token_type
@@ -151,6 +163,14 @@ typedef enum e_access
 	EXECUTABLE
 }	t_access;
 
+//	** PIPELINE DATA TYOES **
+typedef struct s_pipex
+{
+	int		tmp;
+	int		write;
+	int		read;
+}	t_pipex;
+
 //	** SESSION DATA TYPES **
 typedef struct s_session
 {
@@ -188,15 +208,20 @@ void			free_redirs(t_redir *head);
 int				init_shell(t_shell *shell, char **envp);
 void			free_shell(t_shell *shell);
 
-// ** ENV **
+//	** ENV **
 t_env			*init_env(char **envp);
 char			**build_envp_array(t_env *env);
+
+//	** SIGNAL HANDLING **
+void			set_signals(t_sigmode mode);
+void			check_signals(t_shell *shell);
 
 //	** COMMAND LINE SESSION **
 int				run_session(t_shell *shell);
 
 //	** PROMPT & INPUT **
 int				get_input(char **line, char *prompt, bool history_enabled);
+void			reset_prompt(void);
 
 //	** TOKENIZER **	
 t_token			*tokenize_input(const char *line);

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 20:58:08 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 22:44:06 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ bash: "": command not found
 // TODO: review all PRINTF and switch to writes, perrors or stderror if needed
 // TODO: review all PERROR, STDERROR and WRITE(2,) and add predef err msg in .h
 
+volatile sig_atomic_t	g_signal = 0;
+
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	shell;
@@ -34,9 +36,9 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	if (!init_shell(&shell, envp))
-		exit(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	while (run_session(&shell))
 		;
 	free_shell(&shell);
-	exit(EXIT_SUCCESS);
+	return (shell.exit_code);
 }
