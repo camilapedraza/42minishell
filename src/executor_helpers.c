@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 23:47:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 19:27:12 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 19:53:36 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,13 @@ void	init_pipex(t_pipex *pipex)
 	pipex->read = -1;
 }
 
-void	close_if_valid(int fd)
+void	close_if_valid(int *fd)
 {
-	if (fd != -1)
+	if (*fd != -1)
 	{
-		printf("closing valid fd: %d\n", fd);
-		close(fd);
+		close(*fd);
+		*fd = -1;
 	}
-	fd = -1;
 }
 
 static int	get_child_status(int status)

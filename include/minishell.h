@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 19:27:05 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 19:33:06 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
 // ** EXECUTOR HELPERS **
 void			init_pipex(t_pipex *pipex);
-void			close_if_valid(int fd);
+void			close_if_valid(int *fd);
 int				wait_for_children(pid_t last_pid);
 
 // ** RESOLVER **

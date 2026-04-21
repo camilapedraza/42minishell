@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 19:24:57 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 19:58:23 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,15 @@ static pid_t	execute_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 	if (pid < 0)
 	{
 		perror("Command Execution Failed - Fork:");
-		close_if_valid(pipex->read);
-		close_if_valid(pipex->write);
-		close_if_valid(pipex->tmp);
+		close_if_valid(&pipex->read);
+		close_if_valid(&pipex->write);
+		close_if_valid(&pipex->tmp);
 		shell->exit_code = 1;
 		return (FAILURE);
 	}
 	if (pid == 0)
 	{
-		close_if_valid(pipex->tmp);
+		close_if_valid(&pipex->tmp);
 		if (!resolve_redirections(cmd->redirs, pipex))
 			exit(1);
 		if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
@@ -70,7 +70,7 @@ static int	execute_end_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 
 	pipex->write = -1;
 	pid = execute_command(cmd, shell, pipex);
-	close_if_valid(pipex->read);
+	close_if_valid(&pipex->read);
 	if (!pid)
 		return (FAILURE);
 	return (pid);
@@ -84,14 +84,14 @@ static int	execute_piped_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 	if (pipe(pipefd) == -1)
 	{
 		perror("Pipeline execution error");
-		close_if_valid(pipex->read);
+		close_if_valid(&pipex->read);
 		return (FAILURE);
 	}
 	pipex->tmp = pipefd[0];
 	pipex->write = pipefd[1];
 	pid = execute_command(cmd, shell, pipex);
-	close_if_valid(pipex->write);
-	close_if_valid(pipex->read);
+	close_if_valid(&pipex->write);
+	close_if_valid(&pipex->read);
 	if (!pid)
 		return (FAILURE);
 	pipex->read = pipex->tmp;
