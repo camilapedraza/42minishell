@@ -6,11 +6,28 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 23:47:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 23:48:27 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 19:27:12 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	init_pipex(t_pipex *pipex)
+{
+	pipex->tmp = -1;
+	pipex->write = -1;
+	pipex->read = -1;
+}
+
+void	close_if_valid(int fd)
+{
+	if (fd != -1)
+	{
+		printf("closing valid fd: %d\n", fd);
+		close(fd);
+	}
+	fd = -1;
+}
 
 static int	get_child_status(int status)
 {

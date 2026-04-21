@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 20:27:07 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 16:41:37 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 19:24:38 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,28 +88,25 @@ int	handle_redir_append(t_redir *redir)
 
 int	handle_redir_pipe(t_pipex *pipex)
 {
-	close_if_valid(pipex->pipe_read);
-	if (pipex->prev_read != -1)
+	if (pipex->read != -1)
 	{
-		if (dup2(pipex->prev_read, STDIN_FILENO) == -1)
+		if (dup2(pipex->read, STDIN_FILENO) == -1)
 		{
 			perror("Pipe redirection read");
-			close(pipex->prev_read);
+			close(pipex->read);
 			return (FAILURE);
 		}
-		printf("handle_redir_pipe: closing read fd %d after dup2", pipex->prev_read);
-		close(pipex->prev_read);
+		close(pipex->read);
 	}
-	if (pipex->pipe_write != -1)
+	if (pipex->write != -1)
 	{
-		if (dup2(pipex->pipe_write, STDOUT_FILENO) == -1)
+		if (dup2(pipex->write, STDOUT_FILENO) == -1)
 		{
 			perror("Pipe redirection write");
-			close(pipex->pipe_write);
+			close(pipex->write);
 			return (FAILURE);
 		}
-		printf("handle_redir_pipe: closing write fd %d after dup2", pipex->pipe_write);
-		close(pipex->pipe_write);
+		close(pipex->write);
 	}
 	return (SUCCESS);
 }

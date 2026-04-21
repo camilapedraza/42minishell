@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 16:37:45 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/21 19:27:05 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ typedef struct s_shell
 
 typedef struct s_pipex
 {
-	int		pipe_read;
-	int		pipe_write;
-	int		prev_read;
+	int		tmp;
+	int		write;
+	int		read;
 }	t_pipex;
 
 //	** TOKEN DATA TYPES **
@@ -243,6 +243,8 @@ int				append_to_expanded(char **expanded, char *src, size_t len);
 int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
 // ** EXECUTOR HELPERS **
+void			init_pipex(t_pipex *pipex);
+void			close_if_valid(int fd);
 int				wait_for_children(pid_t last_pid);
 
 // ** RESOLVER **
@@ -260,7 +262,6 @@ int				handle_redir_in(t_redir *redir);
 int				handle_redir_out(t_redir *redir);
 
 // ** GENERAL HELPERS **
-void			close_if_valid(int fd);
 void			print_error(char *token, char *msg);
 void			free_matrix(char **array);
 char			*join_with_delimiter(char *s1, char *s2, char delim);
