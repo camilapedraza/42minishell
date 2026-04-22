@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 22:46:02 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/22 23:28:44 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,14 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-//	** CUSTOM EXIT CODES **
+//	** GENERAL EXIT CODES **
 # define SUCCESS 1
 # define FAILURE 0
+# define ABORT -1
+
+//	** HEREDOC EXIT CODE **
+# define UNEXPECTED_EOF 0
+# define CONTINUE 0
 
 //	** SPECIAL CHARS **
 # define CHAR_PIPE '|'
@@ -68,11 +73,12 @@
 
 //	** VALUES FOR PROMPTS & PREFIXES **
 # define SHELL_PROMPT "minishell$ "
-# define HEREDOC_PROMPT "heredoc >"
+# define HEREDOC_PROMPT "heredoc > "
 # define SHELL_PREFIX "minishell: "
 
 //	** PREDEFINED STATUS MESSAGES **
 # define EXIT_MSG "exit\n"
+# define WARN_HEREDOC_EOF "Warning: heredoc delimited by end-of-file"
 # define ERROR_ENV "Error! Failed to initialize environment\n"
 # define ERROR_NO_QUOTE "Error: No closing quote!\n"
 # define ERROR_SYNTAX "Error! Invalid syntax!\n"
@@ -98,6 +104,7 @@ typedef struct s_shell
 typedef enum e_sigmode
 {
 	PROMPT,
+	HEREDOC,
 	CHILD,
 	WAIT
 }	t_sigmode;
@@ -207,21 +214,25 @@ void			free_redirs(t_redir *head);
 //	** SHELL **
 int				init_shell(t_shell *shell, char **envp);
 void			free_shell(t_shell *shell);
+void			set_exit_code(t_shell *shell, int code);
 
 //	** ENV **
 t_env			*init_env(char **envp);
 char			**build_envp_array(t_env *env);
 
 //	** SIGNAL HANDLING **
+void			handle_sigint_code(t_shell *shell);
+bool			sigint_received(void);
 void			set_signals(t_sigmode mode);
-void			check_signals(t_shell *shell);
 
 //	** COMMAND LINE SESSION **
 int				run_session(t_shell *shell);
 
 //	** PROMPT & INPUT **
-int				get_input(char **line, char *prompt, bool history_enabled);
-void			reset_prompt(void);
+int				get_main_input(char **line);
+void			reset_main_prompt(void);
+int				get_heredoc_input(char **line, char *target);
+void			reset_heredoc_prompt(void);
 
 //	** TOKENIZER **	
 t_token			*tokenize_input(const char *line);
@@ -250,7 +261,6 @@ int				scan_segment(char **exp, char *arg, t_quote *st, t_shell *sh);
 //	** EXPANDER - HEREDOC HANDLERS **
 char			*extract_delimiter(t_redir *redir);
 int				get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell);
-char			*heredoc_expansion(char *arg, t_shell *shell);
 int				write_to_pipe(int fd, char *line, size_t size);
 void			close_heredoc_pipe(int *pipefd);
 

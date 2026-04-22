@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 17:04:41 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/17 21:14:11 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/22 23:19:02 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	write_to_pipe(int fd, char *line, size_t size)
 	return (SUCCESS);
 }
 
-char	*heredoc_expansion(char *arg, t_shell *shell)
+static char	*expand_heredoc_line(char *arg, t_shell *shell)
 {
 	char	*expanded;
 	int		index;
@@ -38,7 +38,10 @@ char	*heredoc_expansion(char *arg, t_shell *shell)
 
 	expanded = ft_calloc(sizeof(char), 1);
 	if (!expanded)
+	{
+		perror("Heredoc: ");
 		return (NULL);
+	}
 	index = 0;
 	status = HEREDOC_EXPAND;
 	while (arg && arg[index])
@@ -57,9 +60,14 @@ char	*heredoc_expansion(char *arg, t_shell *shell)
 int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
 {
 	char	*expanded_line;
+	int		status;
 
-	if (!get_input(line, HEREDOC_PROMPT, false))
-		return (FAILURE);
+	set_signals(HEREDOC);
+	status = get_heredoc_input(line, heredoc->target);
+	if (status == UNEXPECTED_EOF)
+		return (CONTINUE);
+	if (status == ABORT)
+		return (handle_sigint_code(shell), ABORT);
 	if (!ft_strcmp(*line, heredoc->target))
 	{
 		free(*line);
@@ -68,7 +76,7 @@ int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
 	}
 	if (heredoc->expand)
 	{
-		expanded_line = heredoc_expansion(*line, shell);
+		expanded_line = expand_heredoc_line(*line, shell);
 		free(*line);
 		if (!expanded_line)
 			return (FAILURE);
