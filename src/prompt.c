@@ -6,16 +6,11 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 20:23:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/22 23:34:08 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/23 22:28:17 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	reset_heredoc_prompt(void)
-{
-	write(1, "\n", 1);
-}
 
 void	reset_main_prompt(void)
 {
@@ -27,8 +22,10 @@ void	reset_main_prompt(void)
 
 int	get_heredoc_input(char **line, char *target)
 {
+	rl_event_hook = event_hook_heredoc_interrupt;
 	*line = readline(HEREDOC_PROMPT);
-	if (sigint_received())
+	rl_event_hook = NULL;
+	if (sigint_caught())
 	{
 		free(*line);
 		return (ABORT);

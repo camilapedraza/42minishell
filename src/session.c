@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/22 23:28:11 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/23 22:47:11 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,18 @@ int	run_session(t_shell *shell)
 	t_session	sesh;
 
 	init_session(&sesh);
-	set_signals(PROMPT);
+	set_signal_catchers(PROMPT);
 	if (!get_main_input(&sesh.line))
 		return (FAILURE);
-	if (sigint_received())
-		handle_sigint_code(shell);
+	if (sigint_caught())
+		set_sigint_code(shell);
 	sesh.tokens = tokenize_input(sesh.line);
 	if (sesh.tokens)
 		sesh.pipeline = parse_tokens(sesh.tokens);
 	if (sesh.pipeline)
 	{
-		if (!expand_parameters(sesh.pipeline, shell))
-			return (FAILURE);
-		execute_pipeline(sesh.pipeline, shell);
+		if (expand_parameters(sesh.pipeline, shell))
+			execute_pipeline(sesh.pipeline, shell);
 		printf("exit code: %d\n", shell->exit_code);
 	}
 	clear_session(&sesh);

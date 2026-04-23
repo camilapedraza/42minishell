@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 17:04:41 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/22 23:19:02 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/23 22:21:24 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
 	char	*expanded_line;
 	int		status;
 
-	set_signals(HEREDOC);
+	set_signal_catchers(HEREDOC);
 	status = get_heredoc_input(line, heredoc->target);
 	if (status == UNEXPECTED_EOF)
 		return (CONTINUE);
 	if (status == ABORT)
-		return (handle_sigint_code(shell), ABORT);
+		return (set_sigint_code(shell), ABORT);
 	if (!ft_strcmp(*line, heredoc->target))
 	{
 		free(*line);

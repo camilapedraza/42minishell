@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/22 23:28:44 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/23 22:29:43 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 
 //	** HEREDOC EXIT CODE **
 # define UNEXPECTED_EOF 0
-# define CONTINUE 0
+# define CONTINUE 1
 
 //	** SPECIAL CHARS **
 # define CHAR_PIPE '|'
@@ -213,17 +213,24 @@ void			free_redirs(t_redir *head);
 
 //	** SHELL **
 int				init_shell(t_shell *shell, char **envp);
-void			free_shell(t_shell *shell);
 void			set_exit_code(t_shell *shell, int code);
+void			set_sigint_code(t_shell *shell);
+void			free_shell(t_shell *shell);
 
 //	** ENV **
 t_env			*init_env(char **envp);
 char			**build_envp_array(t_env *env);
 
-//	** SIGNAL HANDLING **
-void			handle_sigint_code(t_shell *shell);
-bool			sigint_received(void);
-void			set_signals(t_sigmode mode);
+//	** SIGNAL CATCHERS **
+void			set_signal_catchers(t_sigmode mode);
+bool			sigint_caught(void);
+
+// ** SIGNAL HANDLERS **
+void			handle_prompt_sig_int(int sig);
+void			handle_heredoc_sig_int(int sig);
+
+// ** SIGNAL HOOKS **
+int				event_hook_heredoc_interrupt(void);
 
 //	** COMMAND LINE SESSION **
 int				run_session(t_shell *shell);
