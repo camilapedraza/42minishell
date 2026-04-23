@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/04/23 22:31:48 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/04/23 23:05:01 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,10 @@ ${LIBS}:
 %.o: %.c 
 	${CC} ${CFLAGS} ${CPPFLAGS} -O0 -c $< -o $@
 
-# REMOVE LIBFT AND ADD DOWNLOAD STEP LIKE SO LONG
+# TODO REMOVE LIBFT AND ADD DOWNLOAD STEP LIKE SO LONG
+
+pclean:
+	${RM} ${OBJS}
 
 clean:
 	${RM} ${OBJS}
