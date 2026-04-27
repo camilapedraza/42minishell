@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/23 22:29:43 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/27 16:20:27 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,9 +223,9 @@ char			**build_envp_array(t_env *env);
 
 //	** SIGNAL CATCHERS **
 void			set_signal_catchers(t_sigmode mode);
-bool			sigint_caught(void);
 
 // ** SIGNAL HANDLERS **
+bool			sigint_caught(void);
 void			handle_prompt_sig_int(int sig);
 void			handle_heredoc_sig_int(int sig);
 
@@ -287,7 +287,7 @@ int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 // ** EXECUTOR HELPERS **
 void			init_pipex(t_pipex *pipex);
 void			close_if_valid(int *fd);
-int				wait_for_children(pid_t last_pid);
+int				wait_for_pipeline(pid_t last_pid);
 
 // ** RESOLVER **
 char			*resolve_cmd_path(char *cmd, t_env *env);

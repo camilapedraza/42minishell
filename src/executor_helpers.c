@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 23:47:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 19:53:36 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/27 16:27:15 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	get_child_status(int status)
 	return (1);
 }
 
-int	wait_for_children(pid_t last_pid)
+static int	wait_for_children(pid_t last_pid)
 {
 	int		status;
 	int		last_status;
@@ -60,4 +60,14 @@ int	wait_for_children(pid_t last_pid)
 			last_status = get_child_status(status);
 	}
 	return (last_status);
+}
+
+int	wait_for_pipeline(pid_t last_pid)
+{
+	int	pipeline_status;
+
+	set_signal_catchers(WAIT);
+	pipeline_status = wait_for_children(last_pid);
+	set_signal_catchers(PROMPT);
+	return (pipeline_status);
 }

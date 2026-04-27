@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 19:58:23 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/27 16:20:32 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 		exit(126);
 }
 
-static pid_t	execute_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
+static pid_t	create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 {
 	pid_t	pid;
 
@@ -54,6 +54,7 @@ static pid_t	execute_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 	}
 	if (pid == 0)
 	{
+		set_signal_catchers(CHILD);
 		close_if_valid(&pipex->tmp);
 		if (!resolve_redirections(cmd->redirs, pipex))
 			exit(1);
@@ -69,7 +70,7 @@ static int	execute_end_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 	pid_t	pid;
 
 	pipex->write = -1;
-	pid = execute_command(cmd, shell, pipex);
+	pid = create_child_process(cmd, shell, pipex);
 	close_if_valid(&pipex->read);
 	if (!pid)
 		return (FAILURE);
@@ -89,7 +90,7 @@ static int	execute_piped_command(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 	}
 	pipex->tmp = pipefd[0];
 	pipex->write = pipefd[1];
-	pid = execute_command(cmd, shell, pipex);
+	pid = create_child_process(cmd, shell, pipex);
 	close_if_valid(&pipex->write);
 	close_if_valid(&pipex->read);
 	if (!pid)
@@ -120,7 +121,7 @@ int	execute_pipeline(t_cmd *pipeline, t_shell *shell)
 		pipeline = pipeline->next;
 	}
 	if (last_pid)
-		shell->exit_code = wait_for_children(last_pid);
+		shell->exit_code = wait_for_pipeline(last_pid);
 	if (forked)
 		return (SUCCESS);
 	shell->exit_code = 1;
