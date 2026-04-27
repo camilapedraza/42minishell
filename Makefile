@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/04/23 23:05:01 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/04/27 20:03:33 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,8 +33,9 @@ FILES		=	minishell \
 				parse parser_helpers \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
 				append \
-				execute executor_helpers \
+				execute executor_helpers executor_builtins \
 				resolve resolver_paths resolver_redirs \
+				builtin_echo \
 				debug_prints
 SRCS		=	${FILES:%=${SRC_DIR}/%.c}
 OBJS		=	${SRCS:%.c=%.o}

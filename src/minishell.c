@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/23 22:29:04 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/27 22:16:38 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ bash: "": command not found
 // TODO: review all write(2,) and switch to PERROR or stderror if needed
 // TODO: review all PRINTF and switch to writes, perrors or stderror if needed
 // TODO: review all PERROR, STDERROR and WRITE(2,) and add predef err msg in .h
+
+// TODO: determine how to "remove" an argument from argv 
+//when it evaluates to nothing
+// so that commands like CAT can run as normal when no args are provided
+// instead of treating it like an empty string.
 
 volatile sig_atomic_t	g_signal = 0;
 

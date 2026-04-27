@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 15:43:34 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/27 21:57:15 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static void	clear_session(t_session *sesh)
 }
 
 // TODO: Handle failures (since main doesn't read the return of run_session)
+// determine when a failure should EXIT the shell (non-recoverable) vs when it
+// should run a fresh prompt
 int	run_session(t_shell *shell)
 {
 	t_session	sesh;

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 16:20:27 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/27 20:02:35 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,15 @@
 # define ERROR_NO_QUOTE "Error: No closing quote!\n"
 # define ERROR_SYNTAX "Error! Invalid syntax!\n"
 # define ERROR_COMMAND "Command not found"
+
+//	** BUILTIN COMMANDS **
+# define BUILTIN_CD "cd"
+# define BUILTIN_ECHO "echo"
+# define BUILTIN_ENV "env"
+# define BUILTIN_EXIT "exit"
+# define BUILTIN_EXPORT "export"
+# define BUILTIN_PWD "pwd"
+# define BUILTIN_UNSET "unset"
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -288,6 +297,9 @@ int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 void			init_pipex(t_pipex *pipex);
 void			close_if_valid(int *fd);
 int				wait_for_pipeline(pid_t last_pid);
+
+// ** EXECUTOR BUILTINS **
+bool			is_builtin(t_cmd *cmd);
 
 // ** RESOLVER **
 char			*resolve_cmd_path(char *cmd, t_env *env);
