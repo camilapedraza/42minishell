@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 20:02:35 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/28 15:49:05 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@
 # define CHAR_UNDERSCORE '_'
 # define CHAR_SLASH '/'
 # define CHAR_COLON	':'
+# define CHAR_NEWLINE '\n'
 # define SPECIAL_CHARS "\"'$"
 
 //	** VALUES FOR OPERATOR TOKENS **
@@ -73,15 +74,16 @@
 
 //	** VALUES FOR PROMPTS & PREFIXES **
 # define SHELL_PROMPT "minishell$ "
-# define HEREDOC_PROMPT "heredoc > "
-# define SHELL_PREFIX "minishell: "
+# define CONTINUED_PROMPT ">"
+# define SHELL_PREFIX "minishell:"
 
 //	** PREDEFINED STATUS MESSAGES **
 # define EXIT_MSG "exit\n"
 # define WARN_HEREDOC_EOF "Warning: heredoc delimited by end-of-file"
 # define ERROR_ENV "Error! Failed to initialize environment\n"
 # define ERROR_NO_QUOTE "Error: No closing quote!\n"
-# define ERROR_SYNTAX "Error! Invalid syntax!\n"
+# define ERROR_SYNTAX "Syntax Error!"
+# define ERROR_EOF "Unexpected end-of-file"
 # define ERROR_COMMAND "Command not found"
 
 //	** BUILTIN COMMANDS **
@@ -233,13 +235,14 @@ char			**build_envp_array(t_env *env);
 //	** SIGNAL CATCHERS **
 void			set_signal_catchers(t_sigmode mode);
 
-// ** SIGNAL HANDLERS **
+//	** SIGNAL HANDLERS **
 bool			sigint_caught(void);
 void			handle_prompt_sig_int(int sig);
 void			handle_heredoc_sig_int(int sig);
 
-// ** SIGNAL HOOKS **
+//	** SIGNAL HOOKS **
 int				event_hook_heredoc_interrupt(void);
+int				event_hook_contprompt_interrupt(void);
 
 //	** COMMAND LINE SESSION **
 int				run_session(t_shell *shell);
@@ -265,7 +268,7 @@ t_cmd			*parse_tokens(t_token *token);
 
 //	** PARSER HELPERS **
 bool			is_redirection(t_token_type type);
-int				is_valid_syntax(t_token *head);
+bool			is_valid_syntax(t_token *head);
 
 //	** EXPANDER **
 int				expand_parameters(t_cmd *pipeline, t_shell *shell);
@@ -293,34 +296,34 @@ int				append_to_expanded(char **expanded, char *src, size_t len);
 //	** EXECUTOR **
 int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
-// ** EXECUTOR HELPERS **
+//	** EXECUTOR HELPERS **
 void			init_pipex(t_pipex *pipex);
 void			close_if_valid(int *fd);
 int				wait_for_pipeline(pid_t last_pid);
 
-// ** EXECUTOR BUILTINS **
+//	** EXECUTOR BUILTINS **
 bool			is_builtin(t_cmd *cmd);
 
-// ** RESOLVER **
+//	** RESOLVER **
 char			*resolve_cmd_path(char *cmd, t_env *env);
 int				resolve_redirections(t_redir *redirs, t_pipex *pipex);
 
-// ** PATH RESOLVER **
+//	** PATH RESOLVER **
 char			*evaluate_paths(char **dirs, char *cmd);
 
-// ** REDIR RESOLVERS**
+//	** REDIR RESOLVERS**
 int				handle_redir_pipe(t_pipex *pipex);
 int				handle_redir_append(t_redir *redir);
 int				handle_redir_heredoc(t_redir *redir);
 int				handle_redir_in(t_redir *redir);
 int				handle_redir_out(t_redir *redir);
 
-// ** GENERAL HELPERS **
+//	** GENERAL HELPERS **
 void			print_error(char *token, char *msg);
 void			free_matrix(char **array);
 char			*join_with_delimiter(char *s1, char *s2, char delim);
 
-// ** DEBUG **
+//	** DEBUG **
 void			print_env(t_env *env);
 void			print_tokens(t_token *head);
 void			print_cmds(t_cmd *cmds);

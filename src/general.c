@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:05:42 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 19:28:24 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/28 15:48:48 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	print_error(char *token, char *msg)
 {
 	ft_putstr_fd(SHELL_PREFIX, 2);
+	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(token, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(msg, 2);
@@ -44,7 +45,10 @@ char	*join_with_delimiter(char *s1, char *s2, char delim)
 	s2_len = ft_strlen(s2);
 	joined = malloc(s1_len + s2_len + 2);
 	if (!joined)
+	{
+		perror ("minishell");
 		return (NULL);
+	}
 	si = 0;
 	di = 0;
 	while (si < s1_len)

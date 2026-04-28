@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/29 19:55:01 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/28 15:06:02 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static t_cmd	*build_command(t_token **token)
 	return (cmd);
 }
 
-// TODO: if (pipeline), expand_parameters(&pipeline);
+// TODO: what to return if invalid syntax
 t_cmd	*parse_tokens(t_token *token)
 {
 	t_cmd	*pipeline;
@@ -83,7 +83,7 @@ t_cmd	*parse_tokens(t_token *token)
 	pipeline = NULL;
 	if (!is_valid_syntax(token))
 	{
-		printf("%s", ERROR_SYNTAX);
+		printf("%s\n", ERROR_SYNTAX);
 		return (pipeline);
 	}
 	while (token)

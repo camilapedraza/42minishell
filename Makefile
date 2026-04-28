@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/04/27 20:03:33 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/04/28 15:55:56 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,12 +64,14 @@ ${LIBS}:
 
 pclean:
 	${RM} ${OBJS}
+	${RM} ${NAME}
 
 clean:
 	${RM} ${OBJS}
 	${MAKE} -C ${LFT_DIR} clean
 
 fclean: clean
+	${RM} ${NAME}
 	${RM} ${NAME}
 	${MAKE} -C ${LFT_DIR} fclean
 
