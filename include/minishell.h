@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/28 15:49:05 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/29 23:40:06 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ int				event_hook_contprompt_interrupt(void);
 int				run_session(t_shell *shell);
 
 //	** PROMPT & INPUT **
-int				get_main_input(char **line);
+int				read_main_input(char **line);
 void			reset_main_prompt(void);
 int				get_heredoc_input(char **line, char *target);
 void			reset_heredoc_prompt(void);

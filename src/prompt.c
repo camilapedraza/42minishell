@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 20:23:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/28 15:54:25 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/29 23:53:02 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,22 +94,37 @@ if still INCOMPLETE:
 // prints error if Ctrl D (!*line) 
 // [x] syntax error: unexpected end of file
 
-int	get_continuation_input(char **line)
+int	read_continued_input(char **continuation)
 {
 	rl_event_hook = event_hook_contprompt_interrupt;
-	*line = readline(CONTINUED_PROMPT);
+	*continuation = readline(CONTINUED_PROMPT);
 	rl_event_hook = NULL;
 	if (sigint_caught())
 	{
-		free(*line);
+		free(*continuation);
 		return (ABORT);
 	}
-	if (!*line)
+	if (!*continuation)
 	{
 		printf("%s %s %s\n", SHELL_PREFIX, ERROR_SYNTAX, ERROR_EOF);
 		printf("%s", EXIT_MSG);
-		return (FAILURE);
+		return (UNEXPECTED_EOF);
 	}
+	return (SUCCESS);
+}
+
+int run_continued_prompt(char **line)
+{
+	char	*continuation;
+	int		status;
+	
+	status = read_continued_input(&continuation);
+	if (status != SUCCESS)
+		return (status);
+	*line = join_with_delimiter(*line, continuation, CHAR_NEWLINE);
+	free(continuation);
+	if (!*line)
+		return (FAILURE);
 	return (SUCCESS);
 }
 
@@ -140,20 +155,10 @@ int	is_quote_balanced(char *line)
 	return (true);
 }
 
-// TODO: update return behaviour: 
-// regular failure (fresh prompt), critical (exit), success (continue session)
-
-/*
-incomplete pipe is handled differently than unbalanced quote
-- incomplete pipes have only the initial line added to history
-- unbalanced quotes join contd lines to new line with \n and
-add accumulated line to history
-*/
-
-int	get_main_input(char **line)
+int	read_main_input(char **line)
 {
-	char	*cont_line;
-
+	int		status;
+	
 	*line = readline(SHELL_PROMPT);
 	if (!*line)
 	{
@@ -162,15 +167,11 @@ int	get_main_input(char **line)
 	}
 	while (!is_quote_balanced(*line))
 	{
-		if (!get_continuation_input(&cont_line))
-		{
-			free(*line);
-			return (FAILURE);
-		}
-		*line = join_with_delimiter(*line, cont_line, CHAR_NEWLINE);
-		free(cont_line);
-		if (!line)
-			return (FAILURE);
+		status = run_continued_prompt(line);
+		if (status == SUCCESS)
+			continue ;
+		free(*line);
+		reset_main_prompt();
 	}
 	if ((*line)[0])
 		add_history(*line);

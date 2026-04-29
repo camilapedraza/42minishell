@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 21:57:15 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/29 23:46:14 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,16 @@ static void	clear_session(t_session *sesh)
 		free_tokens(sesh->tokens);
 	if (sesh->pipeline)
 		free_commands(sesh->pipeline);
-	init_session(sesh);
+}
+
+int run_main_prompt(t_shell *shell, t_session *sesh)
+{
+	set_signal_catchers(PROMPT);
+	if (!read_main_input(&sesh->line))
+		return (FAILURE);
+	if (sigint_caught())
+		set_sigint_code(shell);
+	return (SUCCESS);
 }
 
 // TODO: Handle failures (since main doesn't read the return of run_session)
@@ -36,13 +45,11 @@ static void	clear_session(t_session *sesh)
 int	run_session(t_shell *shell)
 {
 	t_session	sesh;
+	//int			status;
 
 	init_session(&sesh);
-	set_signal_catchers(PROMPT);
-	if (!get_main_input(&sesh.line))
+	if (!run_main_prompt(shell, &sesh))
 		return (FAILURE);
-	if (sigint_caught())
-		set_sigint_code(shell);
 	sesh.tokens = tokenize_input(sesh.line);
 	if (sesh.tokens)
 		sesh.pipeline = parse_tokens(sesh.tokens);
@@ -50,7 +57,6 @@ int	run_session(t_shell *shell)
 	{
 		if (expand_parameters(sesh.pipeline, shell))
 			execute_pipeline(sesh.pipeline, shell);
-		printf("exit code: %d\n", shell->exit_code);
 	}
 	clear_session(&sesh);
 	return (SUCCESS);
