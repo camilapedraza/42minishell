@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/04/28 15:55:56 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/04/30 22:46:37 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,20 +22,20 @@ SRC_DIR		=	src
 INC_DIR		=	include
 HEADERS		=	minishell.h
 FILES		=	minishell \
-				signal_catchers signal_handlers signal_hooks \
+				signal_catchers signal_handlers \
 				general \
 				variable token command redirection \
 				shell \
 				env \
 				session \
-				prompt \
+				prompt_main prompt_continued \
 				tokenize tokenizer_helpers \
 				parse parser_helpers \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
-				append \
 				execute executor_helpers executor_builtins \
 				resolve resolver_paths resolver_redirs \
 				builtin_echo \
+				utils_concatenation \
 				debug_prints
 SRCS		=	${FILES:%=${SRC_DIR}/%.c}
 OBJS		=	${SRCS:%.c=%.o}

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 21:09:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 16:26:48 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/30 22:37:50 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ static void	set_child_sig_catchers(void)
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
-static void	set_heredoc_sig_catchers(void)
+static void	set_continued_sig_catchers(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
-	sa_int.sa_handler = handle_heredoc_sig_int;
+	sa_int.sa_handler = handle_continued_sig_int;
 	sigaction(SIGINT, &sa_int, NULL);
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = 0;
@@ -57,14 +57,14 @@ static void	set_heredoc_sig_catchers(void)
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
-static void	set_prompt_sig_catchers(void)
+static void	set_main_sig_catchers(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
-	sa_int.sa_handler = handle_prompt_sig_int;
+	sa_int.sa_handler = handle_main_sig_int;
 	sigaction(SIGINT, &sa_int, NULL);
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = 0;
@@ -74,10 +74,10 @@ static void	set_prompt_sig_catchers(void)
 
 void	set_signal_catchers(t_sigmode mode)
 {
-	if (mode == PROMPT)
-		set_prompt_sig_catchers();
-	if (mode == HEREDOC)
-		set_heredoc_sig_catchers();
+	if (mode == MAIN)
+		set_main_sig_catchers();
+	if (mode == CONTINUED)
+		set_continued_sig_catchers();
 	if (mode == CHILD)
 		set_child_sig_catchers();
 	if (mode == WAIT)

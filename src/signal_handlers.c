@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 22:22:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 16:16:56 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/30 22:37:50 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ bool	sigint_caught(void)
 	return (false);
 }
 
-void	handle_heredoc_sig_int(int sig)
+void	handle_continued_sig_int(int sig)
 {
 	(void)sig;
 	g_signal = SIGINT;
 }
 
-void	handle_prompt_sig_int(int sig)
+void	handle_main_sig_int(int sig)
 {
 	(void)sig;
 	g_signal = SIGINT;

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/29 23:40:06 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/30 23:17:32 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@
 //	** VALUES FOR PROMPTS & PREFIXES **
 # define SHELL_PROMPT "minishell$ "
 # define CONTINUED_PROMPT ">"
-# define SHELL_PREFIX "minishell:"
+# define SHELL_PREFIX "minishell"
 
 //	** PREDEFINED STATUS MESSAGES **
 # define EXIT_MSG "exit\n"
@@ -114,8 +114,8 @@ typedef struct s_shell
 // ** SIGNAL DATA TYPES **
 typedef enum e_sigmode
 {
-	PROMPT,
-	HEREDOC,
+	MAIN,
+	CONTINUED,
 	CHILD,
 	WAIT
 }	t_sigmode;
@@ -237,21 +237,24 @@ void			set_signal_catchers(t_sigmode mode);
 
 //	** SIGNAL HANDLERS **
 bool			sigint_caught(void);
-void			handle_prompt_sig_int(int sig);
-void			handle_heredoc_sig_int(int sig);
+void			handle_main_sig_int(int sig);
+void			handle_continued_sig_int(int sig);
 
 //	** SIGNAL HOOKS **
-int				event_hook_heredoc_interrupt(void);
-int				event_hook_contprompt_interrupt(void);
+int				event_hook_cont_prompt_interrupt(void);
 
 //	** COMMAND LINE SESSION **
 int				run_session(t_shell *shell);
 
-//	** PROMPT & INPUT **
-int				read_main_input(char **line);
+//	** MAIN PROMPT & INPUT **
+int				run_main_prompt(t_shell *shell, t_session *sesh);
 void			reset_main_prompt(void);
-int				get_heredoc_input(char **line, char *target);
-void			reset_heredoc_prompt(void);
+
+//	** CONTINUED PROMPS & INPUTS
+int				run_continued_prompt(char **line);
+int				read_heredoc_input(char **line, char *target);
+int				event_hook_cont_prompt_interrupt(void);
+void			kill_continued_prompt(void);
 
 //	** TOKENIZER **	
 t_token			*tokenize_input(const char *line);
@@ -290,8 +293,9 @@ bool			is_removable_quote(char c, t_quote status);
 void			update_segment_status(char c, t_quote *status);
 void			update_delimiter_status(char c, t_quote *status);
 
-//	** APPENDER MODULE (FOR EXAPANSION) **
+//	** UTILS: STRING CONCATENATION **
 int				append_to_expanded(char **expanded, char *src, size_t len);
+char			*join_with_delimiter(char *s1, char *s2, char delim);
 
 //	** EXECUTOR **
 int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
@@ -321,7 +325,6 @@ int				handle_redir_out(t_redir *redir);
 //	** GENERAL HELPERS **
 void			print_error(char *token, char *msg);
 void			free_matrix(char **array);
-char			*join_with_delimiter(char *s1, char *s2, char delim);
 
 //	** DEBUG **
 void			print_env(t_env *env);

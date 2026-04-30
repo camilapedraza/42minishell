@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 23:47:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 16:27:15 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/04/30 22:26:07 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,6 @@ int	wait_for_pipeline(pid_t last_pid)
 
 	set_signal_catchers(WAIT);
 	pipeline_status = wait_for_children(last_pid);
-	set_signal_catchers(PROMPT);
+	set_signal_catchers(MAIN);
 	return (pipeline_status);
 }
