@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:45:14 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 17:58:18 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 19:19:30 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,28 +33,31 @@ Error:
 syntax error near unexpected token <first char found not matching rules>
 if no specific character (EOL) then char is 'newline'
 */
-bool	is_valid_syntax(t_token *head)
+bool	is_valid_syntax(t_token *token)
 {
-	t_token	*temp;
-
-	if (!head)
-		return (false);
-	temp = head;
-	if (temp->type == TOKEN_PIPE)
-		return (false);
-	while (temp)
+	if (token->type == TOKEN_PIPE)
 	{
-		if (temp->type == TOKEN_PIPE)
+		print_syntax_error(token->value);
+		return (false);
+	}
+	while (token)
+	{
+		if (token->type == TOKEN_PIPE
+			&& ((!token->next || token->next->type == TOKEN_PIPE)))
 		{
-			if (!temp->next || temp->next->type == TOKEN_PIPE)
-				return (false);
+			print_syntax_error(token->value);
+			return (false);
 		}
-		else if (temp->type != TOKEN_WORD)
+		else if (token->type != TOKEN_WORD
+			&& (!token->next || token->next->type != TOKEN_WORD))
 		{
-			if (!temp->next || temp->next->type != TOKEN_WORD)
-				return (false);
+			if (!token->next)
+				print_syntax_error("newline");
+			else
+				print_syntax_error(token->next->value);
+			return (false);
 		}
-		temp = temp->next;
+		token = token->next;
 	}
 	return (true);
 }

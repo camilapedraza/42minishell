@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 20:50:36 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/21 16:18:50 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 18:16:00 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*resolve_cmd_path(char *cmd, t_env *env)
 	env_path = get_var_value(env, "PATH");
 	if (!env_path)
 	{
-		print_error(cmd, ERROR_COMMAND);
+		print_general_error(cmd, ERROR_COMMAND);
 		return (NULL);
 	}
 	dirs = ft_split(env_path, CHAR_COLON);

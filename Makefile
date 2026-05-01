@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/04/30 22:46:37 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/05/01 19:05:05 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ FILES		=	minishell \
 				resolve resolver_paths resolver_redirs \
 				builtin_echo \
 				utils_concatenation \
+				utils_print \
 				debug_prints
 SRCS		=	${FILES:%=${SRC_DIR}/%.c}
 OBJS		=	${SRCS:%.c=%.o}

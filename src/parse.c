@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 18:03:27 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 19:14:44 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,10 @@ t_cmd	*parse_tokens(t_token *token)
 	t_cmd	*cmd;
 
 	pipeline = NULL;
+	if (!token)
+		return (NULL);
 	if (!is_valid_syntax(token))
-	{
-		printf("%s: %s\n", SHELL_PREFIX, ERROR_SYNTAX);
-		return (pipeline);
-	}
+		return (NULL);
 	while (token)
 	{
 		cmd = build_command(&token);

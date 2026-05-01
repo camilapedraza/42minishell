@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 20:24:38 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/17 21:15:25 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 18:16:00 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ char	*evaluate_paths(char **dirs, char *cmd)
 	}
 	if (tmp_path)
 		return (tmp_path);
-	print_error(cmd, ERROR_COMMAND);
+	print_general_error(cmd, ERROR_COMMAND);
 	return (NULL);
 }

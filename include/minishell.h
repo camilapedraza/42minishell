@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 18:02:52 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 19:26:35 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,9 @@
 # define EXIT_MSG "exit\n"
 # define WARN_HEREDOC_EOF "Warning: heredoc delimited by end-of-file"
 # define ERROR_ENV "Error! Failed to initialize environment\n"
-# define ERROR_NO_QUOTE "Error: No closing quote!\n"
 # define ERROR_SYNTAX "Syntax Error!"
+# define ERROR_SYNTAX_QUOTE "Syntax error: Missing closing quote\n"
+# define ERROR_SYNTAX_TOKEN "Syntax error near token"
 # define ERROR_EOF "Unexpected end-of-file"
 # define ERROR_COMMAND "Command not found"
 
@@ -296,9 +297,13 @@ bool		is_removable_quote(char c, t_quote status);
 void		update_segment_status(char c, t_quote *status);
 void		update_delimiter_status(char c, t_quote *status);
 
-//	** UTILS: STRING CONCATENATION **
+//	** UTILS: CONCATENATION **
 int			append_to_expanded(char **expanded, char *src, size_t len);
 char		*join_with_delimiter(char *s1, char *s2, char delim);
+
+//	** UTILS: PRINT **
+void		print_general_error(char *token, char *msg);
+void		print_syntax_error(char *token);
 
 //	** EXECUTOR **
 int			execute_pipeline(t_cmd *pipeline, t_shell *shell);
@@ -326,7 +331,6 @@ int			handle_redir_in(t_redir *redir);
 int			handle_redir_out(t_redir *redir);
 
 //	** GENERAL HELPERS **
-void		print_error(char *token, char *msg);
 void		free_matrix(char **array);
 
 //	** DEBUG **

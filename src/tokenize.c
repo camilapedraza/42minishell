@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 20:13:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 18:03:46 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 19:24:36 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_token	*build_word_token(const char *line)
 				index++;
 			if (!line[index])
 			{
-				printf("%s", ERROR_NO_QUOTE);
+				printf("%s", ERROR_SYNTAX_QUOTE);
 				return (NULL);
 			}
 		}
