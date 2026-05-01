@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/05/01 19:05:05 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/05/01 21:03:33 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ FILES		=	minishell \
 				tokenize tokenizer_helpers \
 				parse parser_helpers \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
-				execute executor_helpers executor_builtins \
+				exec execute_helpers execute_builtins execute_children  \
 				resolve resolver_paths resolver_redirs \
 				builtin_echo \
 				utils_concatenation \

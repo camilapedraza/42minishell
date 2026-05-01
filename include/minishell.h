@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 19:26:35 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 21:07:34 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,13 @@
 # define ERROR_COMMAND "Command not found"
 
 //	** BUILTIN COMMANDS **
-# define BUILTIN_CD "cd"
-# define BUILTIN_ECHO "echo"
-# define BUILTIN_ENV "env"
-# define BUILTIN_EXIT "exit"
-# define BUILTIN_EXPORT "export"
-# define BUILTIN_PWD "pwd"
-# define BUILTIN_UNSET "unset"
+# define BUILTIN_NAME_CD "cd"
+# define BUILTIN_NAME_ECHO "echo"
+# define BUILTIN_NAME_ENV "env"
+# define BUILTIN_NAME_EXIT "exit"
+# define BUILTIN_NAME_EXPORT "export"
+# define BUILTIN_NAME_PWD "pwd"
+# define BUILTIN_NAME_UNSET "unset"
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -185,7 +185,19 @@ typedef enum e_access
 	EXECUTABLE
 }	t_access;
 
-//	** PIPELINE DATA TYOES **
+typedef enum e_builtin_type
+{
+	NOT_BUILTIN,
+	BUILTIN_CD,
+	BUILTIN_ECHO,
+	BUILTIN_ENV,
+	BUILTIN_EXIT,
+	BUILTIN_EXPORT,
+	BUILTIN_PWD,
+	BUILTIN_UNSET
+}	t_builtin_t;
+
+//	** PIPELINE DATA TYPES **
 typedef struct s_pipex
 {
 	int				tmp;
@@ -297,24 +309,22 @@ bool		is_removable_quote(char c, t_quote status);
 void		update_segment_status(char c, t_quote *status);
 void		update_delimiter_status(char c, t_quote *status);
 
-//	** UTILS: CONCATENATION **
-int			append_to_expanded(char **expanded, char *src, size_t len);
-char		*join_with_delimiter(char *s1, char *s2, char delim);
+//	** EXECUTE - MAIN **
+int			execute(t_cmd *pipeline, t_shell *shell);
 
-//	** UTILS: PRINT **
-void		print_general_error(char *token, char *msg);
-void		print_syntax_error(char *token);
+//	** EXECUTE - FORKING AND CHILDREN **
+pid_t		create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex);
 
-//	** EXECUTOR **
-int			execute_pipeline(t_cmd *pipeline, t_shell *shell);
+//	** EXECUTE - BUILTINS **
+bool		is_parent_builtin(t_cmd *cmd);
+bool		is_child_builtin(t_cmd *cmd);
+t_builtin_t	get_builtin_type(t_cmd *cmd);
+int			execute_builtin(t_cmd *cmd, t_shell *shell);
 
 //	** EXECUTOR HELPERS **
 void		init_pipex(t_pipex *pipex);
 void		close_if_valid(int *fd);
 int			wait_for_pipeline(pid_t last_pid);
-
-//	** EXECUTOR BUILTINS **
-bool		is_builtin(t_cmd *cmd);
 
 //	** RESOLVER **
 char		*resolve_cmd_path(char *cmd, t_env *env);
@@ -329,6 +339,14 @@ int			handle_redir_append(t_redir *redir);
 int			handle_redir_heredoc(t_redir *redir);
 int			handle_redir_in(t_redir *redir);
 int			handle_redir_out(t_redir *redir);
+
+//	** UTILS: CONCATENATION **
+int			append_to_expanded(char **expanded, char *src, size_t len);
+char		*join_with_delimiter(char *s1, char *s2, char delim);
+
+//	** UTILS: PRINT **
+void		print_general_error(char *token, char *msg);
+void		print_syntax_error(char *token);
 
 //	** GENERAL HELPERS **
 void		free_matrix(char **array);

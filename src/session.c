@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 17:49:19 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 20:42:57 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	run_session(t_shell *shell)
 	if (sesh.pipeline)
 	{
 		if (expand_parameters(sesh.pipeline, shell))
-			execute_pipeline(sesh.pipeline, shell);
+			execute(sesh.pipeline, shell);
 	}
 	clear_session(&sesh);
 	return (SUCCESS);
