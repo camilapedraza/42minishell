@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 23:17:32 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 18:02:52 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,16 @@
 //	** GENERAL EXIT CODES **
 # define SUCCESS 1
 # define FAILURE 0
-# define ABORT -1
 
-//	** HEREDOC EXIT CODE **
+//	** CUSTOM EXIT CODES: UNRECOVERABLE **
 # define UNEXPECTED_EOF 0
-# define CONTINUE 1
+# define FATAL 0
 
-//	** SPECIAL CHARS **
+//	** CUSTOM EXIT CODES: RECOVERABLE **
+# define INTERRUPTED -1
+# define CONTINUE 2
+
+//	** SPECIAL CHARACTERSS **
 # define CHAR_PIPE '|'
 # define CHAR_GREATER_THAN '>'
 # define CHAR_LESS_THAN '<'
@@ -130,11 +133,11 @@ typedef enum e_token_type
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_WORD,
-}	t_token_type;
+}	t_token_t;
 
 typedef struct s_token
 {
-	t_token_type	type;
+	t_token_t		type;
 	char			*value;
 	struct s_token	*next;
 }	t_token;
@@ -147,11 +150,11 @@ typedef enum e_redir_type
 	REDIR_HEREDOC,
 	REDIR_IN,
 	REDIR_OUT,
-}	t_redir_type;
+}	t_redir_t;
 
 typedef struct s_redir
 {
-	t_redir_type	type;	
+	t_redir_t		type;	
 	char			*target;
 	bool			expand;
 	int				fd;
@@ -184,152 +187,152 @@ typedef enum e_access
 //	** PIPELINE DATA TYOES **
 typedef struct s_pipex
 {
-	int		tmp;
-	int		write;
-	int		read;
+	int				tmp;
+	int				write;
+	int				read;
 }	t_pipex;
 
 //	** SESSION DATA TYPES **
 typedef struct s_session
 {
-	char	*line;
-	t_token	*tokens;
-	t_cmd	*pipeline;
+	char			*line;
+	t_token			*tokens;
+	t_cmd			*pipeline;
 }	t_session;
 
 //	** ENV VARIABLES **
-t_env			*new_var(char *key, char *value);
-void			add_var(t_env **head, t_env *new_var);
-t_env			*find_var(t_env *env, char *key);
-char			*get_var_value(t_env *env, char *key);
-void			free_vars(t_env *head);
+t_env		*new_var(char *key, char *value);
+void		add_var(t_env **head, t_env *new_var);
+t_env		*find_var(t_env *env, char *key);
+char		*get_var_value(t_env *env, char *key);
+void		free_vars(t_env *head);
 
 //	** TOKENS **
-t_token			*new_token(t_token_type type, char *value);
-void			add_token(t_token **head, t_token *new_node);
-int				count_args(t_token *token);
-void			free_tokens(t_token *head);
+t_token		*new_token(t_token_t type, char *value);
+void		add_token(t_token **head, t_token *new_node);
+int			count_args(t_token *token);
+void		free_tokens(t_token *head);
 
 //	** COMMANDS **
-t_cmd			*new_command(t_token *token);
-void			add_command(t_cmd **pipeline, t_cmd *new_command);
-void			free_args(char **argv);
-void			free_commands(t_cmd *pipeline);
+t_cmd		*new_command(t_token *token);
+void		add_command(t_cmd **pipeline, t_cmd *new_command);
+void		free_args(char **argv);
+void		free_commands(t_cmd *pipeline);
 
 //	** REDIRECTS **
-t_redir			*new_redir(t_redir_type type, char *value);
-void			add_redir(t_redir **head, t_redir *new_redirect);
-t_redir_type	get_redir_type(t_token_type token_type);
-void			free_redirs(t_redir *head);
+t_redir		*new_redir(t_redir_t type, char *value);
+void		add_redir(t_redir **head, t_redir *new_redirect);
+t_redir_t	get_redir_type(t_token_t token_type);
+void		free_redirs(t_redir *head);
 
 //	** SHELL **
-int				init_shell(t_shell *shell, char **envp);
-void			set_exit_code(t_shell *shell, int code);
-void			set_sigint_code(t_shell *shell);
-void			free_shell(t_shell *shell);
+int			init_shell(t_shell *shell, char **envp);
+void		set_exit_code(t_shell *shell, int code);
+void		set_sigint_code(t_shell *shell);
+void		free_shell(t_shell *shell);
 
 //	** ENV **
-t_env			*init_env(char **envp);
-char			**build_envp_array(t_env *env);
+t_env		*init_env(char **envp);
+char		**build_envp_array(t_env *env);
 
 //	** SIGNAL CATCHERS **
-void			set_signal_catchers(t_sigmode mode);
+void		set_signal_catchers(t_sigmode mode);
 
 //	** SIGNAL HANDLERS **
-bool			sigint_caught(void);
-void			handle_main_sig_int(int sig);
-void			handle_continued_sig_int(int sig);
+bool		sigint_caught(void);
+void		handle_main_sig_int(int sig);
+void		handle_continued_sig_int(int sig);
 
 //	** SIGNAL HOOKS **
-int				event_hook_cont_prompt_interrupt(void);
+int			event_hook_cont_prompt_interrupt(void);
 
 //	** COMMAND LINE SESSION **
-int				run_session(t_shell *shell);
+int			run_session(t_shell *shell);
 
 //	** MAIN PROMPT & INPUT **
-int				run_main_prompt(t_shell *shell, t_session *sesh);
-void			reset_main_prompt(void);
+int			run_main_prompt(t_shell *shell, t_session *sesh);
+void		reset_main_prompt(void);
 
 //	** CONTINUED PROMPS & INPUTS
-int				run_continued_prompt(char **line);
-int				read_heredoc_input(char **line, char *target);
-int				event_hook_cont_prompt_interrupt(void);
-void			kill_continued_prompt(void);
+int			run_continued_prompt(char **line);
+int			read_heredoc_input(char **line, char *target);
+int			event_hook_cont_prompt_interrupt(void);
+void		kill_continued_prompt(void);
 
 //	** TOKENIZER **	
-t_token			*tokenize_input(const char *line);
+t_token		*tokenize_input(const char *line);
 
 //	** TOKENIZER HELPERS **
-bool			is_space(char c);
-bool			is_operator(char c);
-bool			is_quote(char c);
-t_token_type	get_operator_type(const char *s);
-char			*get_operator_value(t_token_type type);
+bool		is_space(char c);
+bool		is_operator(char c);
+bool		is_quote(char c);
+t_token_t	get_operator_type(const char *s);
+char		*get_operator_value(t_token_t type);
 
 //	** PARSER **
-t_cmd			*parse_tokens(t_token *token);
+t_cmd		*parse_tokens(t_token *token);
 
 //	** PARSER HELPERS **
-bool			is_redirection(t_token_type type);
-bool			is_valid_syntax(t_token *head);
+bool		is_redirection(t_token_t type);
+bool		is_valid_syntax(t_token *head);
 
 //	** EXPANDER **
-int				expand_parameters(t_cmd *pipeline, t_shell *shell);
+int			expand_parameters(t_cmd *pipeline, t_shell *shell);
 
 // ** EXPANDER HANDLERS **
-char			*handle_expansion(char *arg, t_shell *shell);
-int				scan_segment(char **exp, char *arg, t_quote *st, t_shell *sh);
+char		*handle_expansion(char *arg, t_shell *shell);
+int			scan_segment(char **exp, char *arg, t_quote *st, t_shell *sh);
 
 //	** EXPANDER - HEREDOC HANDLERS **
-char			*extract_delimiter(t_redir *redir);
-int				get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell);
-int				write_to_pipe(int fd, char *line, size_t size);
-void			close_heredoc_pipe(int *pipefd);
+char		*extract_heredoc_delimiter(t_redir *redir);
+int			run_heredoc_prompt(char **line, t_redir *heredoc, t_shell *shell);
+int			write_to_pipe(int fd, char *line, size_t size);
+void		close_heredoc_pipe(int *pipefd);
 
 //	** EXPANDER HELPERS **
-bool			is_metachar(char c, t_quote status);
-bool			is_valid_var_char(char c, int index);
-bool			is_removable_quote(char c, t_quote status);
-void			update_segment_status(char c, t_quote *status);
-void			update_delimiter_status(char c, t_quote *status);
+bool		is_metachar(char c, t_quote status);
+bool		is_valid_var_char(char c, int index);
+bool		is_removable_quote(char c, t_quote status);
+void		update_segment_status(char c, t_quote *status);
+void		update_delimiter_status(char c, t_quote *status);
 
 //	** UTILS: STRING CONCATENATION **
-int				append_to_expanded(char **expanded, char *src, size_t len);
-char			*join_with_delimiter(char *s1, char *s2, char delim);
+int			append_to_expanded(char **expanded, char *src, size_t len);
+char		*join_with_delimiter(char *s1, char *s2, char delim);
 
 //	** EXECUTOR **
-int				execute_pipeline(t_cmd *pipeline, t_shell *shell);
+int			execute_pipeline(t_cmd *pipeline, t_shell *shell);
 
 //	** EXECUTOR HELPERS **
-void			init_pipex(t_pipex *pipex);
-void			close_if_valid(int *fd);
-int				wait_for_pipeline(pid_t last_pid);
+void		init_pipex(t_pipex *pipex);
+void		close_if_valid(int *fd);
+int			wait_for_pipeline(pid_t last_pid);
 
 //	** EXECUTOR BUILTINS **
-bool			is_builtin(t_cmd *cmd);
+bool		is_builtin(t_cmd *cmd);
 
 //	** RESOLVER **
-char			*resolve_cmd_path(char *cmd, t_env *env);
-int				resolve_redirections(t_redir *redirs, t_pipex *pipex);
+char		*resolve_cmd_path(char *cmd, t_env *env);
+int			resolve_redirections(t_redir *redirs, t_pipex *pipex);
 
 //	** PATH RESOLVER **
-char			*evaluate_paths(char **dirs, char *cmd);
+char		*evaluate_paths(char **dirs, char *cmd);
 
 //	** REDIR RESOLVERS**
-int				handle_redir_pipe(t_pipex *pipex);
-int				handle_redir_append(t_redir *redir);
-int				handle_redir_heredoc(t_redir *redir);
-int				handle_redir_in(t_redir *redir);
-int				handle_redir_out(t_redir *redir);
+int			handle_redir_pipe(t_pipex *pipex);
+int			handle_redir_append(t_redir *redir);
+int			handle_redir_heredoc(t_redir *redir);
+int			handle_redir_in(t_redir *redir);
+int			handle_redir_out(t_redir *redir);
 
 //	** GENERAL HELPERS **
-void			print_error(char *token, char *msg);
-void			free_matrix(char **array);
+void		print_error(char *token, char *msg);
+void		free_matrix(char **array);
 
 //	** DEBUG **
-void			print_env(t_env *env);
-void			print_tokens(t_token *head);
-void			print_cmds(t_cmd *cmds);
-void			print_heredoc_pipe(int fd);
+void		print_env(t_env *env);
+void		print_tokens(t_token *head);
+void		print_cmds(t_cmd *cmds);
+void		print_heredoc_pipe(int fd);
 
 #endif

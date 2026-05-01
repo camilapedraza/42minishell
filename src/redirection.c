@@ -6,13 +6,13 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:26 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/17 21:09:43 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:58:18 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_redir	*new_redir(t_redir_type type, char *value)
+t_redir	*new_redir(t_redir_t type, char *value)
 {
 	t_redir	*redir;
 
@@ -32,7 +32,7 @@ t_redir	*new_redir(t_redir_type type, char *value)
 	return (redir);
 }
 
-t_redir_type	get_redir_type(t_token_type token_type)
+t_redir_t	get_redir_type(t_token_t token_type)
 {
 	if (token_type == TOKEN_APPEND)
 		return (REDIR_APPEND);

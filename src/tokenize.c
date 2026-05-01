@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 20:13:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 15:32:12 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 18:03:46 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_token	*build_operator_token(const char *line)
 {
-	t_token_type	type;
+	t_token_t		type;
 	char			*value;
 	t_token			*token;
 

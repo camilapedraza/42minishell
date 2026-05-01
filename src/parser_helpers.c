@@ -6,13 +6,13 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:45:14 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/28 14:43:15 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:58:18 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_redirection(t_token_type type)
+bool	is_redirection(t_token_t type)
 {
 	if (type == TOKEN_APPEND
 		|| type == TOKEN_HEREDOC

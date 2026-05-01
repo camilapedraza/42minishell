@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 23:16:37 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:49:19 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	run_session(t_shell *shell)
 
 	init_session(&sesh);
 	if (!run_main_prompt(shell, &sesh))
-		return (FAILURE);
+		return (FATAL);
 	sesh.tokens = tokenize_input(sesh.line);
 	if (sesh.tokens)
 		sesh.pipeline = parse_tokens(sesh.tokens);

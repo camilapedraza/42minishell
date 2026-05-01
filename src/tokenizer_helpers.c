@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 15:21:28 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/03/20 18:09:30 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:58:18 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	is_quote(char c)
 	return (c == CHAR_SINGLE_QUOTE || c == CHAR_DOUBLE_QUOTE);
 }
 
-t_token_type	get_operator_type(const char *s)
+t_token_t	get_operator_type(const char *s)
 {
 	if (*s == CHAR_PIPE)
 		return (TOKEN_PIPE);
@@ -48,7 +48,7 @@ t_token_type	get_operator_type(const char *s)
 	return (TOKEN_NULL);
 }
 
-char	*get_operator_value(t_token_type type)
+char	*get_operator_value(t_token_t type)
 {
 	if (type == TOKEN_APPEND)
 		return (APPEND_VALUE);

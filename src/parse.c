@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 22:22:35 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 18:03:27 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	parse_args(t_cmd *cmd, int index, t_token **token)
 static t_redir	*parse_redirect(t_cmd *cmd, t_token **token)
 {
 	t_redir			*redir;
-	t_redir_type	type;
+	t_redir_t		type;
 	char			*target;
 
 	if (!*token || !(*token)->next)

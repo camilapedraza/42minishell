@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 22:31:54 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 23:16:08 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:52:34 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	read_heredoc_input(char **line, char *target)
 	if (sigint_caught())
 	{
 		free(*line);
-		return (ABORT);
+		return (INTERRUPTED);
 	}
 	if (!*line)
 	{
@@ -53,7 +53,7 @@ static int	read_continued_input(char **continuation)
 	{
 		kill_continued_prompt();
 		free(*continuation);
-		return (ABORT);
+		return (INTERRUPTED);
 	}
 	if (!*continuation)
 	{

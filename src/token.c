@@ -6,13 +6,13 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 15:14:13 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/18 18:49:55 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:58:18 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*new_token(t_token_type type, char *value)
+t_token	*new_token(t_token_t type, char *value)
 {
 	t_token	*token;
 

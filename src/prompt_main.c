@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 20:23:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 23:16:13 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:48:59 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	read_main_input(char **line)
 	if (!*line)
 	{
 		printf("%s", EXIT_MSG);
-		return (FAILURE);
+		return (FATAL);
 	}
 	while (!is_balanced(*line))
 	{
@@ -77,7 +77,7 @@ int	run_main_prompt(t_shell *shell, t_session *sesh)
 		if (status == SUCCESS)
 			break ;
 		if (!status)
-			return (FAILURE);
+			return (FATAL);
 		else
 			continue ;
 	}

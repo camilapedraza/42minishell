@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 17:04:41 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 22:25:56 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:54:26 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static char	*expand_heredoc_line(char *arg, t_shell *shell)
 	return (expanded);
 }
 
-int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
+int	run_heredoc_prompt(char **line, t_redir *heredoc, t_shell *shell)
 {
 	char	*expanded_line;
 	int		status;
@@ -66,8 +66,8 @@ int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
 	status = read_heredoc_input(line, heredoc->target);
 	if (status == UNEXPECTED_EOF)
 		return (CONTINUE);
-	if (status == ABORT)
-		return (set_sigint_code(shell), ABORT);
+	if (status == INTERRUPTED)
+		return (set_sigint_code(shell), INTERRUPTED);
 	if (!ft_strcmp(*line, heredoc->target))
 	{
 		free(*line);
@@ -85,7 +85,7 @@ int	get_heredoc_line(char **line, t_redir *heredoc, t_shell *shell)
 	return (SUCCESS);
 }
 
-char	*extract_delimiter(t_redir *redir)
+char	*extract_heredoc_delimiter(t_redir *redir)
 {
 	char	*src;
 	char	*delimiter;

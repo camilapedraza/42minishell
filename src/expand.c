@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/22 23:26:39 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 17:51:19 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ static int	expand_heredocs(t_redir *heredoc, t_shell *shell)
 	line = NULL;
 	while (1)
 	{
-		status = get_heredoc_line(&line, heredoc, shell);
+		status = run_heredoc_prompt(&line, heredoc, shell);
 		if (status == FAILURE)
 			set_exit_code(shell, 1);
-		if (status == ABORT || status == FAILURE)
+		if (status == INTERRUPTED || status == FAILURE)
 			return (close_heredoc_pipe(pipefd), FAILURE);
 		if (!line)
 			break ;
@@ -50,7 +50,7 @@ static int	expand_redirections(t_cmd *cmd, t_shell *shell)
 		if (redir->type == REDIR_HEREDOC)
 		{
 			redir->expand = true;
-			expanded_target = extract_delimiter(redir);
+			expanded_target = extract_heredoc_delimiter(redir);
 		}
 		else
 			expanded_target = handle_expansion(redir->target, shell);
