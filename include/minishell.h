@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 21:07:34 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 22:10:54 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,21 @@
 # define CONTINUE 2
 
 //	** SPECIAL CHARACTERSS **
-# define CHAR_PIPE '|'
-# define CHAR_GREATER_THAN '>'
-# define CHAR_LESS_THAN '<'
-# define CHAR_SINGLE_QUOTE '\''
+# define CHAR_COLON	':'
+# define CHAR_DASH '-'
+# define CHAR_DOLLAR '$'
 # define CHAR_DOUBLE_QUOTE '"'
 # define CHAR_EQUALS '='
-# define CHAR_DOLLAR '$'
-# define CHAR_QUESTION '?'
-# define CHAR_UNDERSCORE '_'
-# define CHAR_SLASH '/'
-# define CHAR_COLON	':'
+# define CHAR_GREATER_THAN '>'
+# define CHAR_LESS_THAN '<'
+# define CHAR_N 'n'
 # define CHAR_NEWLINE '\n'
+# define CHAR_PIPE '|'
+# define CHAR_QUESTION '?'
+# define CHAR_SINGLE_QUOTE '\''
+# define CHAR_SLASH '/'
+# define CHAR_SPACE ' '
+# define CHAR_UNDERSCORE '_'
 # define SPECIAL_CHARS "\"'$"
 
 //	** VALUES FOR OPERATOR TOKENS **
@@ -316,9 +319,11 @@ int			execute(t_cmd *pipeline, t_shell *shell);
 pid_t		create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex);
 
 //	** EXECUTE - BUILTINS **
+bool		is_builtin(t_cmd *cmd);
 bool		is_parent_builtin(t_cmd *cmd);
 bool		is_child_builtin(t_cmd *cmd);
-t_builtin_t	get_builtin_type(t_cmd *cmd);
+//t_builtin_t	get_builtin_type(t_cmd *cmd);
+int			run_builtin(t_cmd *cmd, t_shell *shell);
 int			execute_builtin(t_cmd *cmd, t_shell *shell);
 
 //	** EXECUTOR HELPERS **
@@ -339,6 +344,9 @@ int			handle_redir_append(t_redir *redir);
 int			handle_redir_heredoc(t_redir *redir);
 int			handle_redir_in(t_redir *redir);
 int			handle_redir_out(t_redir *redir);
+
+//	** BUILTINS	**
+int			builtin_echo(char **fields);
 
 //	** UTILS: CONCATENATION **
 int			append_to_expanded(char **expanded, char *src, size_t len);

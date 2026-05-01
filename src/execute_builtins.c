@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 21:17:56 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 22:41:47 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,21 @@ bool	is_child_builtin(t_cmd *cmd)
 	return (false);
 }
 
+bool	is_builtin(t_cmd *cmd)
+{
+	if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
+		return (false);
+	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_CD)
+		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_ECHO)
+		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_ENV)
+		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXIT)
+		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXPORT)
+		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_PWD)
+		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_UNSET))
+		return (true);
+	return (false);
+}
+/*
 t_builtin_t	get_builtin_type(t_cmd *cmd)
 {
 	char	*cmd_name;
@@ -63,6 +78,17 @@ t_builtin_t	get_builtin_type(t_cmd *cmd)
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_UNSET))
 		return (BUILTIN_UNSET);
 	return (NOT_BUILTIN);
+}*/
+
+// THIS WILL PASS AN EXIT CODE TO THE CHILD SO IT NEEDS C EXIT CODES!
+int	run_builtin(t_cmd *cmd, t_shell *shell)
+{
+	(void)shell;
+	printf("*** Running %s as a builtin in child\n\n", cmd->argv[0]);
+	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_ECHO))
+		return (builtin_echo(&cmd->argv[1]));
+	printf("*** The %s builtin has not yet been coded :(\n", cmd->argv[0]);
+	return (EXIT_SUCCESS);
 }
 
 //save current stdin/stdout

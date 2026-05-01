@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 19:45:45 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 21:01:47 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 22:30:44 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ pid_t	create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 			exit(1);
 		if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
 			exit(0);
+		if (is_builtin(cmd))
+			exit(run_builtin(cmd, shell));
 		exec_in_child(cmd, shell);
 	}
 	return (pid);
