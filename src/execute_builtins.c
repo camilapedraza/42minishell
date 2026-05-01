@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 22:41:47 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/01 22:52:15 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ t_builtin_t	get_builtin_type(t_cmd *cmd)
 int	run_builtin(t_cmd *cmd, t_shell *shell)
 {
 	(void)shell;
-	printf("*** Running %s as a builtin in child\n\n", cmd->argv[0]);
 	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_ECHO))
 		return (builtin_echo(&cmd->argv[1]));
 	printf("*** The %s builtin has not yet been coded :(\n", cmd->argv[0]);
@@ -100,7 +99,11 @@ int	run_builtin(t_cmd *cmd, t_shell *shell)
 //excute can shell->exit_code = exec_in_parent(...) or do it here
 int	execute_builtin(t_cmd *cmd, t_shell *shell)
 {
+	int	status;
+
 	(void)shell;
-	printf("this %s should run a builtin in the parent!\n", cmd->argv[0]);
+	printf("Running the %s builtin in the parent!\n", cmd->argv[0]);
+	status = run_builtin(cmd, shell);
+	set_exit_code(shell, status);
 	return (SUCCESS);
 }
