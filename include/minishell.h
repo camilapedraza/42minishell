@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/04 15:43:19 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/04 16:18:53 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@
 //	** CUSTOM SHELL EXIT CODES **
 # define EXIT_INVALID 2
 
-
 //	** SPECIAL CHARACTERSS **
 # define CHAR_COLON	':'
 # define CHAR_DASH '-'
@@ -97,6 +96,7 @@
 # define ERROR_EOF "Unexpected end-of-file"
 # define ERROR_COMMAND "Command not found"
 # define ERROR_OPTION "invalid option"
+# define ERROR_ARGS "too many arguments"
 
 //	** BUILTIN COMMANDS **
 # define BUILTIN_NAME_CD "cd"
@@ -352,6 +352,7 @@ int			handle_redir_out(t_redir *redir);
 
 //	** BUILTINS	**
 int			builtin_echo(char **fields);
+int			builtin_env(char **fields, t_shell *shell);
 int			builtin_pwd(char **fields);
 
 //	** UTILS: CONCATENATION **

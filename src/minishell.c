@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 20:33:51 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/04 16:13:19 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ bash: "": command not found
 //when it evaluates to nothing
 // so that commands like CAT can run as normal when no args are provided
 // instead of treating it like an empty string.
+
+// TODO: check all functions that should list consts
 
 volatile sig_atomic_t	g_signal = 0;
 
