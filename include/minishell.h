@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 22:10:54 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/04 15:43:19 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,21 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-//	** GENERAL EXIT CODES **
+//	** GENERAL RETURN STATUS **
 # define SUCCESS 1
 # define FAILURE 0
 
-//	** CUSTOM EXIT CODES: UNRECOVERABLE **
-# define UNEXPECTED_EOF 0
+//	** CUSTOM RETURN STATUS: UNRECOVERABLE **
 # define FATAL 0
 
-//	** CUSTOM EXIT CODES: RECOVERABLE **
+//	** CUSTOM RETURN STATUS: RECOVERABLE **
+# define UNEXPECTED_EOF 0
 # define INTERRUPTED -1
 # define CONTINUE 2
+
+//	** CUSTOM SHELL EXIT CODES **
+# define EXIT_INVALID 2
+
 
 //	** SPECIAL CHARACTERSS **
 # define CHAR_COLON	':'
@@ -92,6 +96,7 @@
 # define ERROR_SYNTAX_TOKEN "Syntax error near token"
 # define ERROR_EOF "Unexpected end-of-file"
 # define ERROR_COMMAND "Command not found"
+# define ERROR_OPTION "invalid option"
 
 //	** BUILTIN COMMANDS **
 # define BUILTIN_NAME_CD "cd"
@@ -347,6 +352,7 @@ int			handle_redir_out(t_redir *redir);
 
 //	** BUILTINS	**
 int			builtin_echo(char **fields);
+int			builtin_pwd(char **fields);
 
 //	** UTILS: CONCATENATION **
 int			append_to_expanded(char **expanded, char *src, size_t len);

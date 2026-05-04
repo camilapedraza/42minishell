@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 22:52:15 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/04 15:51:15 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int	run_builtin(t_cmd *cmd, t_shell *shell)
 	(void)shell;
 	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_ECHO))
 		return (builtin_echo(&cmd->argv[1]));
+	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_PWD))
+		return (builtin_pwd(&cmd->argv[1]));
 	printf("*** The %s builtin has not yet been coded :(\n", cmd->argv[0]);
 	return (EXIT_SUCCESS);
 }

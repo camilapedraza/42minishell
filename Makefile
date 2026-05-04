@@ -6,7 +6,7 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/05/01 21:03:33 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/05/04 15:43:33 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ FILES		=	minishell \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
 				exec execute_helpers execute_builtins execute_children  \
 				resolve resolver_paths resolver_redirs \
-				builtin_echo \
+				builtin_echo builtin_pwd \
 				utils_concatenation \
 				utils_print \
 				debug_prints
