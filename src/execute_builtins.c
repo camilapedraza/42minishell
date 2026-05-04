@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/04 16:24:47 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/20 16:41:05 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,13 @@ int	run_builtin(t_cmd *cmd, t_shell *shell)
 		return (builtin_pwd(&cmd->argv[1]));
 	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_ENV))
 		return (builtin_env(&cmd->argv[1], shell));
+	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_CD))
+		return (builtin_cd(&cmd->argv[1], shell));
 	printf("*** The %s builtin has not yet been coded :(\n", cmd->argv[0]);
 	return (EXIT_SUCCESS);
 }
 
+// TODO: redirection logic for builtins executed in parent!
 //save current stdin/stdout
 //apply redirections
 //run builtin

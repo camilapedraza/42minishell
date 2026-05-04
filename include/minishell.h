@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/04 16:18:53 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/04 23:48:39 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,15 @@
 # define ERROR_SYNTAX_TOKEN "Syntax error near token"
 # define ERROR_EOF "Unexpected end-of-file"
 # define ERROR_COMMAND "Command not found"
-# define ERROR_OPTION "invalid option"
-# define ERROR_ARGS "too many arguments"
+# define ERROR_OPTION "Invalid option"
+# define ERROR_ARGS "Too many arguments"
+
+# define ERROR_HOME_UNDEFINED "$HOME environment variable empty or undefined"
+
+//	** SPECIAL ENV VARS **
+# define HOME "HOME"
+# define OLDPWD "OLDPWD"
+# define PWD "PWD"
 
 //	** BUILTIN COMMANDS **
 # define BUILTIN_NAME_CD "cd"
@@ -351,6 +358,7 @@ int			handle_redir_in(t_redir *redir);
 int			handle_redir_out(t_redir *redir);
 
 //	** BUILTINS	**
+int			builtin_cd(char **fields, t_shell *shell);
 int			builtin_echo(char **fields);
 int			builtin_env(char **fields, t_shell *shell);
 int			builtin_pwd(char **fields);

@@ -6,13 +6,13 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:30:42 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/04 15:44:39 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/04 19:46:49 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_n_flag(char *field)
+static bool	is_n_flag(char *field)
 {
 	int	index;
 
