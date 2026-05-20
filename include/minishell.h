@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/04 23:48:39 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/20 20:31:30 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,12 +331,8 @@ int			execute(t_cmd *pipeline, t_shell *shell);
 pid_t		create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex);
 
 //	** EXECUTE - BUILTINS **
-bool		is_builtin(t_cmd *cmd);
-bool		is_parent_builtin(t_cmd *cmd);
-bool		is_child_builtin(t_cmd *cmd);
-//t_builtin_t	get_builtin_type(t_cmd *cmd);
 int			run_builtin(t_cmd *cmd, t_shell *shell);
-int			execute_builtin(t_cmd *cmd, t_shell *shell);
+int			execute_builtin_in_parent(t_cmd *cmd, t_shell *shell);
 
 //	** EXECUTOR HELPERS **
 void		init_pipex(t_pipex *pipex);
@@ -358,6 +354,10 @@ int			handle_redir_in(t_redir *redir);
 int			handle_redir_out(t_redir *redir);
 
 //	** BUILTINS	**
+bool		is_builtin(t_cmd *cmd);
+bool		is_parent_builtin(t_cmd *cmd);
+//bool		is_child_builtin(t_cmd *cmd);
+//t_builtin_t	get_builtin_type(t_cmd *cmd);
 int			builtin_cd(char **fields, t_shell *shell);
 int			builtin_echo(char **fields);
 int			builtin_env(char **fields, t_shell *shell);

@@ -6,79 +6,11 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/20 16:41:05 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/20 20:55:00 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-bool	is_parent_builtin(t_cmd *cmd)
-{
-	char	*cmd_name;
-
-	if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
-		return (false);
-	cmd_name = cmd->argv[0];
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_CD)
-		|| !ft_strcmp(cmd_name, BUILTIN_NAME_EXIT)
-		|| !ft_strcmp(cmd_name, BUILTIN_NAME_EXPORT)
-		|| !ft_strcmp(cmd_name, BUILTIN_NAME_UNSET))
-		return (true);
-	return (false);
-}
-
-bool	is_child_builtin(t_cmd *cmd)
-{
-	char	*cmd_name;
-
-	if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
-		return (false);
-	cmd_name = cmd->argv[0];
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_ECHO)
-		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ENV)
-		|| !ft_strcmp(cmd_name, BUILTIN_NAME_PWD))
-		return (true);
-	return (false);
-}
-
-bool	is_builtin(t_cmd *cmd)
-{
-	if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
-		return (false);
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_CD)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_ECHO)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_ENV)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXIT)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXPORT)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_PWD)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_UNSET))
-		return (true);
-	return (false);
-}
-/*
-t_builtin_t	get_builtin_type(t_cmd *cmd)
-{
-	char	*cmd_name;
-
-	if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
-		return (NOT_BUILTIN);
-	cmd_name = cmd->argv[0];
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_CD))
-		return (BUILTIN_CD);
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_ECHO))
-		return (BUILTIN_ECHO);
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_ENV))
-		return (BUILTIN_ENV);
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_EXIT))
-		return (BUILTIN_EXIT);
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_EXPORT))
-		return (BUILTIN_EXPORT);
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_PWD))
-		return (BUILTIN_PWD);
-	if (!ft_strcmp(cmd_name, BUILTIN_NAME_UNSET))
-		return (BUILTIN_UNSET);
-	return (NOT_BUILTIN);
-}*/
 
 // THIS WILL PASS AN EXIT CODE TO THE CHILD SO IT NEEDS C EXIT CODES!
 int	run_builtin(t_cmd *cmd, t_shell *shell)
@@ -96,21 +28,50 @@ int	run_builtin(t_cmd *cmd, t_shell *shell)
 	return (EXIT_SUCCESS);
 }
 
-// TODO: redirection logic for builtins executed in parent!
-//save current stdin/stdout
-//apply redirections
-//run builtin
-//restore stdin/stdout
-//return builtin exit status
-//builtin = get_builtin_type(cmd);
-//excute can shell->exit_code = exec_in_parent(...) or do it here
-int	execute_builtin(t_cmd *cmd, t_shell *shell)
+static void	restore_parent_stdio(int fd_in, int fd_out)
 {
+	dup2(fd_in, STDIN_FILENO);
+	dup2(fd_out, STDOUT_FILENO);
+	close(fd_in);
+	close(fd_out);
+}
+
+static int	handle_parent_redirs(t_redir *redir, int *fd_in, int *fd_out)
+{
+	t_pipex	pipex;
+
+	init_pipex(&pipex);
+	*fd_in = dup(STDIN_FILENO);
+	if (*fd_in == -1)
+		return (FAILURE);
+	*fd_out = dup(STDOUT_FILENO);
+	if (*fd_out == -1)
+	{
+		dup2(*fd_in, STDIN_FILENO);
+		close(*fd_in);
+		return (FAILURE);
+	}
+	if (!resolve_redirections(redir, &pipex))
+	{
+		restore_parent_stdio(*fd_in, *fd_out);
+		return (FAILURE);
+	}
+	return (SUCCESS);
+}
+
+int	execute_builtin_in_parent(t_cmd *cmd, t_shell *shell)
+{
+	int	fd_in;
+	int	fd_out;
 	int	status;
 
-	(void)shell;
-	printf("Running the %s builtin in the parent!\n", cmd->argv[0]);
+	if (!handle_parent_redirs(cmd->redirs, &fd_in, &fd_out))
+	{
+		set_exit_code(shell, EXIT_FAILURE);
+		return (FAILURE);
+	}
 	status = run_builtin(cmd, shell);
 	set_exit_code(shell, status);
+	restore_parent_stdio(fd_in, fd_out);
 	return (SUCCESS);
 }

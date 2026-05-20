@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 19:43:28 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/20 16:40:18 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/20 20:30:13 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,7 @@ int	builtin_cd(char **fields, t_shell *shell)
 		print_general_error(BUILTIN_NAME_CD, ERROR_ARGS);
 		return (EXIT_INVALID);
 	}
+	if (!ft_strlen(fields[0]))
+		return (EXIT_SUCCESS);
 	return (chdir_path(fields[0], shell));
 }

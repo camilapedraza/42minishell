@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 21:00:25 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/20 19:24:44 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	execute_pipeline(t_cmd *pipeline, t_shell *shell)
 int	execute(t_cmd *pipeline, t_shell *shell)
 {
 	if (!pipeline->next && is_parent_builtin(pipeline))
-		return (execute_builtin(pipeline, shell));
+		return (execute_builtin_in_parent(pipeline, shell));
 	else
 		return (execute_pipeline(pipeline, shell));
 }
