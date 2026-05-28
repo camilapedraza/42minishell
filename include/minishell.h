@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/20 20:31:30 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/05/28 08:50:19 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@
 # include <sys/wait.h>
 
 // ** THIRD-PARTY LIBARY HEADERS **
-# include <readline/history.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 
 //	** GENERAL RETURN STATUS **
 # define SUCCESS 1
