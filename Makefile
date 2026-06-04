@@ -3,23 +3,26 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
+#    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/05/28 09:09:42 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/06/04 18:01:16 by plepercq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror
-CPPFLAGS	=	-I${INC_DIR} -I${LFT_DIR}
+CPPFLAGS	=	-I${DIR_INC} -I${LFT_DIR}
 LDFLAGS		=	-lreadline
 LIBS		=	${LFT}
 
-SRC_DIR		=	src
-INC_DIR		=	include
+DIR_SRC		=	src
+DIR_OBJ		= 	obj
+DIR_INC		=	include
+
 HEADERS		=	minishell.h
+
 FILES		=	minishell \
 				signal_catchers signal_handlers \
 				general \
@@ -37,8 +40,9 @@ FILES		=	minishell \
 				utils_concatenation \
 				utils_print \
 				debug_prints
-SRCS		=	${FILES:%=${SRC_DIR}/%.c}
-OBJS		=	${SRCS:%.c=%.o}
+				
+SRCS		=	$(addprefix $(DIR_SRC)/, $(addsuffix .c, $(FILES)))
+OBJS		=	$(addprefix $(DIR_OBJ)/, $(addsuffix .o, $(FILES)))
 
 LFT			=	${LFT_DIR}/libft.a
 LFT_DIR		=	libft
@@ -52,6 +56,7 @@ ifeq ($(UNAME), Darwin)
 endif
 
 all:		${NAME}
+	@echo -e "> Program name : $(NAME)\n"
 
 ${NAME}: ${LIBS} ${OBJS}
 	${CC} ${CFLAGS}	${OBJS}	${LIBS} ${LDFLAGS} -o ${NAME}
@@ -65,21 +70,24 @@ ${LIBS}:
 	${MAKE} -C ${LFT_DIR}
 
 # FOR AGGRESSIVE OPTIMIZATION
-#%.o: %.c
+#$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 #	$(CC) ${CFLAGS} ${CPPFLAGS} -O3 -c $< -o $@
 
 # FOR DEBUGGING
-%.o: %.c 
+$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
+	@mkdir -vp $(DIR_OBJ)
 	${CC} ${CFLAGS} ${CPPFLAGS} -O0 -c $< -o $@
 
 # TODO REMOVE LIBFT AND ADD DOWNLOAD STEP LIKE SO LONG
 
 clean:
-	${RM} ${OBJS}
+	${RM} -v ${OBJS}
 	${MAKE} -C ${LFT_DIR} clean
 
 fclean: clean
-	${RM} ${NAME}
+	${RM} -vd ${NAME} ${DIR_OBJ}
 	${MAKE} -C ${LFT_DIR} fclean
 	
 re: fclean all
+
+.PHONY: all clean fclean re
