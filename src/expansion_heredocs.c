@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_heredocs.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 17:04:41 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 21:06:58 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/06/10 18:39:05 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	run_heredoc_prompt(char **line, t_redir *heredoc, t_shell *shell)
 	status = read_heredoc_input(line, heredoc->target);
 	if (status == UNEXPECTED_EOF)
 		return (CONTINUE);
-	if (status == INTERRUPTED)
+	if (status == INTERRUPTED && sigint_caught())
 		return (set_sigint_code(shell), INTERRUPTED);
 	if (!ft_strcmp(*line, heredoc->target))
 	{

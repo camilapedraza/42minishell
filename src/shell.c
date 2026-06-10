@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/28 08:51:01 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/06/10 18:39:21 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 void	set_sigint_code(t_shell *shell)
 {
-	if (g_signal == SIGINT)
-	{
-		shell->exit_code = 130;
-		g_signal = 0;
-	}
+	shell->exit_code = 130;
+	g_signal = 0;
 }
 
 void	set_exit_code(t_shell *shell, int code)
