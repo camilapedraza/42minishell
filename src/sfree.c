@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*   sfree.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 18:30:12 by plepercq          #+#    #+#             */
-/*   Updated: 2026/06/15 18:17:41 by plepercq         ###   ########.fr       */
+/*   Created: 2026/06/16 15:19:38 by plepercq          #+#    #+#             */
+/*   Updated: 2026/06/16 15:24:57 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_exit(char **fields, t_shell *shell)
+int	sfree(void *ptr)
 {
-	(void)fields;
-	free_shell(shell);
-	exit(shell->exit_code);
+	if (!ptr)
+		return (0);
+	free(ptr);
+	ptr = NULL;
 }

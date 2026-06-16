@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:39:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/06/11 17:00:21 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:19:13 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static t_env	*parse_var(char *envp)
 	{
 		key = ft_strdup(envp);
 		value = ft_calloc(1, 1);
+		value[0] = '\0';
 	}
 	var = new_var(key, value);
 	if (key)
