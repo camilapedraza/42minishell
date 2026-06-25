@@ -6,16 +6,15 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 15:19:38 by plepercq          #+#    #+#             */
-/*   Updated: 2026/06/16 15:24:57 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/06/25 19:25:57 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	sfree(void *ptr)
+void	sfree(void *ptr)
 {
 	if (!ptr)
-		return (0);
+		return ;
 	free(ptr);
 	ptr = NULL;
 }

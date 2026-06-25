@@ -6,16 +6,15 @@
 #    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/06/04 18:35:45 by plepercq         ###   ########.fr        #
+#    Updated: 2026/06/25 18:41:09 by plepercq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g
 CPPFLAGS	=	-I${DIR_INC} -I${LFT_DIR}
 LDFLAGS		=	-lreadline
-LIBS		=	${LFT}
 
 DIR_SRC		=	src
 DIR_OBJ		= 	obj
@@ -25,7 +24,7 @@ HEADERS		=	minishell.h
 
 FILES		=	minishell \
 				signal_catchers signal_handlers \
-				general \
+				general sfree \
 				variable token command redirection \
 				shell \
 				env \
@@ -36,7 +35,7 @@ FILES		=	minishell \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
 				exec execute_helpers execute_builtins execute_children  \
 				resolve resolver_paths resolver_redirs \
-				builtin builtin_echo builtin_pwd builtin_env builtin_cd builtin_exit\
+				builtin builtin_echo builtin_pwd builtin_env builtin_cd builtin_exit builtin_export\
 				utils_concatenation \
 				utils_print \
 				debug_prints
@@ -58,10 +57,10 @@ endif
 all:		${NAME}
 	@echo -e "> Program name : $(NAME)\n"
 
-${NAME}: ${LIBS} ${OBJS}
-	${CC} ${CFLAGS}	${OBJS}	${LIBS} ${LDFLAGS} -o ${NAME}
+${NAME}: ${LFT} ${OBJS}
+	${CC} ${CFLAGS}	${OBJS}	${LFT} ${LDFLAGS} -o ${NAME}
 
-${LIBS}:
+${LFT}:
 	@if [ ! -d "$(LFT_DIR)" ]; then \
 		echo "Cloning Libft..."; \
 		git clone $(LFT_REPO) $(LFT_DIR); \

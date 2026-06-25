@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/06/04 18:30:00 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/06/25 19:25:19 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,6 +362,7 @@ int			builtin_cd(char **fields, t_shell *shell);
 int			builtin_echo(char **fields);
 int			builtin_env(char **fields, t_shell *shell);
 int			builtin_exit(char **fields, t_shell *shell);
+int			builtin_export(char **fields, t_shell *shell);
 int			builtin_pwd(char **fields);
 
 //	** UTILS: CONCATENATION **
@@ -374,6 +375,7 @@ void		print_syntax_error(char *token);
 
 //	** GENERAL HELPERS **
 void		free_matrix(char **array);
+void		sfree(void *ptr);
 
 //	** DEBUG **
 void		print_env(t_env *env);
