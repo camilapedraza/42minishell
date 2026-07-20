@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:43:05 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/29 17:47:34 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/07/20 18:09:48 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,29 @@ t_env	*new_var(char *key, char *value)
 	var->key = ft_strdup(key);
 	var->value = ft_strdup(value);
 	if (!var->key || !var->value)
+	{
+		free(var);
+		return (NULL);
+	}
+	var->next = NULL;
+	return (var);
+}
+
+t_env	*new_var(char *key, char *value)
+{
+	t_env	*var;
+
+	if (!key)
+		return (NULL);
+	var = malloc(sizeof(t_env));
+	if (!var)
+		return (NULL);
+	var->key = ft_strdup(key);
+	if (value)
+		var->value = ft_strdup(value);
+	else
+		var->value = NULL;
+	if (!var->key)
 	{
 		free(var);
 		return (NULL);
@@ -72,6 +95,12 @@ char	*get_var_value(t_env *env, char *key)
 	if (!var || !var->value)
 		return (NULL);
 	return (var->value);
+}
+
+void	free_var(t_env **head)
+{
+	// TODO
+	t_env	*new_head;
 }
 
 void	free_vars(t_env *head)

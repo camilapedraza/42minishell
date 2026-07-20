@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/06/25 19:25:19 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/07/20 16:14:02 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,8 +370,10 @@ int			append_to_expanded(char **expanded, char *src, size_t len);
 char		*join_with_delimiter(char *s1, char *s2, char delim);
 
 //	** UTILS: PRINT **
+void		print_error_prefix(char *token);
 void		print_general_error(char *token, char *msg);
 void		print_syntax_error(char *token);
+void		print_error_strs(size_t count, ...);
 
 //	** GENERAL HELPERS **
 void		free_matrix(char **array);

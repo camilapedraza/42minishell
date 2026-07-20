@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_print.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 18:09:59 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 19:21:58 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/07/20 17:35:42 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,22 @@ void	ft_putstr_np_fd(char *str, int fd)
 	}
 }
 
-void	print_syntax_error(char *token)
-{
-	ft_putstr_fd(SHELL_PREFIX, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(ERROR_SYNTAX_TOKEN, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(token, 2);
-}
-
-void	print_general_error(char *token, char *msg)
+void	print_error_prefix(char *token)
 {
 	ft_putstr_fd(SHELL_PREFIX, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_np_fd(token, 2);
 	ft_putstr_fd(": ", 2);
+}
+
+void	print_syntax_error(char *token)
+{
+	print_error_prefix(ERROR_SYNTAX_TOKEN);
+	ft_putendl_fd(token, 2);
+}
+
+void	print_general_error(char *token, char *msg)
+{
+	print_error_prefix(token);
 	ft_putendl_fd(msg, 2);
 }
