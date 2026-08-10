@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/06/15 18:22:00 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/10 15:11:54 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	run_builtin(t_cmd *cmd, t_shell *shell)
 		return (builtin_cd(&cmd->argv[1], shell));
 	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXPORT))
 		return (builtin_export(&cmd->argv[1], shell));
+	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_UNSET))
+		return (builtin_unset(&cmd->argv[1], shell));
 	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXIT))
 		return (builtin_exit(&cmd->argv[1], shell));
 	printf("*** The %s builtin has not yet been coded :(\n", cmd->argv[0]);

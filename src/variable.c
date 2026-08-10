@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:43:05 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/10 11:16:31 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:36:02 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	free_var(t_env *var, t_env **head)
 {
 	t_env	*check;
 
-	if (!var)
+	if (var == NULL)
 		return ;
 	if (head == NULL || *head == NULL)
 		return (sfree(var->value), free(var->key), free(var));

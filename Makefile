@@ -6,7 +6,7 @@
 #    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/06/25 18:41:09 by plepercq         ###   ########.fr        #
+#    Updated: 2026/08/10 11:25:15 by plepercq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ FILES		=	minishell \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
 				exec execute_helpers execute_builtins execute_children  \
 				resolve resolver_paths resolver_redirs \
-				builtin builtin_echo builtin_pwd builtin_env builtin_cd builtin_exit builtin_export\
+				builtin builtin_echo builtin_pwd builtin_env builtin_cd builtin_exit builtin_export builtin_unset\
 				utils_concatenation \
 				utils_print \
 				debug_prints

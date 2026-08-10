@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/10 10:55:26 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/10 14:38:06 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	free_shell(t_shell *shell)
 {
 	t_env	*var;
 
-	var = &(shell->env);
+	var = shell->env;
 	while (var)
 		free_var(var, &var);
 	rl_clear_history();

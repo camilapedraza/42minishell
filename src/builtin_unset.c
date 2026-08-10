@@ -1,52 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/04 18:30:12 by plepercq          #+#    #+#             */
-/*   Updated: 2026/08/10 14:37:12 by plepercq         ###   ########.fr       */
+/*   Created: 2026/08/10 11:24:37 by plepercq          #+#    #+#             */
+/*   Updated: 2026/08/10 14:40:37 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_exit(char **fields, t_shell *shell)
-{
-	(void)fields;
-	(void)shell;
-	printf("HELLO\n");
-	return (0);
-	//free_shell(shell);
-	//return (shell->exit_code);
-}
-
-
-/*
-int	builtin_exit(char **fields, t_shell *shell)
+int	builtin_unset(char **fields, t_shell *shell)
 {
 	int		i;
 	t_env	*var;
-	char	**keys;
 
 	i = 0;
 	if (*fields == NULL)
-	{
-		keys = get_env_keys(shell->env);
-		sort_alpha(&keys);
-		while (keys[i])
-			print_var(keys[i++], shell->env);
-		sfree(keys);
 		return (SUCCESS);
-	}
 	while (fields[i])
 	{
-		var = parse_var(fields[i]);
-		if (var != NULL)
-			add_var(&shell->env, var);
+		var = find_var(shell->env, fields[i]);
+		free_var(var, &shell->env);
 		i++;
 	}
 	return (SUCCESS);
 }
-*/

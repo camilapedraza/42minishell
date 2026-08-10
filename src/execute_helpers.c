@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_helpers.c                                 :+:      :+:    :+:   */
+/*   execute_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 23:47:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 22:26:07 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/08/10 16:06:48 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static int	wait_for_children(pid_t last_pid)
 	last_status = 1;
 	while (1)
 	{
+		// TODO PIERRE : PQ -1?
 		dead_pid = waitpid(-1, &status, 0);
 		if (dead_pid == -1)
 		{
