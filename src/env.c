@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:39:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/06/16 15:19:13 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:16:22 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ t_env	*init_env(char **envp)
 		var = parse_var(envp[index]);
 		if (!var)
 		{
-			free_vars(env);
+			while (env)
+				free_var(env, &env);
 			printf("%s", ERROR_ENV);
 			return (NULL);
 		}

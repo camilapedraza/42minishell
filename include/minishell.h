@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/07/20 16:14:02 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:16:53 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ t_env		*new_var(char *key, char *value);
 void		add_var(t_env **head, t_env *new_var);
 t_env		*find_var(t_env *env, char *key);
 char		*get_var_value(t_env *env, char *key);
-void		free_vars(t_env *head);
+void		free_var(t_env *var, t_env **head);
 
 //	** TOKENS **
 t_token		*new_token(t_token_t type, char *value);

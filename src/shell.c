@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/06/12 15:16:45 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/10 10:55:26 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ int	init_shell(t_shell *shell, char **envp)
 
 void	free_shell(t_shell *shell)
 {
-	free_vars(shell->env);
+	t_env	*var;
+
+	var = &(shell->env);
+	while (var)
+		free_var(var, &var);
 	rl_clear_history();
 }

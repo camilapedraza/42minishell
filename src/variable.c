@@ -6,31 +6,11 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:43:05 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/07/20 18:09:48 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:16:31 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_env	*new_var(char *key, char *value)
-{
-	t_env	*var;
-
-	if (!key || !value)
-		return (NULL);
-	var = malloc(sizeof(t_env));
-	if (!var)
-		return (NULL);
-	var->key = ft_strdup(key);
-	var->value = ft_strdup(value);
-	if (!var->key || !var->value)
-	{
-		free(var);
-		return (NULL);
-	}
-	var->next = NULL;
-	return (var);
-}
 
 t_env	*new_var(char *key, char *value)
 {
@@ -42,15 +22,16 @@ t_env	*new_var(char *key, char *value)
 	if (!var)
 		return (NULL);
 	var->key = ft_strdup(key);
+	if (!var->key)
+		return (free(var), NULL);
 	if (value)
+	{
 		var->value = ft_strdup(value);
+		if (!var->value)
+			return (free(var->key), free(var), NULL);
+	}
 	else
 		var->value = NULL;
-	if (!var->key)
-	{
-		free(var);
-		return (NULL);
-	}
 	var->next = NULL;
 	return (var);
 }
@@ -97,24 +78,29 @@ char	*get_var_value(t_env *env, char *key)
 	return (var->value);
 }
 
-void	free_var(t_env **head)
+void	free_var(t_env *var, t_env **head)
 {
-	// TODO
-	t_env	*new_head;
-}
+	t_env	*check;
 
-void	free_vars(t_env *head)
-{
-	t_env	*temp;
-
-	if (!head)
+	if (!var)
 		return ;
-	while (head)
+	if (head == NULL || *head == NULL)
+		return (sfree(var->value), free(var->key), free(var));
+	if (*head == var)
 	{
-		temp = head->next;
-		free(head->key);
-		free(head->value);
-		free(head);
-		head = temp;
+		*head = var->next;
+		sfree(var->value);
+		free(var->key);
+		free(var);
+		return ;
 	}
+	check = *head;
+	while (check->next != NULL || check->next != var)
+		check = check->next;
+	if (check->next == NULL)
+		return ;
+	check->next = var->next;
+	sfree(var->value);
+	free(var->key);
+	free(var);
 }
