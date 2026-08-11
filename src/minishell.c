@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/04 16:13:19 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/08/11 16:29:59 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		printf("Must be executed in a terminal.");
+		return (EXIT_FAILURE);
+	}
 	if (!init_shell(&shell, envp))
 		return (EXIT_FAILURE);
 	while (run_session(&shell))
