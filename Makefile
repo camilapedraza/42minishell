@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
+#    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/08/10 11:25:15 by plepercq         ###   ########.fr        #
+#    Updated: 2026/08/15 21:31:15 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ FILES		=	minishell \
 				builtin builtin_echo builtin_pwd builtin_env builtin_cd builtin_exit builtin_export builtin_unset\
 				utils_concatenation \
 				utils_print \
+				utils_sort \
 				debug_prints
 				
 SRCS		=	$(addprefix $(DIR_SRC)/, $(addsuffix .c, $(FILES)))

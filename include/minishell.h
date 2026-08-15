@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/15 20:36:49 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/08/15 21:19:28 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,6 +376,10 @@ void		print_error_prefix(char *token);
 void		print_general_error(char *token, char *msg);
 void		print_syntax_error(char *token);
 void		print_error_strs(size_t count, ...);
+
+// ** UTILS: SORT **
+char		**get_first_alpha(char **str1, char **str2);
+void		sort_alpha(char ***strs);
 
 //	** GENERAL HELPERS **
 void		free_matrix(char **array);
