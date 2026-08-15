@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 19:43:28 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/07/20 17:34:24 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/15 21:03:26 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	update_wds(char **old, char **new, t_shell *shell)
 	oldpwd = find_var(shell->env, OLDPWD);
 	if (!oldpwd)
 	{
-		if (!*old || !new_var(OLDPWD, *old))
+		if (!old || !*old || !new_var(OLDPWD, *old))
 			return (EXIT_FAILURE);
 		free(*old);
 		add_var(&shell->env, oldpwd);
@@ -30,7 +30,7 @@ static int	update_wds(char **old, char **new, t_shell *shell)
 	pwd = find_var(shell->env, PWD);
 	if (!pwd)
 	{
-		if (!new || !new_var(PWD, *new))
+		if (!new || !*new || !new_var(PWD, *new))
 			return (EXIT_FAILURE);
 		free(*new);
 		add_var(&shell->env, pwd);
