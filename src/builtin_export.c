@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:30:12 by plepercq          #+#    #+#             */
-/*   Updated: 2026/07/20 17:56:57 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/15 20:36:57 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_var(char *key, t_env *env)
 		env = env->next;
 	if (env == NULL)
 		return ;
-	ft_putstr_fd("declare -x ", fd);
+	ft_putstr_fd(EXPORT_PREFIX, fd);
 	ft_putstr_fd(key, fd);
 	if (env->value == NULL)
 		return ;
@@ -85,8 +85,8 @@ static t_env	*parse_var(char *var)
 	if (is_var_key_valid(key))
 		return (new_var(key, value));
 	print_error(key);
-	sfree(key);
-	sfree(value);
+	safe_free(key);
+	safe_free(value);
 	return (NULL);
 }
 
@@ -171,7 +171,7 @@ int	builtin_export(char **fields, t_shell *shell)
 		sort_alpha(&keys);
 		while (keys[i])
 			print_var(keys[i++], shell->env);
-		sfree(keys);
+		safe_free(keys);
 		return (SUCCESS);
 	}
 	while (fields[i])

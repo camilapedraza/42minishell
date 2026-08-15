@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:39:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/10 11:16:22 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/15 20:52:39 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,17 @@ static t_env	*parse_var(char *envp)
 	t_env	*var;
 
 	div = ft_strchr(envp, CHAR_EQUALS);
-	if (div)
-	{
-		key = ft_substr(envp, 0, div - envp);
-		value = ft_strdup(div + 1);
-	}
-	else
-	{
-		key = ft_strdup(envp);
-		value = ft_calloc(1, 1);
-		value[0] = '\0';
-	}
+	if (!div)
+		return (NULL);
+	key = ft_substr(envp, 0, div - envp);
+	if (!key)
+		return (NULL);
+	value = ft_strdup(div + 1);
+	if (!value)
+		return (free(key), NULL);
 	var = new_var(key, value);
-	if (key)
-		free(key);
-	if (value)
-		free(value);
+	free(key);
+	free(value);
 	return (var);
 }
 
@@ -94,7 +89,7 @@ t_env	*init_env(char **envp)
 		{
 			while (env)
 				free_var(env, &env);
-			printf("%s", ERROR_ENV);
+			ft_putstr_fd(ERROR_ENV, STDERR_FILENO);
 			return (NULL);
 		}
 		add_var(&env, var);

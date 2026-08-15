@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   sfree.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 15:19:38 by plepercq          #+#    #+#             */
-/*   Updated: 2026/06/25 19:25:57 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/15 20:11:41 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-void	sfree(void *ptr)
+void	safe_free(void *ptr)
 {
 	if (!ptr)
 		return ;

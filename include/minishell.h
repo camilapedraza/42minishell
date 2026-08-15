@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/10 14:39:13 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/15 20:36:49 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@
 # define SHELL_PROMPT "minishell$ "
 # define CONTINUED_PROMPT ">"
 # define SHELL_PREFIX "minishell"
+# define EXPORT_PREFIX "export "
 
 //	** PREDEFINED STATUS MESSAGES **
 # define EXIT_MSG "exit\n"
@@ -378,7 +379,7 @@ void		print_error_strs(size_t count, ...);
 
 //	** GENERAL HELPERS **
 void		free_matrix(char **array);
-void		sfree(void *ptr);
+void		safe_free(void *ptr);
 
 //	** DEBUG **
 void		print_env(t_env *env);
