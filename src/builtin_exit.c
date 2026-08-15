@@ -6,47 +6,65 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:30:12 by plepercq          #+#    #+#             */
-/*   Updated: 2026/08/10 14:37:12 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/15 15:42:48 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	print_exit_error(char *var, char *msg)
+{
+	int	fd;
+
+	fd = STDERR_FILENO;
+	print_error_prefix(BUILTIN_NAME_EXIT);
+	if (var)
+	{
+		ft_putstr_fd(var, fd);
+		ft_putstr_fd(": ", fd);
+	}
+	ft_putstr_fd(msg, fd);
+}
+
+int is_num(char *s)
+{
+	int	i;
+	int digits;
+
+	i = 0;
+	digits = 0;
+	while (s[i] && s[i] == ' ')
+		i++;
+	if (s[i] == '+' || s[i] == '-')
+		i++;
+	while (s[i])
+	{
+		if (!ft_isdigit(s[i]))
+			return (0);
+		digits = 1;
+		i++;
+	}
+	if (digits == 1)
+		return (1);
+	return (0);
+}
+
 int	builtin_exit(char **fields, t_shell *shell)
 {
 	(void)fields;
 	(void)shell;
-	printf("HELLO\n");
-	return (0);
-	//free_shell(shell);
-	//return (shell->exit_code);
-}
-
-
-/*
-int	builtin_exit(char **fields, t_shell *shell)
-{
-	int		i;
-	t_env	*var;
-	char	**keys;
-
-	i = 0;
 	if (*fields == NULL)
+		exit(shell->exit_code % 256);
+	if (fields[1])
 	{
-		keys = get_env_keys(shell->env);
-		sort_alpha(&keys);
-		while (keys[i])
-			print_var(keys[i++], shell->env);
-		sfree(keys);
-		return (SUCCESS);
+		print_exit_error(NULL, "too many arguments\n");
+		return (FAILURE);
 	}
-	while (fields[i])
+	if (!is_num(fields[0]))
 	{
-		var = parse_var(fields[i]);
-		if (var != NULL)
-			add_var(&shell->env, var);
-		i++;
+		print_exit_error(fields[0], "numeric argument required\n");
+		return (FAILURE);
 	}
-	return (SUCCESS);
+	free_shell(shell);
+	exit(ft_atoi(fields[0]));
 }
-*/
