@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:30:12 by plepercq          #+#    #+#             */
-/*   Updated: 2026/08/15 15:42:48 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/21 17:13:00 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void	print_exit_error(char *var, char *msg)
 	ft_putstr_fd(msg, fd);
 }
 
-int is_num(char *s)
+int	is_num(char *s)
 {
 	int	i;
-	int digits;
+	int	digits;
 
 	i = 0;
 	digits = 0;

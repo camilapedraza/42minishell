@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:30:12 by plepercq          #+#    #+#             */
-/*   Updated: 2026/08/15 21:28:52 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/08/21 17:17:05 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	print_error(char *var)
 	ft_putstr_fd(var, fd);
 	ft_putstr_fd("': not a valid identifier\n", fd);
 }
-
 
 void	print_var(char *key, t_env *env)
 {
@@ -70,7 +69,6 @@ static t_env	*parse_var(char *var)
 	char	*key;
 	char	*value;
 
-
 	div = ft_strchr(var, CHAR_EQUALS);
 	if (div)
 	{
@@ -88,33 +86,6 @@ static t_env	*parse_var(char *var)
 	safe_free(key);
 	safe_free(value);
 	return (NULL);
-}
-
-char	**get_env_keys(t_env *env)
-{
-	int		nbr;
-	t_env	*ptr;
-	char	**keys;
-
-	nbr = 0;
-	ptr = env;
-	while (ptr != NULL)
-	{
-		ptr = ptr->next;
-		nbr++;
-	}
-	keys = malloc((nbr + 1) * sizeof(char *));
-	if (!keys)
-		return (NULL);
-	nbr = 0;
-	ptr = env;
-	while (ptr != NULL)
-	{
-		keys[nbr++] = ptr->key;
-		ptr = ptr->next;
-	}
-	keys[nbr] = NULL;
-	return (keys);
 }
 
 int	builtin_export(char **fields, t_shell *shell)

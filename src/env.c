@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:39:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/15 20:52:39 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/08/21 17:17:11 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,33 @@ static int	count_env_vars(t_env *env)
 		env = env->next;
 	}
 	return (count);
+}
+
+char	**get_env_keys(t_env *env)
+{
+	int		nbr;
+	t_env	*ptr;
+	char	**keys;
+
+	nbr = 0;
+	ptr = env;
+	while (ptr != NULL)
+	{
+		ptr = ptr->next;
+		nbr++;
+	}
+	keys = malloc((nbr + 1) * sizeof(char *));
+	if (!keys)
+		return (NULL);
+	nbr = 0;
+	ptr = env;
+	while (ptr != NULL)
+	{
+		keys[nbr++] = ptr->key;
+		ptr = ptr->next;
+	}
+	keys[nbr] = NULL;
+	return (keys);
 }
 
 char	**build_envp_array(t_env *env)
