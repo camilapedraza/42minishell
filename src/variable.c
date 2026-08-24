@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:43:05 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/24 18:08:50 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:59:27 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,31 @@ t_env	*new_var(char *key, char *value)
 	return (var);
 }
 
+void	update_var(t_env **head, t_env *var, t_env *new)
+{
+	t_env	*prev;
+
+	if (!head || !*head || !var || !new)
+		return ;
+	if (var->key != new->key)
+	if (!find_var(*head, new->key))
+		return ;
+	new->next = var->next;
+	if (*head == var)
+		*head = new;
+	else
+	{
+		prev = *head;
+		while (prev->next != var)
+			prev = prev->next;
+		prev->next = new;
+	}
+	free_var(var, NULL);
+}
+
 void	add_var(t_env **head, t_env *new_var)
 {
 	t_env	*temp;
-	t_env	*prev;
 
 	if (!head || !new_var)
 		return ;
@@ -47,19 +68,7 @@ void	add_var(t_env **head, t_env *new_var)
 		*head = new_var;
 	temp = find_var(*head, new_var->key);
 	if (temp != NULL)
-	{
-		new_var->next = temp->next;
-		if (*head == temp)
-			*head = new_var;
-		else
-		{
-			prev = *head;
-			while (prev->next != temp)
-				prev = prev->next;
-			prev->next = new_var;
-		}
-		free(temp);
-	}
+		update_var(head, temp, new_var);
 	else
 	{
 		temp = *head;
