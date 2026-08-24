@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/15 16:41:23 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/24 14:58:41 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	if (!init_shell(&shell, envp))
 		return (EXIT_FAILURE);
+	printf("\n%s\n", WELCOME_MSG);
 	while (run_session(&shell))
 		;
 	free_shell(&shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/15 21:19:28 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/08/24 15:17:32 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,14 @@
 # define BUILTIN_NAME_EXPORT "export"
 # define BUILTIN_NAME_PWD "pwd"
 # define BUILTIN_NAME_UNSET "unset"
+
+# define WELCOME_MSG ">  Welcome to minishell \\(ᵔᵕᵔ)/ !!\n\n\
+#  This project is a simplified implementation of bash.\n\
+#  The goal is to understand how a Unix shell works from the inside:\n\
+#   - reading user input,\n\
+#   - parsing commands,\n\
+#   - executing them via system calls.\n\
+#  Feel free to try any commands you want!\n"
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -262,6 +270,7 @@ void		free_shell(t_shell *shell);
 
 //	** ENV **
 t_env		*init_env(char **envp);
+char		**get_env_keys(t_env *env);
 char		**build_envp_array(t_env *env);
 
 //	** SIGNAL CATCHERS **

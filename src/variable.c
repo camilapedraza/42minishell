@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variable.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:43:05 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/15 20:19:27 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:08:50 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,31 @@ t_env	*new_var(char *key, char *value)
 void	add_var(t_env **head, t_env *new_var)
 {
 	t_env	*temp;
+	t_env	*prev;
 
 	if (!head || !new_var)
 		return ;
 	if (*head == NULL)
 		*head = new_var;
+	temp = find_var(*head, new_var->key);
+	if (temp != NULL)
+	{
+		new_var->next = temp->next;
+		if (*head == temp)
+			*head = new_var;
+		else
+		{
+			prev = *head;
+			while (prev->next != temp)
+				prev = prev->next;
+			prev->next = new_var;
+		}
+		free(temp);
+	}
 	else
 	{
 		temp = *head;
-		while (temp->next)
+		while (temp->next != NULL)
 			temp = temp->next;
 		temp->next = new_var;
 	}
