@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
+#    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/08/15 21:31:15 by mpedraza         ###   ########.fr        #
+#    Updated: 2026/08/25 11:15:15 by plepercq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ HEADERS		=	minishell.h
 FILES		=	minishell \
 				signal_catchers signal_handlers \
 				general sfree \
-				variable token command redirection \
+				variable var_utils token command redirection \
 				shell \
 				env \
 				session \

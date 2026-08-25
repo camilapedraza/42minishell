@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:30:12 by plepercq          #+#    #+#             */
-/*   Updated: 2026/08/21 17:17:05 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/25 11:42:10 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,13 @@ void	print_var(char *key, t_env *env)
 		return ;
 	ft_putstr_fd(EXPORT_PREFIX, fd);
 	ft_putstr_fd(key, fd);
-	if (env->value == NULL)
-		return ;
-	ft_putchar_fd(CHAR_EQUALS, fd);
-	ft_putchar_fd(CHAR_DOUBLE_QUOTE, fd);
-	ft_putstr_fd(env->value, fd);
-	ft_putchar_fd(CHAR_DOUBLE_QUOTE, fd);
+	if (env->value != NULL)
+	{
+		ft_putchar_fd(CHAR_EQUALS, fd);
+		ft_putchar_fd(CHAR_DOUBLE_QUOTE, fd);
+		ft_putstr_fd(env->value, fd);
+		ft_putchar_fd(CHAR_DOUBLE_QUOTE, fd);
+	}
 	ft_putchar_fd('\n', fd);
 }
 

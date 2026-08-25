@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/24 15:17:32 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/25 11:29:02 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@
 # define REDIR_OUT_VALUE ">"
 
 //	** VALUES FOR PROMPTS & PREFIXES **
-# define SHELL_PROMPT "minishell$ "
+# define SHELL_PROMPT "\x1b[35mminishell\x1b[m $ "
 # define CONTINUED_PROMPT ">"
 # define SHELL_PREFIX "minishell"
 # define EXPORT_PREFIX "export "
@@ -239,10 +239,11 @@ typedef struct s_session
 
 //	** ENV VARIABLES **
 t_env		*new_var(char *key, char *value);
+int			update_var(t_env **head, t_env *new);
 void		add_var(t_env **head, t_env *new_var);
+void		free_var(t_env *var, t_env **head);
 t_env		*find_var(t_env *env, char *key);
 char		*get_var_value(t_env *env, char *key);
-void		free_var(t_env *var, t_env **head);
 
 //	** TOKENS **
 t_token		*new_token(t_token_t type, char *value);
