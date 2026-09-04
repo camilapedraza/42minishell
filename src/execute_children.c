@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 19:45:45 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/10 14:02:52 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/25 17:33:37 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 		free(cmd_path);
 		exit(1);
 	}
+	printf("HEYYYYY : %s\n", cmd_path);
 	execve(cmd_path, cmd->argv, envp);
 	err = errno;
 	perror(cmd->argv[0]);

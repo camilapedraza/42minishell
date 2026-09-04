@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 20:13:33 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 19:24:36 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/08/26 12:37:58 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,3 +84,58 @@ t_token	*tokenize_input(const char *line)
 	}
 	return (list);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+t_token	*tokenize_input(const char *line)
+{
+	int		i;
+	t_token	*token;
+	t_token *tokens;
+
+	i = 0;
+	tokens = NULL;
+	skip_space(&line);
+	while (*line)
+	{
+		if (is_operator(line[i]))
+			token = get_operator(tokens, line[i]);
+		else
+			token = get_word(tokens, line[i]);
+		if (!token)
+		{
+			free(tokens);
+			return (NULL);
+		}
+		skip_space(&line);
+	}
+}
+
+t_token *lexer(const char **line)
+{
+	if (is_operator(line[i]))
+	{
+		token = get_operator(tokens, &line[i]);
+		is_cmd = true;
+	}
+	else
+		token = get_word(tokens, &line[i]);
+}
+
+
+*/

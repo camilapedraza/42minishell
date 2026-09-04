@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/25 11:29:02 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/08/25 17:53:58 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,9 +152,9 @@ typedef enum e_sigmode
 typedef enum e_token_type
 {
 	TOKEN_NULL,
+	TOKEN_PIPE,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_PIPE,
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_WORD,
