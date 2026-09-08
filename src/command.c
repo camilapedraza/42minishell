@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 20:03:33 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/08 12:17:08 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	count_args(t_token *token)
+{
+	t_token	*temp;
+	int		argc;
+
+	temp = token;
+	argc = 0;
+	while (temp && temp->type != TOKEN_PIPE)
+	{
+		if (is_redirection(temp->type))
+			temp = temp->next;
+		else
+			argc++;
+		temp = temp->next;
+	}
+	return (argc);
+}
 
 t_cmd	*new_command(t_token *token)
 {

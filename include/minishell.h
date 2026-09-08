@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/25 17:53:58 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/08 15:05:55 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,9 @@ typedef struct s_session
 	t_cmd			*pipeline;
 }	t_session;
 
+// LIBFT EXTRA
+char		*ft_strndup(const char *s, size_t n);
+
 //	** ENV VARIABLES **
 t_env		*new_var(char *key, char *value);
 int			update_var(t_env **head, t_env *new);
@@ -247,11 +250,11 @@ char		*get_var_value(t_env *env, char *key);
 
 //	** TOKENS **
 t_token		*new_token(t_token_t type, char *value);
+void		free_token(t_token **head, t_token *token);
 void		add_token(t_token **head, t_token *new_node);
-int			count_args(t_token *token);
-void		free_tokens(t_token *head);
 
 //	** COMMANDS **
+int			count_args(t_token *token);
 t_cmd		*new_command(t_token *token);
 void		add_command(t_cmd **pipeline, t_cmd *new_command);
 void		free_args(char **argv);
@@ -298,15 +301,16 @@ int			read_heredoc_input(char **line, char *target);
 int			event_hook_cont_prompt_interrupt(void);
 void		kill_continued_prompt(void);
 
-//	** TOKENIZER **	
-t_token		*tokenize_input(const char *line);
+//	** LEXER **	
+t_token		*lexer(const char *line);
 
-//	** TOKENIZER HELPERS **
+//	** LEXER HELPERS **
 bool		is_space(char c);
 bool		is_operator(char c);
 bool		is_quote(char c);
-t_token_t	get_operator_type(const char *s);
-char		*get_operator_value(t_token_t type);
+void		skip_spaces(const char **line);
+//t_token_t	get_operator_type(const char *s);
+//char		*get_operator_value(t_token_t type);
 
 //	** PARSER **
 t_cmd		*parse_tokens(t_token *token);

@@ -6,7 +6,7 @@
 #    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/08/25 11:15:15 by plepercq         ###   ########.fr        #
+#    Updated: 2026/09/08 15:37:26 by plepercq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ DIR_INC		=	include
 HEADERS		=	minishell.h
 
 FILES		=	minishell \
+				ft_strndup \
 				signal_catchers signal_handlers \
 				general sfree \
 				variable var_utils token command redirection \
@@ -30,8 +31,8 @@ FILES		=	minishell \
 				env \
 				session \
 				prompt_main prompt_continued \
-				tokenize tokenizer_helpers \
-				parse parser_helpers \
+				lexer lexer_helpers \
+				parser parser_helpers \
 				expand expansion_handlers expansion_helpers expansion_heredocs \
 				exec execute_helpers execute_builtins execute_children  \
 				resolve resolver_paths resolver_redirs \

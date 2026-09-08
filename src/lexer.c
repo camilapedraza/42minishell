@@ -6,13 +6,13 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 16:06:48 by plepercq          #+#    #+#             */
-/*   Updated: 2026/09/03 16:09:52 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/08 15:06:18 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*tokenize_operator(char *s)
+static t_token	*tokenize_operator(const char *s)
 {
 	if (*s == CHAR_PIPE)
 		return (new_token(TOKEN_PIPE, ft_strndup(s, 1)));
@@ -33,7 +33,7 @@ t_token	*tokenize_operator(char *s)
 	return (NULL);
 }
 
-t_token	*tokenize_word(char *line)
+static t_token	*tokenize_word(const char *line)
 {
 	int		len;
 	char	quote;
@@ -59,7 +59,7 @@ t_token	*tokenize_word(char *line)
 	return (new_token(TOKEN_WORD, word));
 }
 
-t_token	*get_next_token(char **line)
+static t_token	*get_next_token(const char **line)
 {
 	t_token	*token;
 
@@ -75,7 +75,7 @@ t_token	*get_next_token(char **line)
 	return (token);
 }
 
-t_token	*lexer(char *line)
+t_token	*lexer(const char *line)
 {
 	t_token	*token;
 	t_token	*tokens;
@@ -88,7 +88,7 @@ t_token	*lexer(char *line)
 		if (!token)
 		{
 			while (tokens)
-				free_token(tokens, &tokens);
+				free_token(&tokens, tokens);
 			return (NULL);
 		}
 		add_token(&tokens, token);
