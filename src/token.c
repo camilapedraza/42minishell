@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token2.c                                           :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 16:10:20 by plepercq          #+#    #+#             */
-/*   Updated: 2026/09/08 11:46:26 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/09 10:04:16 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*new_token(t_token_t type, char *value)
+t_token	*new_token(t_token_t type, char *value, t_quote quote_type)
 {
 	t_token	*token;
 
@@ -26,6 +26,7 @@ t_token	*new_token(t_token_t type, char *value)
 	}
 	token->type = type;
 	token->value = value;
+	token->quote_type = quote_type;
 	token->next = NULL;
 	return (token);
 }

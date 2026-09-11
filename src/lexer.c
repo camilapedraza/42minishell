@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 16:06:48 by plepercq          #+#    #+#             */
-/*   Updated: 2026/09/08 15:06:18 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/09 13:19:46 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 static t_token	*tokenize_operator(const char *s)
 {
 	if (*s == CHAR_PIPE)
-		return (new_token(TOKEN_PIPE, ft_strndup(s, 1)));
+		return (new_token(TOKEN_PIPE, ft_strndup(s, 1), NONE));
 	if (*s == CHAR_GREATER_THAN)
 	{
 		if (*(s + 1) == CHAR_GREATER_THAN)
-			return (new_token(TOKEN_APPEND, ft_strndup(s, 2)));
+			return (new_token(TOKEN_APPEND, ft_strndup(s, 2), NONE));
 		else
-			return (new_token(TOKEN_REDIR_OUT, ft_strndup(s, 1)));
+			return (new_token(TOKEN_REDIR_OUT, ft_strndup(s, 1), NONE));
 	}
 	if (*s == CHAR_LESS_THAN)
 	{
 		if (*(s + 1) == CHAR_LESS_THAN)
-			return (new_token(TOKEN_HEREDOC, ft_strndup(s, 2)));
+			return (new_token(TOKEN_HEREDOC, ft_strndup(s, 2), NONE));
 		else
-			return (new_token(TOKEN_REDIR_IN, ft_strndup(s, 1)));
+			return (new_token(TOKEN_REDIR_IN, ft_strndup(s, 1), NONE));
 	}
 	return (NULL);
 }
@@ -56,7 +56,7 @@ static t_token	*tokenize_word(const char *line)
 		len++;
 	}
 	word = ft_strndup(line, len);
-	return (new_token(TOKEN_WORD, word));
+	return (new_token(TOKEN_WORD, word, NONE));
 }
 
 static t_token	*get_next_token(const char **line)

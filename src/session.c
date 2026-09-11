@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   session.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/08 15:08:28 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/09 15:54:55 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ int	run_session(t_shell *shell)
 	if (!run_main_prompt(shell, &sesh))
 		return (FATAL);
 	sesh.tokens = lexer(sesh.line);
+	print_tokens(sesh.tokens);
 	if (sesh.tokens)
 		sesh.pipeline = parse_tokens(sesh.tokens);
+	print_cmds(sesh.pipeline);
 	if (sesh.pipeline)
 	{
 		if (expand_parameters(sesh.pipeline, shell))

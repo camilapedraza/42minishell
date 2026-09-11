@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
+#    By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/09/08 15:37:26 by plepercq         ###   ########.fr        #
+#    Updated: 2026/09/09 02:29:19 by pierre_lepe      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ DIR_INC		=	include
 HEADERS		=	minishell.h
 
 FILES		=	minishell \
-				ft_strndup \
+				ft_strndup ft_lstpop\
 				signal_catchers signal_handlers \
 				general sfree \
 				variable var_utils token command redirection \

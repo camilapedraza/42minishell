@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/08 15:05:55 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/09 10:05:36 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,10 +160,19 @@ typedef enum e_token_type
 	TOKEN_WORD,
 }	t_token_t;
 
+typedef enum e_quote
+{
+	NONE,
+	SINGLE,
+	DOUBLE,
+	HEREDOC_EXPAND,
+}	t_quote;
+
 typedef struct s_token
 {
 	t_token_t		type;
 	char			*value;
+	t_quote			quote_type;
 	struct s_token	*next;
 }	t_token;
 
@@ -193,14 +202,6 @@ typedef struct s_cmd
 	t_redir			*redirs;
 	struct s_cmd	*next;
 }	t_cmd;
-
-typedef enum e_quote
-{
-	NONE,
-	SINGLE,
-	DOUBLE,
-	HEREDOC_EXPAND,
-}	t_quote;
 
 typedef enum e_access
 {
@@ -249,7 +250,7 @@ t_env		*find_var(t_env *env, char *key);
 char		*get_var_value(t_env *env, char *key);
 
 //	** TOKENS **
-t_token		*new_token(t_token_t type, char *value);
+t_token		*new_token(t_token_t type, char *value, t_quote quote_type);
 void		free_token(t_token **head, t_token *token);
 void		add_token(t_token **head, t_token *new_node);
 
