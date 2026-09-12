@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/10 15:11:54 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/12 18:26:01 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,25 @@
 // THIS WILL PASS AN EXIT CODE TO THE CHILD SO IT NEEDS C EXIT CODES!
 int	run_builtin(t_cmd *cmd, t_shell *shell)
 {
+	char	*cmd_name;
+
 	(void)shell;
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_ECHO))
+	cmd_name = cmd->args->content;
+	if (!ft_strcmp(cmd_name, BUILTIN_NAME_ECHO))
 		return (builtin_echo(&cmd->argv[1]));
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_PWD))
+	if (!ft_strcmp(cmd_name, BUILTIN_NAME_PWD))
 		return (builtin_pwd(&cmd->argv[1]));
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_ENV))
+	if (!ft_strcmp(cmd_name, BUILTIN_NAME_ENV))
 		return (builtin_env(&cmd->argv[1], shell));
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_CD))
+	if (!ft_strcmp(cmd_name, BUILTIN_NAME_CD))
 		return (builtin_cd(&cmd->argv[1], shell));
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXPORT))
+	if (!ft_strcmp(cmd_name, BUILTIN_NAME_EXPORT))
 		return (builtin_export(&cmd->argv[1], shell));
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_UNSET))
+	if (!ft_strcmp(cmd_name, BUILTIN_NAME_UNSET))
 		return (builtin_unset(&cmd->argv[1], shell));
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXIT))
+	if (!ft_strcmp(cmd_name, BUILTIN_NAME_EXIT))
 		return (builtin_exit(&cmd->argv[1], shell));
-	printf("*** The %s builtin has not yet been coded :(\n", cmd->argv[0]);
+	//printf("*** The %s builtin has not yet been coded :(\n", cmd_name);
 	return (EXIT_SUCCESS);
 }
 

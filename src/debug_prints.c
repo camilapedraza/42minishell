@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_prints.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:53:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 17:58:09 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/12 17:32:53 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	print_tokens(t_token *head)
 	temp = head;
 	while (temp)
 	{
-		printf("[%d: %s]\n", temp->type, temp->value);
+		printf("[Type : %d ", temp->type);
+		printf("| Value : %s]\n", temp->value);
 		temp = temp->next;
 	}
 }
@@ -40,18 +41,18 @@ void	print_cmds(t_cmd *cmds)
 	t_cmd	*tmp_cmd;
 	t_redir	*tmp_rdr;
 	int		count;
-	int		index;
+	t_list	*arg;
 
 	tmp_cmd = cmds;
 	count = 0;
 	while (tmp_cmd)
 	{
 		printf("CMD %d:\n", ++count);
-		index = 0;
-		while (tmp_cmd->argv[index])
+		arg = tmp_cmd->args;
+		while (arg)
 		{
-			printf("\targv[%d] = %s\n", index, tmp_cmd->argv[index]);
-			index++;
+			printf("\targ = %s\n", arg);
+			arg = arg->next;
 		}
 		tmp_rdr = tmp_cmd->redirs;
 		while (tmp_rdr)

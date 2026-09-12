@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/09 10:05:36 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/12 20:23:51 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,19 +160,10 @@ typedef enum e_token_type
 	TOKEN_WORD,
 }	t_token_t;
 
-typedef enum e_quote
-{
-	NONE,
-	SINGLE,
-	DOUBLE,
-	HEREDOC_EXPAND,
-}	t_quote;
-
 typedef struct s_token
 {
 	t_token_t		type;
 	char			*value;
-	t_quote			quote_type;
 	struct s_token	*next;
 }	t_token;
 
@@ -198,10 +189,19 @@ typedef struct s_redir
 //	** COMMAND DATA TYPES **
 typedef struct s_cmd
 {
-	char			**argv;
+	t_list			*args;
+	char			**expanded_args;
 	t_redir			*redirs;
 	struct s_cmd	*next;
 }	t_cmd;
+
+typedef enum e_quote
+{
+	NONE,
+	SINGLE,
+	DOUBLE,
+	HEREDOC_EXPAND,
+}	t_quote;
 
 typedef enum e_access
 {
@@ -250,9 +250,10 @@ t_env		*find_var(t_env *env, char *key);
 char		*get_var_value(t_env *env, char *key);
 
 //	** TOKENS **
-t_token		*new_token(t_token_t type, char *value, t_quote quote_type);
-void		free_token(t_token **head, t_token *token);
+t_token		*new_token(t_token_t type, char *value);
+void		free_token(t_token *token);
 void		add_token(t_token **head, t_token *new_node);
+void		remove_token(t_token **head, t_token *token);
 
 //	** COMMANDS **
 int			count_args(t_token *token);
@@ -310,8 +311,6 @@ bool		is_space(char c);
 bool		is_operator(char c);
 bool		is_quote(char c);
 void		skip_spaces(const char **line);
-//t_token_t	get_operator_type(const char *s);
-//char		*get_operator_value(t_token_t type);
 
 //	** PARSER **
 t_cmd		*parse_tokens(t_token *token);

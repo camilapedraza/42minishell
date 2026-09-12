@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 15:21:28 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/11 23:48:19 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/12 16:26:39 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,6 @@ bool	is_operator(char c)
 bool	is_quote(char c)
 {
 	return (c == CHAR_SINGLE_QUOTE || c == CHAR_DOUBLE_QUOTE);
-}
-
-t_quote	get_quote_type(char c)
-{
-	if (c == '\'')
-		return (SINGLE);
-	if (c == '"')
-		return (DOUBLE);
-		
 }
 
 void	skip_spaces(const char **line)

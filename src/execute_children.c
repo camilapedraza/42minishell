@@ -6,37 +6,68 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 19:45:45 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/25 17:33:37 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/12 18:17:48 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static char	**list_to_strs(t_list *lst)
+{
+	int		len;
+	int		index;
+	char	**strs;
+
+	len = ft_lstsize(lst);
+	strs = calloc(len, sizeof(char *));
+	if (!strs)
+		return (NULL);
+	index = 0;
+	while (lst)
+	{
+		strs[index] = malloc(ft_strlen(lst->content));
+		if (!strs[index])
+		{
+			while (index > 0)
+			{
+				free(strs[--index]);
+			}
+			free(strs);
+			return (NULL);
+		}
+		index++;
+		lst = lst->next;
+	}
+	return (strs);
+}
+
 static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 {
 	char	*cmd_path;
+	char	**args;
 	char	**envp;
 	int		err;
 
-	cmd_path = resolve_cmd_path(cmd->argv[0], shell->env);
+	cmd_path = resolve_cmd_path(cmd->args->content, shell->env);
 	if (!cmd_path)
 		exit(127);
 	envp = build_envp_array(shell->env);
-	if (!envp)
+	args = list_to_strs(cmd->args);
+	if (!envp || !args)
 	{
+		sfree(envp);
+		sfree(args);
 		free(cmd_path);
 		exit(1);
 	}
-	printf("HEYYYYY : %s\n", cmd_path);
-	execve(cmd_path, cmd->argv, envp);
+	execve(cmd_path, args, envp);
 	err = errno;
-	perror(cmd->argv[0]);
+	perror(cmd->args->content);
 	free(cmd_path);
 	free_matrix(envp);
 	if (err == ENOENT)
 		exit(127);
-	else
-		exit(126);
+	exit(126);
 }
 
 pid_t	create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
@@ -59,7 +90,7 @@ pid_t	create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 		close_if_valid(&pipex->tmp);
 		if (!resolve_redirections(cmd->redirs, pipex))
 			exit(1);
-		if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
+		if (!cmd->args || !(cmd->args)->content)
 			exit(0);
 		if (is_builtin(cmd))
 			exit(run_builtin(cmd, shell));

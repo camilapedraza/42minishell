@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+         #
+#    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/09/09 02:29:19 by pierre_lepe      ###   ########.fr        #
+#    Updated: 2026/09/12 17:43:41 by plepercq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ ${LFT}:
 		git clone $(LFT_REPO) $(LFT_DIR); \
 	fi
 	@echo "Building Libft..."
-	${MAKE} -C ${LFT_DIR}
+	${MAKE} -C ${LFT_DIR} bonus
 
 # FOR AGGRESSIVE OPTIMIZATION
 #$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c

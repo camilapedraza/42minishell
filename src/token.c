@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 16:10:20 by plepercq          #+#    #+#             */
-/*   Updated: 2026/09/09 10:04:16 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/12 16:28:13 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*new_token(t_token_t type, char *value, t_quote quote_type)
+t_token	*new_token(t_token_t type, char *value)
 {
 	t_token	*token;
 
@@ -26,42 +26,17 @@ t_token	*new_token(t_token_t type, char *value, t_quote quote_type)
 	}
 	token->type = type;
 	token->value = value;
-	token->quote_type = quote_type;
 	token->next = NULL;
 	return (token);
 }
 
-static void	_free_token(t_token *token)
+void	free_token(t_token *token)
 {
 	if (!token)
 		return ;
 	if (token->value)
 		free(token->value);
 	free(token);
-}
-
-void	free_token(t_token **head, t_token *token)
-{
-	t_token	*prev;
-
-	if (!token)
-		return ;
-	if (!head)
-		return (_free_token(token));
-	if (!*head)
-		return ;
-	if (token == *head)
-	{
-		*head = token->next;
-		return (_free_token(token));
-	}
-	prev = *head;
-	while (prev->next != NULL && prev->next != token)
-		prev = prev->next;
-	if (prev->next == NULL)
-		return ;
-	prev->next = token->next;
-	_free_token(prev);
 }
 
 void	add_token(t_token **head, t_token *new_token)
@@ -79,4 +54,28 @@ void	add_token(t_token **head, t_token *new_token)
 			temp = temp->next;
 		temp->next = new_token;
 	}
+}
+
+void	remove_token(t_token **head, t_token *token)
+{
+	t_token	*prev;
+
+	if (!token)
+		return ;
+	if (!head)
+		return (free_token(token));
+	if (!*head)
+		return ;
+	if (token == *head)
+	{
+		*head = token->next;
+		return (free_token(token));
+	}
+	prev = *head;
+	while (prev->next != NULL && prev->next != token)
+		prev = prev->next;
+	if (prev->next == NULL)
+		return ;
+	prev->next = token->next;
+	free_token(prev);
 }

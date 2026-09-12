@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   session.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 23:24:51 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/09 15:54:55 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/12 16:30:10 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	clear_session(t_session *sesh)
 	if (sesh->tokens)
 	{
 		while (sesh->tokens)
-			free_token(&(sesh->tokens), sesh->tokens);
+			remove_token(&(sesh->tokens), sesh->tokens);
 	}
 	if (sesh->pipeline)
 		free_commands(sesh->pipeline);

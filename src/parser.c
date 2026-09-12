@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 19:14:44 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/12 20:05:43 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,18 @@
 // - this means a pipeline is at least 1 command, with zero or more "| command"
 // - a command stops when it meets a pipe or EOL
 
-static int	parse_args(t_cmd *cmd, int index, t_token **token)
+static int	parse_args(t_cmd *cmd, t_token **token)
 {
-	cmd->argv[index] = ft_strdup((*token)->value);
-	if (!cmd->argv[index])
+	char	*argv;
+	t_list	*new_arg;
+
+	argv = ft_strdup((*token)->value);
+	if (!argv)
 		return (0);
+	new_arg = ft_lstnew(argv);
+	if (!new_arg)
+		return (free(argv), 0);
+	ft_lstadd_back(&cmd->args, new_arg);
 	*token = (*token)->next;
 	return (1);
 }
@@ -50,9 +57,7 @@ static t_redir	*parse_redirect(t_cmd *cmd, t_token **token)
 static t_cmd	*build_command(t_token **token)
 {
 	t_cmd	*cmd;
-	int		index;
 
-	index = 0;
 	cmd = new_command(*token);
 	if (!cmd)
 		return (NULL);
@@ -65,12 +70,10 @@ static t_cmd	*build_command(t_token **token)
 		}
 		else
 		{
-			if (!parse_args(cmd, index, token))
+			if (!parse_args(cmd, token))
 				return (free_commands(cmd), NULL);
-			index++;
 		}
 	}
-	cmd->argv[index] = NULL;
 	return (cmd);
 }
 

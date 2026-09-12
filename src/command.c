@@ -6,29 +6,11 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/08 12:17:08 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/12 20:32:35 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	count_args(t_token *token)
-{
-	t_token	*temp;
-	int		argc;
-
-	temp = token;
-	argc = 0;
-	while (temp && temp->type != TOKEN_PIPE)
-	{
-		if (is_redirection(temp->type))
-			temp = temp->next;
-		else
-			argc++;
-		temp = temp->next;
-	}
-	return (argc);
-}
 
 t_cmd	*new_command(t_token *token)
 {
@@ -38,13 +20,8 @@ t_cmd	*new_command(t_token *token)
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	argc = count_args(token);
-	cmd->argv = malloc(sizeof(char *) * (argc + 1));
-	if (!cmd->argv)
-	{
-		free(cmd);
-		return (NULL);
-	}
+	cmd->expanded_args = NULL;
+	cmd->args = NULL;
 	cmd->redirs = NULL;
 	cmd->next = NULL;
 	return (cmd);
@@ -89,8 +66,10 @@ void	free_commands(t_cmd *pipeline)
 	while (pipeline)
 	{
 		temp = pipeline->next;
-		if (pipeline->argv)
-			free_args(pipeline->argv);
+		if (pipeline->expanded_args)
+			free_args(pipeline->expanded_args);
+		if (pipeline->args)
+			ft_lstclear(&pipeline->args, free);
 		if (pipeline->redirs)
 			free_redirs(pipeline->redirs);
 		free(pipeline);

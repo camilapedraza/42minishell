@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 20:22:25 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/25 18:36:34 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/12 17:26:16 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ bool	is_parent_builtin(t_cmd *cmd)
 {
 	char	*cmd_name;
 
-	if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
+	if (!cmd->args || !(cmd->args)->content)
 		return (false);
-	cmd_name = cmd->argv[0];
+	cmd_name = (cmd->args)->content;
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_CD)
 		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ECHO)
 		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ENV)
@@ -72,15 +72,18 @@ bool	is_parent_builtin(t_cmd *cmd)
 
 bool	is_builtin(t_cmd *cmd)
 {
-	if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
+	char	*cmd_name;
+
+	if (!cmd->args || !(cmd->args)->content)
 		return (false);
-	if (!ft_strcmp(cmd->argv[0], BUILTIN_NAME_CD)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_ECHO)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_ENV)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXIT)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_EXPORT)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_PWD)
-		|| !ft_strcmp(cmd->argv[0], BUILTIN_NAME_UNSET))
+	cmd_name = (cmd->args)->content;
+	if (!ft_strcmp(cmd_name, BUILTIN_NAME_CD)
+		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ECHO)
+		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ENV)
+		|| !ft_strcmp(cmd_name, BUILTIN_NAME_EXIT)
+		|| !ft_strcmp(cmd_name, BUILTIN_NAME_EXPORT)
+		|| !ft_strcmp(cmd_name, BUILTIN_NAME_PWD)
+		|| !ft_strcmp(cmd_name, BUILTIN_NAME_UNSET))
 		return (true);
 	return (false);
 }
