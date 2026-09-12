@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtins.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 18:26:01 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 01:48:18 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,26 @@
 int	run_builtin(t_cmd *cmd, t_shell *shell)
 {
 	char	*cmd_name;
+	char	**args;
 
 	(void)shell;
-	cmd_name = cmd->args->content;
+	cmd_name = cmd->expanded_args[0];
+	args = &(cmd->expanded_args[1]);
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_ECHO))
-		return (builtin_echo(&cmd->argv[1]));
+		return (builtin_echo(args));
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_PWD))
-		return (builtin_pwd(&cmd->argv[1]));
+		return (builtin_pwd(args));
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_ENV))
-		return (builtin_env(&cmd->argv[1], shell));
+		return (builtin_env(args, shell));
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_CD))
-		return (builtin_cd(&cmd->argv[1], shell));
+		return (builtin_cd(args, shell));
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_EXPORT))
-		return (builtin_export(&cmd->argv[1], shell));
+		return (builtin_export(args, shell));
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_UNSET))
-		return (builtin_unset(&cmd->argv[1], shell));
+		return (builtin_unset(args, shell));
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_EXIT))
-		return (builtin_exit(&cmd->argv[1], shell));
-	//printf("*** The %s builtin has not yet been coded :(\n", cmd_name);
+		return (builtin_exit(args, shell));
+	printf("*** The %s builtin has not yet been coded :(\n", cmd_name);
 	return (EXIT_SUCCESS);
 }
 

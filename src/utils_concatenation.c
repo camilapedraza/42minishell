@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_concatenation.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 14:41:56 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 16:55:57 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 01:15:02 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,6 @@ static char	*concat_strings(char *s1, char *s2, size_t s2_len)
 int	append_to_expanded(char **expanded, char *src, size_t len)
 {
 	char	*new_str;
-
-	write(1, "-> ", 3);
-	write(1, src, (int)len);
-	write(1, "\n", 1);
 
 	new_str = concat_strings(*expanded, src, len);
 	if (!new_str)

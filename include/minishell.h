@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 20:23:51 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 00:46:36 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,7 +397,7 @@ void		sort_alpha(char ***strs);
 
 //	** GENERAL HELPERS **
 void		free_matrix(char **array);
-void		safe_free(void *ptr);
+void		sfree(void *ptr);
 
 //	** DEBUG **
 void		print_env(t_env *env);

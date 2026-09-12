@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_prints.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:53:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 17:32:53 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 01:35:47 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,18 @@ void	print_cmds(t_cmd *cmds)
 	t_cmd	*tmp_cmd;
 	t_redir	*tmp_rdr;
 	int		count;
-	t_list	*arg;
+	int		index;
 
 	tmp_cmd = cmds;
 	count = 0;
 	while (tmp_cmd)
 	{
 		printf("CMD %d:\n", ++count);
-		arg = tmp_cmd->args;
-		while (arg)
+		index = 0;
+		while (tmp_cmd->expanded_args[index])
 		{
-			printf("\targ = %s\n", arg);
-			arg = arg->next;
+			printf("\texp arg [%i] = %s\n", index, tmp_cmd->expanded_args[index]);
+			index++;
 		}
 		tmp_rdr = tmp_cmd->redirs;
 		while (tmp_rdr)

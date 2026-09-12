@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_handlers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 16:54:10 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 01:08:35 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,7 @@ static int	handle_literal(char **expanded, char *arg, t_quote status)
 int	scan_segment(char **exp, char *arg, t_quote *status, t_shell *shell)
 {
 	if (!is_metachar(*arg, *status))
-	{
-		printf("%s is literal\n", arg);
 		return (handle_literal(exp, arg, *status));
-	}
-	printf("%s is special\n", arg);
 	update_segment_status(*arg, status);
 	return (handle_special(exp, arg, shell));
 }

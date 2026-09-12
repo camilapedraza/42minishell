@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 20:45:40 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 01:49:23 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,23 +71,22 @@ static int	expand_arguments(t_cmd *cmd, t_shell *shell)
 
 	index = 0;
 	arg = cmd->args;
-	printf("---------------------------\n");
+	cmd->expanded_args = malloc(sizeof(char *) * ft_lstsize(cmd->args));
+	if (!cmd->expanded_args)
+		return (FAILURE);
 	while (arg && arg->content)
 	{
-		printf("TO EXPAND : %s\n", (char *)arg->content);
 		expanded_arg = handle_expansion(arg->content, shell);
-		printf("EXPANDED : %s\n", (char *)expanded_arg);
 		if (!expanded_arg)
 			return (FAILURE);
-		if (arg->content[0] == '$' && expanded_arg[0] == '\0')
-		// IF DOUBLE QUOTED and expanded_arg[0] == \0
-		free(arg->content);
-		arg->content = expanded_arg;
+		if (!(((char *)arg->content)[0] == '$' && expanded_arg[0] == '\0'))
+		{
+			cmd->expanded_args[index] = expanded_arg;
+			index++;
+		}
 		arg = arg->next;
-		index++;
 	}
 	cmd->expanded_args[index] = NULL;
-	printf("---------------------------\n");
 	return (SUCCESS);
 }
 

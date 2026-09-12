@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 20:22:25 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 17:26:16 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 01:43:56 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ bool	is_parent_builtin(t_cmd *cmd)
 {
 	char	*cmd_name;
 
-	if (!cmd->args || !(cmd->args)->content)
+	if (!cmd->expanded_args || !cmd->expanded_args[0] || !cmd->expanded_args[0][0])
 		return (false);
-	cmd_name = (cmd->args)->content;
+	cmd_name = cmd->expanded_args[0];
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_CD)
 		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ECHO)
 		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ENV)
@@ -74,9 +74,9 @@ bool	is_builtin(t_cmd *cmd)
 {
 	char	*cmd_name;
 
-	if (!cmd->args || !(cmd->args)->content)
+	if (!cmd->expanded_args || !cmd->expanded_args[0] || !cmd->expanded_args[0][0])
 		return (false);
-	cmd_name = (cmd->args)->content;
+	cmd_name = cmd->expanded_args[0];
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_CD)
 		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ECHO)
 		|| !ft_strcmp(cmd_name, BUILTIN_NAME_ENV)

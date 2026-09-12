@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 18:30:12 by plepercq          #+#    #+#             */
-/*   Updated: 2026/08/25 11:42:10 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 00:46:36 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ static t_env	*parse_var(char *var)
 	if (is_var_key_valid(key))
 		return (new_var(key, value));
 	print_error(key);
-	safe_free(key);
-	safe_free(value);
+	sfree(key);
+	sfree(value);
 	return (NULL);
 }
 
@@ -102,7 +102,7 @@ int	builtin_export(char **fields, t_shell *shell)
 		sort_alpha(&keys);
 		while (keys[i])
 			print_var(keys[i++], shell->env);
-		safe_free(keys);
+		sfree(keys);
 		return (SUCCESS);
 	}
 	while (fields[i])

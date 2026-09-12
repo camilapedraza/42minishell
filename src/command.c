@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 20:32:35 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/12 23:54:40 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 t_cmd	*new_command(t_token *token)
 {
 	t_cmd	*cmd;
-	int		argc;
 
+	(void)token;
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);

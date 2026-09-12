@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variable.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:43:05 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/25 11:56:32 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 00:46:36 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,11 @@ void	free_var(t_env *var, t_env **head)
 	if (var == NULL)
 		return ;
 	if (head == NULL || *head == NULL)
-		return (safe_free(var->value), free(var->key), free(var));
+		return (sfree(var->value), free(var->key), free(var));
 	if (*head == var)
 	{
 		*head = var->next;
-		return (safe_free(var->value), free(var->key), free(var));
+		return (sfree(var->value), free(var->key), free(var));
 	}
 	check = *head;
 	while (check->next != NULL && check->next != var)
@@ -98,7 +98,7 @@ void	free_var(t_env *var, t_env **head)
 	if (check->next == NULL)
 		return ;
 	check->next = var->next;
-	safe_free(var->value);
+	sfree(var->value);
 	free(var->key);
 	free(var);
 }
