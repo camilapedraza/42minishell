@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 15:48:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/20 19:24:44 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 18:33:24 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,5 @@ int	execute(t_cmd *pipeline, t_shell *shell)
 {
 	if (!pipeline->next && is_parent_builtin(pipeline))
 		return (execute_builtin_in_parent(pipeline, shell));
-	else
-		return (execute_pipeline(pipeline, shell));
+	return (execute_pipeline(pipeline, shell));
 }

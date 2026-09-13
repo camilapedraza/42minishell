@@ -1,43 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell.c                                            :+:      :+:    :+:   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/10 14:38:06 by plepercq         ###   ########.fr       */
+/*   Created: 2026/08/10 11:24:37 by plepercq          #+#    #+#             */
+/*   Updated: 2026/08/25 11:57:40 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_exit_code(t_shell *shell, int code)
+int	builtin_unset(char **fields, t_shell *shell)
 {
-	shell->exit_code = code;
-}
-
-void	set_sigint_code(t_shell *shell)
-{
-	set_exit_code(shell, 130);
-	g_signal = 0;
-}
-
-int	init_shell(t_shell *shell, char **envp)
-{
-	shell->env = init_env(envp);
-	if (!shell->env)
-		return (FAILURE);
-	set_exit_code(shell, 0);
-	return (SUCCESS);
-}
-
-void	free_shell(t_shell *shell)
-{
+	int		i;
 	t_env	*var;
 
-	var = shell->env;
-	while (var)
-		free_var(var, &var);
-	rl_clear_history();
+	i = 0;
+	while (fields[i])
+	{
+		var = find_var(shell->env, fields[i]);
+		if (var)
+			free_var(var, &(shell->env));
+		i++;
+	}
+	return (SUCCESS);
 }

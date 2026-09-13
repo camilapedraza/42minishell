@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_handlers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 21:06:37 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 17:46:37 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,7 @@ char	*handle_expansion(char *arg, t_shell *shell)
 	{
 		advance = scan_segment(&expanded, arg + index, &status, shell);
 		if (!advance)
-		{
-			free(expanded);
-			return (NULL);
-		}
+			return (free(expanded), NULL);
 		index += advance;
 	}
 	return (expanded);

@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   execute_children.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 19:45:45 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 22:30:44 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 17:36:03 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	is_dir(char *path)
+{
+	DIR		*ds;
+
+	ds = opendir(path);
+	if (ds == NULL)
+		return (false);
+	closedir(ds);
+	return (true);
+}
+
+void	exit_on_dir(char *dir_path)
+{
+	print_general_error(dir_path, "Is a directory");
+	exit(126);
+}
 
 static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 {
@@ -21,6 +38,8 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 	cmd_path = resolve_cmd_path(cmd->argv[0], shell->env);
 	if (!cmd_path)
 		exit(127);
+	if (is_dir(cmd_path))
+		exit_on_dir(cmd_path);
 	envp = build_envp_array(shell->env);
 	if (!envp)
 	{
@@ -43,7 +62,7 @@ pid_t	create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 	pid_t	pid;
 
 	pid = fork();
-	if (pid < 0)
+	if (pid == -1)
 	{
 		perror("Command Execution Failed - Fork:");
 		close_if_valid(&pipex->read);

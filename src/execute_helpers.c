@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_helpers.c                                 :+:      :+:    :+:   */
+/*   execute_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 23:47:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/30 22:26:07 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 19:26:35 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,17 @@ void	close_if_valid(int *fd)
 
 static int	get_child_status(int status)
 {
+	int	sig;
+
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+			printf("%s", ERROR_SIQUIT_CHILD);
+		return (128 + sig);
+	}
 	return (1);
 }
 

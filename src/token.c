@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/10 15:14:13 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 17:58:18 by mpedraza         ###   ########.fr       */
+/*   Created: 2026/09/03 16:10:20 by plepercq          #+#    #+#             */
+/*   Updated: 2026/09/12 16:28:13 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,27 @@ t_token	*new_token(t_token_t type, char *value)
 {
 	t_token	*token;
 
-	if (!type || !value)
+	if (!value)
 		return (NULL);
 	token = malloc(sizeof(t_token));
 	if (!token)
+	{
+		free(value);
 		return (NULL);
+	}
 	token->type = type;
 	token->value = value;
 	token->next = NULL;
 	return (token);
+}
+
+void	free_token(t_token *token)
+{
+	if (!token)
+		return ;
+	if (token->value)
+		free(token->value);
+	free(token);
 }
 
 void	add_token(t_token **head, t_token *new_token)
@@ -44,35 +56,26 @@ void	add_token(t_token **head, t_token *new_token)
 	}
 }
 
-int	count_args(t_token *token)
+void	remove_token(t_token **head, t_token *token)
 {
-	t_token	*temp;
-	int		argc;
+	t_token	*prev;
 
-	temp = token;
-	argc = 0;
-	while (temp && temp->type != TOKEN_PIPE)
-	{
-		if (is_redirection(temp->type))
-			temp = temp->next;
-		else
-			argc++;
-		temp = temp->next;
-	}
-	return (argc);
-}
-
-void	free_tokens(t_token *head)
-{
-	t_token	*temp;
-
-	if (!head)
+	if (!token)
 		return ;
-	while (head)
+	if (!head)
+		return (free_token(token));
+	if (!*head)
+		return ;
+	if (token == *head)
 	{
-		temp = head->next;
-		free(head->value);
-		free(head);
-		head = temp;
+		*head = token->next;
+		return (free_token(token));
 	}
+	prev = *head;
+	while (prev->next != NULL && prev->next != token)
+		prev = prev->next;
+	if (prev->next == NULL)
+		return ;
+	prev->next = token->next;
+	free_token(prev);
 }

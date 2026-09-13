@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/27 20:03:33 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 18:33:24 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,13 @@
 t_cmd	*new_command(t_token *token)
 {
 	t_cmd	*cmd;
-	int		argc;
 
+	(void)token;
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	argc = count_args(token);
-	cmd->argv = malloc(sizeof(char *) * (argc + 1));
-	if (!cmd->argv)
-	{
-		free(cmd);
-		return (NULL);
-	}
+	cmd->argv = NULL;
+	cmd->words = NULL;
 	cmd->redirs = NULL;
 	cmd->next = NULL;
 	return (cmd);
@@ -73,6 +68,8 @@ void	free_commands(t_cmd *pipeline)
 		temp = pipeline->next;
 		if (pipeline->argv)
 			free_args(pipeline->argv);
+		if (pipeline->words)
+			ft_lstclear(&pipeline->words, free);
 		if (pipeline->redirs)
 			free_redirs(pipeline->redirs);
 		free(pipeline);

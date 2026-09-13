@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variable.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 18:43:05 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/04/08 21:44:38 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 18:33:24 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,48 @@ t_env	*new_var(char *key, char *value)
 {
 	t_env	*var;
 
-	if (!key || !value)
+	if (!key)
 		return (NULL);
 	var = malloc(sizeof(t_env));
-	var->key = ft_strdup(key);
-	var->value = ft_strdup(value);
-	if (!var->key || !var->value)
-	{
-		free(var);
+	if (!var)
 		return (NULL);
+	var->key = ft_strdup(key);
+	if (!var->key)
+		return (free(var), NULL);
+	if (value)
+	{
+		var->value = ft_strdup(value);
+		if (!var->value)
+			return (free(var->key), free(var), NULL);
 	}
+	else
+		var->value = NULL;
 	var->next = NULL;
 	return (var);
+}
+
+int	update_var(t_env **head, t_env *new)
+{
+	t_env	*var;
+	t_env	*prev;
+
+	if (!head || !*head || !new)
+		return (false);
+	var = find_var(*head, new->key);
+	if (!var)
+		return (false);
+	new->next = var->next;
+	if (*head == var)
+		*head = new;
+	else
+	{
+		prev = *head;
+		while (prev->next != var)
+			prev = prev->next;
+		prev->next = new;
+	}
+	free_var(var, NULL);
+	return (true);
 }
 
 void	add_var(t_env **head, t_env *new_var)
@@ -36,54 +66,39 @@ void	add_var(t_env **head, t_env *new_var)
 
 	if (!head || !new_var)
 		return ;
+	if (update_var(head, new_var))
+		return ;
 	if (*head == NULL)
 		*head = new_var;
 	else
 	{
 		temp = *head;
-		while (temp->next)
+		while (temp->next != NULL)
 			temp = temp->next;
 		temp->next = new_var;
 	}
 }
 
-t_env	*find_var(t_env *env, char *key)
+void	free_var(t_env *var, t_env **head)
 {
-	if (!key || !*key)
-		return (NULL);
-	while (env)
-	{
-		if (!ft_strcmp(env->key, key))
-			return (env);
-		env = env->next;
-	}
-	return (NULL);
-}
+	t_env	*check;
 
-char	*get_var_value(t_env *env, char *key)
-{
-	t_env	*var;
-
-	if (!key || !*key)
-		return (NULL);
-	var = find_var(env, key);
-	if (!var || !var->value)
-		return (NULL);
-	return (var->value);
-}
-
-void	free_vars(t_env *head)
-{
-	t_env	*temp;
-
-	if (!head)
+	if (var == NULL)
 		return ;
-	while (head)
+	if (head == NULL || *head == NULL)
+		return (sfree(var->value), free(var->key), free(var));
+	if (*head == var)
 	{
-		temp = head->next;
-		free(head->key);
-		free(head->value);
-		free(head);
-		head = temp;
+		*head = var->next;
+		return (sfree(var->value), free(var->key), free(var));
 	}
+	check = *head;
+	while (check->next != NULL && check->next != var)
+		check = check->next;
+	if (check->next == NULL)
+		return ;
+	check->next = var->next;
+	sfree(var->value);
+	free(var->key);
+	free(var);
 }

@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/28 08:50:19 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 20:08:35 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <errno.h>
+# include <dirent.h>
 
 // ** POSIX / SYSTEM HEADERS **
 # include <unistd.h>
@@ -72,6 +73,7 @@
 # define CHAR_SLASH '/'
 # define CHAR_SPACE ' '
 # define CHAR_UNDERSCORE '_'
+# define CHAR_TILDE '~'
 # define SPECIAL_CHARS "\"'$"
 
 //	** VALUES FOR OPERATOR TOKENS **
@@ -82,9 +84,10 @@
 # define REDIR_OUT_VALUE ">"
 
 //	** VALUES FOR PROMPTS & PREFIXES **
-# define SHELL_PROMPT "minishell$ "
+# define SHELL_PROMPT "\x1b[35mminishell\x1b[m $ "
 # define CONTINUED_PROMPT ">"
 # define SHELL_PREFIX "minishell"
+# define EXPORT_PREFIX "export "
 
 //	** PREDEFINED STATUS MESSAGES **
 # define EXIT_MSG "exit\n"
@@ -92,12 +95,12 @@
 # define ERROR_ENV "Error! Failed to initialize environment\n"
 # define ERROR_SYNTAX "Syntax Error!"
 # define ERROR_SYNTAX_QUOTE "Syntax error: Missing closing quote\n"
-# define ERROR_SYNTAX_TOKEN "Syntax error near token"
+# define ERROR_SYNTAX_TOKEN "Syntax error near unexpected token"
 # define ERROR_EOF "Unexpected end-of-file"
 # define ERROR_COMMAND "Command not found"
 # define ERROR_OPTION "Invalid option"
 # define ERROR_ARGS "Too many arguments"
-
+# define ERROR_SIQUIT_CHILD "Quit (Core Dumped)\n"
 # define ERROR_HOME_UNDEFINED "$HOME environment variable empty or undefined"
 
 //	** SPECIAL ENV VARS **
@@ -113,6 +116,14 @@
 # define BUILTIN_NAME_EXPORT "export"
 # define BUILTIN_NAME_PWD "pwd"
 # define BUILTIN_NAME_UNSET "unset"
+
+# define WELCOME_MSG ">  Welcome to minishell \\(ᵔᵕᵔ)/ !!\n\n\
+#  This project is a simplified implementation of bash.\n\
+#  The goal is to understand how a Unix shell works from the inside:\n\
+#   - reading user input,\n\
+#   - parsing commands,\n\
+#   - executing them via system calls.\n\
+#  Feel free to try any commands you want!\n"
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -143,9 +154,9 @@ typedef enum e_sigmode
 typedef enum e_token_type
 {
 	TOKEN_NULL,
+	TOKEN_PIPE,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_PIPE,
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_WORD,
@@ -180,6 +191,7 @@ typedef struct s_redir
 //	** COMMAND DATA TYPES **
 typedef struct s_cmd
 {
+	t_list			*words;
 	char			**argv;
 	t_redir			*redirs;
 	struct s_cmd	*next;
@@ -228,20 +240,25 @@ typedef struct s_session
 	t_cmd			*pipeline;
 }	t_session;
 
+// LIBFT EXTRA
+char		*ft_strndup(const char *s, size_t n);
+
 //	** ENV VARIABLES **
 t_env		*new_var(char *key, char *value);
+int			update_var(t_env **head, t_env *new);
 void		add_var(t_env **head, t_env *new_var);
+void		free_var(t_env *var, t_env **head);
 t_env		*find_var(t_env *env, char *key);
 char		*get_var_value(t_env *env, char *key);
-void		free_vars(t_env *head);
 
 //	** TOKENS **
 t_token		*new_token(t_token_t type, char *value);
+void		free_token(t_token *token);
 void		add_token(t_token **head, t_token *new_node);
-int			count_args(t_token *token);
-void		free_tokens(t_token *head);
+void		remove_token(t_token **head, t_token *token);
 
 //	** COMMANDS **
+int			count_args(t_token *token);
 t_cmd		*new_command(t_token *token);
 void		add_command(t_cmd **pipeline, t_cmd *new_command);
 void		free_args(char **argv);
@@ -261,6 +278,7 @@ void		free_shell(t_shell *shell);
 
 //	** ENV **
 t_env		*init_env(char **envp);
+char		**get_env_keys(t_env *env);
 char		**build_envp_array(t_env *env);
 
 //	** SIGNAL CATCHERS **
@@ -287,15 +305,14 @@ int			read_heredoc_input(char **line, char *target);
 int			event_hook_cont_prompt_interrupt(void);
 void		kill_continued_prompt(void);
 
-//	** TOKENIZER **	
-t_token		*tokenize_input(const char *line);
+//	** LEXER **	
+t_token		*lexer(const char *line);
 
-//	** TOKENIZER HELPERS **
+//	** LEXER HELPERS **
 bool		is_space(char c);
 bool		is_operator(char c);
 bool		is_quote(char c);
-t_token_t	get_operator_type(const char *s);
-char		*get_operator_value(t_token_t type);
+void		skip_spaces(const char **line);
 
 //	** PARSER **
 t_cmd		*parse_tokens(t_token *token);
@@ -356,11 +373,12 @@ int			handle_redir_out(t_redir *redir);
 //	** BUILTINS	**
 bool		is_builtin(t_cmd *cmd);
 bool		is_parent_builtin(t_cmd *cmd);
-//bool		is_child_builtin(t_cmd *cmd);
-//t_builtin_t	get_builtin_type(t_cmd *cmd);
 int			builtin_cd(char **fields, t_shell *shell);
 int			builtin_echo(char **fields);
 int			builtin_env(char **fields, t_shell *shell);
+int			builtin_exit(char **fields, t_shell *shell);
+int			builtin_export(char **fields, t_shell *shell);
+int			builtin_unset(char **fields, t_shell *shell);
 int			builtin_pwd(char **fields);
 
 //	** UTILS: CONCATENATION **
@@ -368,16 +386,16 @@ int			append_to_expanded(char **expanded, char *src, size_t len);
 char		*join_with_delimiter(char *s1, char *s2, char delim);
 
 //	** UTILS: PRINT **
+void		print_error_prefix(char *token);
 void		print_general_error(char *token, char *msg);
 void		print_syntax_error(char *token);
 
+// ** UTILS: SORT **
+char		**get_first_alpha(char **str1, char **str2);
+void		sort_alpha(char ***strs);
+
 //	** GENERAL HELPERS **
 void		free_matrix(char **array);
-
-//	** DEBUG **
-void		print_env(t_env *env);
-void		print_tokens(t_token *head);
-void		print_cmds(t_cmd *cmds);
-void		print_heredoc_pipe(int fd);
+void		sfree(void *ptr);
 
 #endif

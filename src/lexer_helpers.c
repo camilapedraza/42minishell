@@ -1,43 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell.c                                            :+:      :+:    :+:   */
+/*   lexer_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/20 18:12:57 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/10 14:38:06 by plepercq         ###   ########.fr       */
+/*   Created: 2026/03/10 15:21:28 by mpedraza          #+#    #+#             */
+/*   Updated: 2026/09/12 16:26:39 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_exit_code(t_shell *shell, int code)
+bool	is_space(char c)
 {
-	shell->exit_code = code;
+	return (c == ' ' || (c >= 9 && c <= 13));
 }
 
-void	set_sigint_code(t_shell *shell)
+bool	is_operator(char c)
 {
-	set_exit_code(shell, 130);
-	g_signal = 0;
+	return (c == CHAR_PIPE || c == CHAR_GREATER_THAN || c == CHAR_LESS_THAN);
 }
 
-int	init_shell(t_shell *shell, char **envp)
+bool	is_quote(char c)
 {
-	shell->env = init_env(envp);
-	if (!shell->env)
-		return (FAILURE);
-	set_exit_code(shell, 0);
-	return (SUCCESS);
+	return (c == CHAR_SINGLE_QUOTE || c == CHAR_DOUBLE_QUOTE);
 }
 
-void	free_shell(t_shell *shell)
+void	skip_spaces(const char **line)
 {
-	t_env	*var;
-
-	var = shell->env;
-	while (var)
-		free_var(var, &var);
-	rl_clear_history();
+	while (**line == ' ')
+		(*line)++;
 }

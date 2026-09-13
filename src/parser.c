@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/01 19:14:44 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 20:09:27 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// parse token_list and group into:
-// - commands (WORDS stored as **argv, optionally followed by any redirects)
-// -- redirects are a REDIR operator followed by a WORD (file)
-// --- a redirect can be followed by one or more redirects -> store as a list
-// - commands are separated by pipes (commands in pipeline == num pipes + 1 )
-// - this means a pipeline is at least 1 command, with zero or more "| command"
-// - a command stops when it meets a pipe or EOL
-
-static int	parse_args(t_cmd *cmd, int index, t_token **token)
+static int	parse_args(t_cmd *cmd, t_token **token)
 {
-	cmd->argv[index] = ft_strdup((*token)->value);
-	if (!cmd->argv[index])
+	char	*argv;
+	t_list	*new_arg;
+
+	argv = ft_strdup((*token)->value);
+	if (!argv)
 		return (0);
+	new_arg = ft_lstnew(argv);
+	if (!new_arg)
+		return (free(argv), 0);
+	ft_lstadd_back(&cmd->words, new_arg);
 	*token = (*token)->next;
 	return (1);
 }
@@ -50,9 +49,7 @@ static t_redir	*parse_redirect(t_cmd *cmd, t_token **token)
 static t_cmd	*build_command(t_token **token)
 {
 	t_cmd	*cmd;
-	int		index;
 
-	index = 0;
 	cmd = new_command(*token);
 	if (!cmd)
 		return (NULL);
@@ -65,16 +62,13 @@ static t_cmd	*build_command(t_token **token)
 		}
 		else
 		{
-			if (!parse_args(cmd, index, token))
+			if (!parse_args(cmd, token))
 				return (free_commands(cmd), NULL);
-			index++;
 		}
 	}
-	cmd->argv[index] = NULL;
 	return (cmd);
 }
 
-// TODO: what to return if invalid syntax
 t_cmd	*parse_tokens(t_token *token)
 {
 	t_cmd	*pipeline;
