@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:30:42 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/05/04 19:46:49 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 20:09:11 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ static bool	is_n_flag(char *field)
 	return (true);
 }
 
-// THIS WILL PASS AN EXIT CODE TO THE CHILD SO IT NEEDS C EXIT CODES!
-// assume fields starts at cmd->argv[1], so index here should be 0
 int	builtin_echo(char **fields)
 {
 	bool	newline;

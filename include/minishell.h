@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 19:21:39 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 20:08:35 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@
 # define ERROR_OPTION "Invalid option"
 # define ERROR_ARGS "Too many arguments"
 # define ERROR_SIQUIT_CHILD "Quit (Core Dumped)\n"
-
 # define ERROR_HOME_UNDEFINED "$HOME environment variable empty or undefined"
 
 //	** SPECIAL ENV VARS **
@@ -374,8 +373,6 @@ int			handle_redir_out(t_redir *redir);
 //	** BUILTINS	**
 bool		is_builtin(t_cmd *cmd);
 bool		is_parent_builtin(t_cmd *cmd);
-//bool		is_child_builtin(t_cmd *cmd);
-//t_builtin_t	get_builtin_type(t_cmd *cmd);
 int			builtin_cd(char **fields, t_shell *shell);
 int			builtin_echo(char **fields);
 int			builtin_env(char **fields, t_shell *shell);
@@ -392,7 +389,6 @@ char		*join_with_delimiter(char *s1, char *s2, char delim);
 void		print_error_prefix(char *token);
 void		print_general_error(char *token, char *msg);
 void		print_syntax_error(char *token);
-void		print_error_strs(size_t count, ...);
 
 // ** UTILS: SORT **
 char		**get_first_alpha(char **str1, char **str2);
@@ -401,11 +397,5 @@ void		sort_alpha(char ***strs);
 //	** GENERAL HELPERS **
 void		free_matrix(char **array);
 void		sfree(void *ptr);
-
-//	** DEBUG **
-void		print_env(t_env *env);
-void		print_tokens(t_token *head);
-void		print_cmds(t_cmd *cmds);
-void		print_heredoc_pipe(int fd);
 
 #endif

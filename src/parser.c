@@ -6,19 +6,11 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 19:59:32 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 20:09:27 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// parse token_list and group into:
-// - commands (WORDS stored as **argv, optionally followed by any redirects)
-// -- redirects are a REDIR operator followed by a WORD (file)
-// --- a redirect can be followed by one or more redirects -> store as a list
-// - commands are separated by pipes (commands in pipeline == num pipes + 1 )
-// - this means a pipeline is at least 1 command, with zero or more "| command"
-// - a command stops when it meets a pipe or EOL
 
 static int	parse_args(t_cmd *cmd, t_token **token)
 {
