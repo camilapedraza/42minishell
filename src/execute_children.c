@@ -6,7 +6,7 @@
 /*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 19:45:45 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 02:02:05 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 11:46:08 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,14 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 	char	**envp;
 	int		err;
 
+	printf("JE SUIS LA\n");
 	cmd_path = resolve_cmd_path(cmd->argv[0], shell->env);
 	if (!cmd_path)
+	{
+		printf("JE SUIS ICI MEME\n");
 		exit(127);
+	}
+	printf("LAAAAAAAAAAAAAAAAAAAAAAAAAAA %s\n", cmd_path);
 	envp = build_envp_array(shell->env);
 	if (!envp)
 	{
