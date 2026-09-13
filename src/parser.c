@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 18:33:24 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 19:59:32 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ static t_cmd	*build_command(t_token **token)
 	return (cmd);
 }
 
-// TODO: what to return if invalid syntax
 t_cmd	*parse_tokens(t_token *token)
 {
 	t_cmd	*pipeline;

@@ -3,36 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:49:52 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/24 14:58:41 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 19:59:31 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-// TODO: reproduce bash behavior when command is empty string
-/*
-bash-5.2$ ""
-bash: : command not found
-bash-5.2$ ''
-bash: : command not found
-bash-5.2$ "''"
-bash: '': command not found
-bash-5.2$ '""'
-bash: "": command not found
-*/
-// TODO: review all PERRORs and switch to stderror if needed
-// TODO: review all write(2,) and switch to PERROR or stderror if needed
-// TODO: review all PRINTF and switch to writes, perrors or stderror if needed
-// TODO: review all PERROR, STDERROR and WRITE(2,) and add predef err msg in .h
-
-// TODO: determine how to "remove" an argument from argv 
-//when it evaluates to nothing
-// so that commands like CAT can run as normal when no args are provided
-// instead of treating it like an empty string.
-
-// TODO: check all functions that should list consts
 
 volatile sig_atomic_t	g_signal = 0;
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
+#    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/09/13 18:33:12 by plepercq         ###   ########.fr        #
+#    Updated: 2026/09/13 19:59:32 by mpedraza         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,8 +78,6 @@ ${LFT}:
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@mkdir -vp $(DIR_OBJ)
 	${CC} ${CFLAGS} ${CPPFLAGS} -O0 -c $< -o $@
-
-# TODO REMOVE LIBFT AND ADD DOWNLOAD STEP LIKE SO LONG
 
 clean:
 	${RM} -v ${OBJS}
