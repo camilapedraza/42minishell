@@ -6,7 +6,7 @@
 /*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 23:47:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 19:17:05 by mpedraza         ###   ########.fr       */
+/*   Updated: 2026/09/13 19:26:35 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	close_if_valid(int *fd)
 
 static int	get_child_status(int status)
 {
-	int sig;
-	
+	int	sig;
+
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
@@ -72,6 +72,7 @@ static int	wait_for_children(pid_t last_pid)
 int	wait_for_pipeline(pid_t last_pid)
 {
 	int	pipeline_status;
+
 	set_signal_catchers(WAIT);
 	pipeline_status = wait_for_children(last_pid);
 	set_signal_catchers(MAIN);
