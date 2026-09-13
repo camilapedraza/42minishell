@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 23:47:22 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/08/21 17:12:25 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 19:17:05 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,17 @@ void	close_if_valid(int *fd)
 
 static int	get_child_status(int status)
 {
+	int sig;
+	
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+			printf("%s", ERROR_SIQUIT_CHILD);
+		return (128 + sig);
+	}
 	return (1);
 }
 
@@ -65,7 +72,6 @@ static int	wait_for_children(pid_t last_pid)
 int	wait_for_pipeline(pid_t last_pid)
 {
 	int	pipeline_status;
-
 	set_signal_catchers(WAIT);
 	pipeline_status = wait_for_children(last_pid);
 	set_signal_catchers(MAIN);

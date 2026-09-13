@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 15:17:04 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 19:10:14 by mpedraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@
 # define ERROR_COMMAND "Command not found"
 # define ERROR_OPTION "Invalid option"
 # define ERROR_ARGS "Too many arguments"
+# define ERROR_SIQUIT_CHILD "Quit (Core Dumped)\n"
 
 # define ERROR_HOME_UNDEFINED "$HOME environment variable empty or undefined"
 
