@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 02:02:05 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 15:17:04 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <errno.h>
+# include <dirent.h>
 
 // ** POSIX / SYSTEM HEADERS **
 # include <unistd.h>
@@ -72,6 +73,7 @@
 # define CHAR_SLASH '/'
 # define CHAR_SPACE ' '
 # define CHAR_UNDERSCORE '_'
+# define CHAR_TILDE '~'
 # define SPECIAL_CHARS "\"'$"
 
 //	** VALUES FOR OPERATOR TOKENS **

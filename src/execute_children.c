@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   execute_children.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 19:45:45 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 11:46:08 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 17:36:03 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	is_dir(char *path)
+{
+	DIR		*ds;
+
+	ds = opendir(path);
+	if (ds == NULL)
+		return (false);
+	closedir(ds);
+	return (true);
+}
+
+void	exit_on_dir(char *dir_path)
+{
+	print_general_error(dir_path, "Is a directory");
+	exit(126);
+}
 
 static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 {
@@ -18,14 +35,11 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 	char	**envp;
 	int		err;
 
-	printf("JE SUIS LA\n");
 	cmd_path = resolve_cmd_path(cmd->argv[0], shell->env);
 	if (!cmd_path)
-	{
-		printf("JE SUIS ICI MEME\n");
 		exit(127);
-	}
-	printf("LAAAAAAAAAAAAAAAAAAAAAAAAAAA %s\n", cmd_path);
+	if (is_dir(cmd_path))
+		exit_on_dir(cmd_path);
 	envp = build_envp_array(shell->env);
 	if (!envp)
 	{

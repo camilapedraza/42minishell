@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 02:05:41 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 17:18:29 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	expand_arguments(t_cmd *cmd, t_shell *shell)
 
 	index = 0;
 	arg = cmd->words;
-	cmd->argv = malloc(sizeof(char *) * ft_lstsize(cmd->words));
+	cmd->argv = malloc(sizeof(char *) * (ft_lstsize(cmd->words) + 1));
 	if (!cmd->argv)
 		return (FAILURE);
 	while (arg && arg->content)
