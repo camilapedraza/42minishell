@@ -6,13 +6,13 @@
 #    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/09/13 18:33:12 by plepercq         ###   ########.fr        #
+#    Updated: 2026/09/13 19:09:57 by plepercq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -g
+CFLAGS		=	-Wall -Wextra -Werror
 CPPFLAGS	=	-I${DIR_INC} -I${LFT_DIR}
 LDFLAGS		=	-lreadline
 
