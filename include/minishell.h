@@ -6,7 +6,7 @@
 /*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 15:17:04 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 17:52:09 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@
 # define ERROR_ENV "Error! Failed to initialize environment\n"
 # define ERROR_SYNTAX "Syntax Error!"
 # define ERROR_SYNTAX_QUOTE "Syntax error: Missing closing quote\n"
-# define ERROR_SYNTAX_TOKEN "Syntax error near token"
+# define ERROR_SYNTAX_TOKEN "Syntax error near unexpected token"
 # define ERROR_EOF "Unexpected end-of-file"
 # define ERROR_COMMAND "Command not found"
 # define ERROR_OPTION "Invalid option"

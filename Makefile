@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+         #
+#    By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
-#    Updated: 2026/09/13 01:59:42 by pierre_lepe      ###   ########.fr        #
+#    Updated: 2026/09/13 18:33:12 by plepercq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

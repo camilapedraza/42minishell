@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_prints.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 18:53:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 02:02:05 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 18:33:24 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

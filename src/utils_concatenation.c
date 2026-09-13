@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_concatenation.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
+/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 14:41:56 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 01:15:02 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 18:33:24 by plepercq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
