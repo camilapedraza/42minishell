@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by pedraza and plepercq*
+*This project has been created as part of the 42 curriculum by mpedraza and plepercq*
 
 # Minishell
 
@@ -86,47 +86,13 @@ make fclean   # Remove object files and executable
 make re       # Recompile from scratch
 ```
 
-
-
-
----
-
-## Usage
-
-```bash
-make
-./minishell
-```
-
-### Compilation
-
-```bash
-make
-```
-
-This will compile the project and produce the `minishell` executable.
-
-### Usage
-
-```bash
-./minishell
-```
-
-### Cleanup
-
-```bash
-make clean    # Remove object files
-make fclean   # Remove object files and executable
-make re       # Recompile from scratch
-```
-
 ---
 
 ## Resources
 
 ### Documentation & References
 
-- Documentation on availables functions
+- Documentation on available functions
 - [Blog CodeQuoi](https://www.codequoi.com/pourquoi-je-necris-plus-darticles-sur-les-projets-de-42/#minishell)
 - Videos on YouTube
 - Friends ;)
@@ -134,8 +100,8 @@ make re       # Recompile from scratch
 ### AI Usage
 
 - **Debugging:** Used AI to understand error messages
-- **Concepts:** Asked AI to assist me in project conception
-- **No code generation:** All code was written and understood by me personally
+- **Concepts:** Asked AI to assist us in project conception
+- **No code generation:** All code was written and understood us me personally
 
 ## Authors
 
