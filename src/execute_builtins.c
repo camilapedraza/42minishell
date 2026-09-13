@@ -6,7 +6,7 @@
 /*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 18:53:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 01:48:18 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 02:02:05 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	run_builtin(t_cmd *cmd, t_shell *shell)
 	char	**args;
 
 	(void)shell;
-	cmd_name = cmd->expanded_args[0];
-	args = &(cmd->expanded_args[1]);
+	cmd_name = cmd->argv[0];
+	args = &(cmd->argv[1]);
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_ECHO))
 		return (builtin_echo(args));
 	if (!ft_strcmp(cmd_name, BUILTIN_NAME_PWD))

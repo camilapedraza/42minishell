@@ -6,7 +6,7 @@
 /*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:04:11 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 23:54:40 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 02:02:05 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ t_cmd	*new_command(t_token *token)
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->expanded_args = NULL;
-	cmd->args = NULL;
+	cmd->argv = NULL;
+	cmd->words = NULL;
 	cmd->redirs = NULL;
 	cmd->next = NULL;
 	return (cmd);
@@ -66,10 +66,10 @@ void	free_commands(t_cmd *pipeline)
 	while (pipeline)
 	{
 		temp = pipeline->next;
-		if (pipeline->expanded_args)
-			free_args(pipeline->expanded_args);
-		if (pipeline->args)
-			ft_lstclear(&pipeline->args, free);
+		if (pipeline->argv)
+			free_args(pipeline->argv);
+		if (pipeline->words)
+			ft_lstclear(&pipeline->words, free);
 		if (pipeline->redirs)
 			free_redirs(pipeline->redirs);
 		free(pipeline);

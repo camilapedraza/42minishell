@@ -56,7 +56,7 @@
 readline()
     │
     ▼
-Tokeniser / Lexer  →  [ TOKEN_WORD ] [ TOKEN_PIPE ] [ TOKEN_REDIR ] ...
+Lexer / Tokeniser  →  [ TOKEN_WORD ] [ TOKEN_PIPE ] [ TOKEN_REDIR ] ...
     │
     ▼
 Parser  →  command list

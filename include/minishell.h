@@ -6,7 +6,7 @@
 /*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:51:02 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 00:46:36 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 02:02:05 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,8 @@ typedef struct s_redir
 //	** COMMAND DATA TYPES **
 typedef struct s_cmd
 {
-	t_list			*args;
-	char			**expanded_args;
+	t_list			*words;
+	char			**argv;
 	t_redir			*redirs;
 	struct s_cmd	*next;
 }	t_cmd;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plepercq <plepercq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 20:31:19 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/12 20:05:43 by plepercq         ###   ########.fr       */
+/*   Updated: 2026/09/13 02:01:51 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	parse_args(t_cmd *cmd, t_token **token)
 	new_arg = ft_lstnew(argv);
 	if (!new_arg)
 		return (free(argv), 0);
-	ft_lstadd_back(&cmd->args, new_arg);
+	ft_lstadd_back(&cmd->words, new_arg);
 	*token = (*token)->next;
 	return (1);
 }

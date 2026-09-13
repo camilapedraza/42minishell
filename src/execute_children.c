@@ -6,7 +6,7 @@
 /*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/01 19:45:45 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 01:30:41 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 02:02:05 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 	char	**envp;
 	int		err;
 
-	cmd_path = resolve_cmd_path(cmd->expanded_args[0], shell->env);
+	cmd_path = resolve_cmd_path(cmd->argv[0], shell->env);
 	if (!cmd_path)
 		exit(127);
 	envp = build_envp_array(shell->env);
@@ -27,9 +27,9 @@ static void	exec_in_child(t_cmd *cmd, t_shell *shell)
 		free(cmd_path);
 		exit(1);
 	}
-	execve(cmd_path, cmd->expanded_args, envp);
+	execve(cmd_path, cmd->argv, envp);
 	err = errno;
-	perror(cmd->expanded_args[0]);
+	perror(cmd->argv[0]);
 	free(cmd_path);
 	free_matrix(envp);
 	if (err == ENOENT)
@@ -58,7 +58,7 @@ pid_t	create_child_process(t_cmd *cmd, t_shell *shell, t_pipex *pipex)
 		close_if_valid(&pipex->tmp);
 		if (!resolve_redirections(cmd->redirs, pipex))
 			exit(1);
-		if (!cmd->expanded_args || !cmd->expanded_args[0] || !cmd->expanded_args[0][0])
+		if (!cmd->argv || !cmd->argv[0] || !cmd->argv[0][0])
 			exit(0);
 		if (is_builtin(cmd))
 			exit(run_builtin(cmd, shell));

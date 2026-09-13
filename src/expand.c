@@ -6,7 +6,7 @@
 /*   By: pierre_lepercq <pierre_lepercq@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 20:47:15 by mpedraza          #+#    #+#             */
-/*   Updated: 2026/09/13 01:49:23 by pierre_lepe      ###   ########.fr       */
+/*   Updated: 2026/09/13 02:05:41 by pierre_lepe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,26 @@ static int	expand_arguments(t_cmd *cmd, t_shell *shell)
 {
 	int		index;
 	t_list	*arg;
-	char	*expanded_arg;
+	char	*expanded;
 
 	index = 0;
-	arg = cmd->args;
-	cmd->expanded_args = malloc(sizeof(char *) * ft_lstsize(cmd->args));
-	if (!cmd->expanded_args)
+	arg = cmd->words;
+	cmd->argv = malloc(sizeof(char *) * ft_lstsize(cmd->words));
+	if (!cmd->argv)
 		return (FAILURE);
 	while (arg && arg->content)
 	{
-		expanded_arg = handle_expansion(arg->content, shell);
-		if (!expanded_arg)
+		expanded = handle_expansion(arg->content, shell);
+		if (!expanded)
 			return (FAILURE);
-		if (!(((char *)arg->content)[0] == '$' && expanded_arg[0] == '\0'))
+		if (!(((char *)arg->content)[0] == CHAR_DOLLAR && expanded[0] == '\0'))
 		{
-			cmd->expanded_args[index] = expanded_arg;
+			cmd->argv[index] = expanded;
 			index++;
 		}
 		arg = arg->next;
 	}
-	cmd->expanded_args[index] = NULL;
+	cmd->argv[index] = NULL;
 	return (SUCCESS);
 }
 
