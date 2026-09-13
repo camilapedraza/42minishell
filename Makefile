@@ -6,13 +6,17 @@
 #    By: mpedraza <mpedraza@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/09 15:53:31 by mpedraza          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2026/09/13 19:59:32 by mpedraza         ###   ########.fr        #
+=======
+#    Updated: 2026/09/13 19:09:57 by plepercq         ###   ########.fr        #
+>>>>>>> personal/branch_pierre
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -g
+CFLAGS		=	-Wall -Wextra -Werror
 CPPFLAGS	=	-I${DIR_INC} -I${LFT_DIR}
 LDFLAGS		=	-lreadline
 
